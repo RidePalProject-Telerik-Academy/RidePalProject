@@ -1,4 +1,4 @@
-package com.example.ridepalapplication;
+package com.example.ridepalapplication.mappers;
 
 import com.example.ridepalapplication.models.Genre;
 import org.springframework.stereotype.Component;
