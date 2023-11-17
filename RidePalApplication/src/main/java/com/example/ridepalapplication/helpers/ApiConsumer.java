@@ -45,6 +45,7 @@ public class ApiConsumer {
                 dataBaseEntity.put(key, value);
             }
             Genre genre = genreMapper.fromMapToGenre(dataBaseEntity);
+
             dataBaseEntity.clear();
         }
     }
