@@ -23,4 +23,8 @@ public class GenreController {
     public void getGenres() throws ParseException {
         apiConsumer.getGenres();
     }
+    @GetMapping("/test")
+    public void getArtist() throws ParseException{
+        apiConsumer.getArtist();
+    }
 }

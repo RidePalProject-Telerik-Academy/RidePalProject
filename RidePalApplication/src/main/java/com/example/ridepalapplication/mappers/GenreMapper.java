@@ -1,6 +1,7 @@
 package com.example.ridepalapplication.mappers;
 
 import com.example.ridepalapplication.models.Genre;
+import org.json.simple.JSONObject;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
@@ -9,9 +10,9 @@ import java.util.Map;
 public class GenreMapper {
     public GenreMapper() {
     }
-    public Genre fromMapToGenre(Map<String, Object> map) {
-        String genreName = (String) map.get("name");
-        Long id = (Long) map.get("id");
+    public Genre fromMapToGenre(JSONObject jsonObject) {
+        String genreName = (String) jsonObject.get("name");
+        Long id = (Long) jsonObject.get("id");
         Genre genre = new Genre();
         genre.setId(id);
         genre.setName(genreName);

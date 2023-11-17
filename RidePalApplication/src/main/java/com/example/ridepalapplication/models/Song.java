@@ -6,7 +6,6 @@ import jakarta.persistence.*;
 @Table(name = "songs")
 public class Song {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
     @Column(name = "title")
@@ -14,9 +13,9 @@ public class Song {
     @Column(name = "link")
     private String link;
     @Column(name = "duration")
-    private int duration;
+    private Long duration;
     @Column(name = "rank")
-    private int rank;
+    private Long rank;
     @Column(name = "preview_url")
     private String previewUrl;
     @ManyToOne
@@ -42,11 +41,11 @@ public class Song {
         return link;
     }
 
-    public int getDuration() {
+    public Long getDuration() {
         return duration;
     }
 
-    public int getRank() {
+    public Long getRank() {
         return rank;
     }
 
@@ -74,11 +73,11 @@ public class Song {
         this.link = link;
     }
 
-    public void setDuration(int duration) {
+    public void setDuration(Long duration) {
         this.duration = duration;
     }
 
-    public void setRank(int rank) {
+    public void setRank(Long rank) {
         this.rank = rank;
     }
 
