@@ -1,4 +1,4 @@
-package com.example.ridepalapplication.controllers;
+package com.example.ridepalapplication.controllers.rest;
 
 import com.example.ridepalapplication.dtos.UpdateUserDto;
 import com.example.ridepalapplication.dtos.UserDto;
