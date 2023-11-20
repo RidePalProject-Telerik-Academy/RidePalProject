@@ -1,0 +1,79 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-family: 'Noto Sans', sans-serif;
+}
+html {
+    font-size: 62.5%;
+}
+body {
+    font-size: 2.1rem;
+    min-height: 100vh;
+    width: 100%;
+    background-image: linear-gradient(rgba(4, 9, 30, 0.2), rgba(4, 9, 30, 0.2)), url(../images/vinyl.jpg);
+    background-position: center;
+    background-size: cover;
+    position: relative;
+}
+.footer {
+    text-align: center;
+    color: gainsboro;
+    font-size: 1.5rem;
+    margin: 0.5rem;
+}
+
+#welcome {
+    color: gainsboro;
+    display: grid;
+    top: 30%;
+    left: 50%;
+
+}
+#welcome h1 {
+    margin-left: 10rem;
+    font-size: 15rem;
+    margin-top: 0;
+}
+#welcome strong {
+    margin-left: 10rem;
+    margin-top: 10rem;
+    font-size: 5rem;
+}
+
+.first-steps{
+    color: gainsboro;
+    display: grid;
+    column-gap: 5rem;
+    grid-auto-flow: column;
+    margin: 10rem;
+    margin-top: 15rem;
+}
+.first-steps h3 {
+    font-size: 1.5rem;
+}
+.first-steps h2 {
+    font-size: 4rem;
+}
+.hero-btn {
+    display: inline-block;
+    text-decoration: none;
+    color: gainsboro;
+    border: 0.2rem solid gainsboro;
+    border-radius: 1.0rem;
+    font-size: 1.5rem;
+    padding: 1.5rem 4rem;
+    margin-top: 2rem;
+    cursor: pointer;
+    background: transparent;
+    position: relative;
+    transition: 0.8s;
+}
+.hero-btn:hover {
+    border: 0.2rem solid gainsboro;
+    background: gainsboro;
+    color: black;
+}
+#r-u-ready {
+    font-size: 1.5em;
+    margin: 0 6% 5%;
+}

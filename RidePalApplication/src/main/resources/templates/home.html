@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../static/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
+    <title>Home</title>
+</head>
+<body>
+<section class="header">
+    <div id="welcome">
+        <strong>Welcome to</strong>
+        <h1>RidePal</h1>
+        <strong style="margin-top: 0">your ultimate travel playlist generator</strong>
+    </div>
+</section>
+
+<section class="first-steps">
+    <div class="step">
+        <h3>Step 1</h3>
+        <h2>Log In</h2>
+    </div>
+    <div class="step">
+        <h3>Step 2</h3>
+        <h2>Set your journey</h2>
+    </div>
+    <div class="step">
+        <h3>Step 3</h3>
+        <h2>Choose your music</h2>
+    </div>
+    <div class="step">
+        <h3>Step 4</h3>
+        <h2>Enjoy the ride!</h2>
+    </div>
+</section>
+
+<section>
+    <button class="hero-btn" id="r-u-ready" onclick="location.href='/login'">Are You Ready?</button>
+</section>
+
+
+<section class="footer">
+    <h5>About Us</h5>
+    <h5>Copyright &copy 2023 WeWhoAreNotAsOthers</h5>
+</section>
+
+</body>
+</html>
