@@ -1,6 +1,7 @@
 package com.example.ridepalapplication.services;
 
 import com.example.ridepalapplication.dtos.GenreDto;
+import com.example.ridepalapplication.exceptions.AuthorizationException;
 import com.example.ridepalapplication.models.Genre;
 import com.example.ridepalapplication.models.Playlist;
 import com.example.ridepalapplication.models.Song;
@@ -28,28 +29,28 @@ public class PlaylistServiceImpl implements PlaylistService {
     }
 
     @Override
-    public Playlist generatePlaylist(String name,int travelDuration, List<GenreDto> genreDtoList, User user) {
+    public Playlist generatePlaylist(Playlist playlist,int travelDuration, List<GenreDto> genreDtoList) {
         Set<Song> songs = new HashSet<>();
-        for (int i = 0; i <genreDtoList.size() ; i++) {
-            int genrePercantage = genreDtoList.get(i).getPercentage();
-            int queryCalculation = (travelDuration * genrePercantage) / 100;
-            int temp = 0;
-            while (temp < queryCalculation) {
-                Genre genre = genreRepository.findByName(genreDtoList.get(i).getName());
 
+        for (GenreDto genreDto : genreDtoList) {
+            int getGenrePercentage = genreDto.getPercentage();
+            int totalGenreDuration = (travelDuration * getGenrePercentage) / 100;
+            int currentGenreDuration = 0;
+            Genre genre = genreRepository.findByName(genreDto.getName());
+            while (currentGenreDuration < totalGenreDuration) {
                 List<Song> song = songRepository.getMeSingleSongByGenre(genre.getId());
                 if (song.isEmpty()) {
+                    //TODO implement exception
                     break;
                 }
                 songs.add(song.get(0));
-                temp+=song.get(0).getDuration();
+                currentGenreDuration += song.get(0).getDuration();
             }
 
         }
-        Playlist p = new Playlist();
-        p.setCreator(user);
-        p.setName(name);
-        p.setSongs(songs);
-       return playlistRepository.save(p);
+        playlist.setSongs(songs);
+       return playlistRepository.save(playlist);
     }
+
+
 }

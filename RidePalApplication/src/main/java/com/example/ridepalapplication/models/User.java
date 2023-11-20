@@ -1,5 +1,6 @@
 package com.example.ridepalapplication.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -12,6 +13,7 @@ public class User {
     @Column(name = "username")
     private String username;
     @Column(name = "password")
+    @JsonIgnore
     private String password;
     @Column(name = "email")
     private String email;
@@ -19,7 +21,9 @@ public class User {
     private String firstName;
     @Column(name = "last_name")
     private String lastName;
+
     @Column(name = "is_admin")
+    @JsonIgnore
     private boolean isAdmin;
 
     public User() {
