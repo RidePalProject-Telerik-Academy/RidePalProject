@@ -69,10 +69,12 @@ public class Playlist {
         this.creator = creator;
     }
 
-    public void setSongs(Song song) {
-        songs.add(song);
+    public void setSongs(Set<Song> songs) {
+        this.songs = songs;
     }
-
+    public void addSong(Song song){
+        this.songs.add(song);
+    }
     public void setTags(Tag tag) {
         tags.add(tag);
     }

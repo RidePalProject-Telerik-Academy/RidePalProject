@@ -2,6 +2,7 @@ package com.example.ridepalapplication.controllers.rest;
 
 import com.example.ridepalapplication.dtos.GenreDto;
 import com.example.ridepalapplication.dtos.LocationDto;
+import com.example.ridepalapplication.dtos.PlaylistDto;
 import com.example.ridepalapplication.helpers.AuthenticationHelper;
 import com.example.ridepalapplication.models.Playlist;
 import com.example.ridepalapplication.models.User;
@@ -28,11 +29,12 @@ public class PlaylistController {
     }
 
     @PostMapping
-    public Playlist generatePlaylist(@RequestBody LocationDto locationDto,@RequestBody List<GenreDto> genreDtos, @RequestHeader HttpHeaders headers
+    public Playlist generatePlaylist(@RequestBody PlaylistDto playlistDto, @RequestHeader HttpHeaders headers
     ) throws ParseException {
-        int travelDuration = bingController.calculateTravelTime(locationDto);
+        int travelDuration = bingController.calculateTravelTime(playlistDto.getLocationDto());
         User user = authenticationHelper.tryGetUser(headers);
-        return playlistService.generatePlaylist(travelDuration,genreDtos,user);
+        List<GenreDto> genreDtoss = playlistDto.getGenreDtoList();
+        return playlistService.generatePlaylist(playlistDto.getName(),travelDuration,genreDtoss,user);
 
 
     }

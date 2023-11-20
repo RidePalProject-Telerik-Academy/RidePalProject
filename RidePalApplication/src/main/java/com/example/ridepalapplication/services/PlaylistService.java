@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface PlaylistService {
 
-    Playlist generatePlaylist(int travelDuration, List<GenreDto> genreDtoList, User user);
+    Playlist generatePlaylist(String name,int travelDuration, List<GenreDto> genreDtoList, User user);
 }
