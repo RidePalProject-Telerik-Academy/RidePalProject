@@ -11,7 +11,7 @@ import java.util.Set;
 
 @Repository
 public interface SongRepository extends JpaRepository<Song,Long> {
-    List<Song> findByAlbum_GenreName(String name);
+
     @Query(nativeQuery = true,value = "SELECT songs.* FROM songs JOIN albums ON songs.album_id = albums.id WHERE albums.genre_id = :id ORDER BY RAND() LIMIT 1;")
     List<Song> getMeSingleSongByGenre(@Param("id") Long id);
 }

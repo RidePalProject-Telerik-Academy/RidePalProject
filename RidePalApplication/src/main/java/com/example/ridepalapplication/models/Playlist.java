@@ -14,6 +14,8 @@ public class Playlist {
     private long id;
     @Column(name = "name")
     private String name;
+    @Column(name = "duration")
+    private int duration;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -77,6 +79,12 @@ public class Playlist {
     }
     public void setTags(Tag tag) {
         tags.add(tag);
+    }
+    public int getDuration(){
+        return duration;
+    }
+    public void setDuration(int duration){
+        this.duration = duration;
     }
 
     @Override

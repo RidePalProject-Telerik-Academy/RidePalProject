@@ -1,7 +1,10 @@
 package com.example.ridepalapplication.helpers;
 
 
+import com.example.ridepalapplication.mappers.AlbumMapper;
+import com.example.ridepalapplication.mappers.ArtistMapper;
 import com.example.ridepalapplication.mappers.GenreMapper;
+import com.example.ridepalapplication.mappers.SongMapper;
 import com.example.ridepalapplication.models.Album;
 
 import com.example.ridepalapplication.models.Artist;
@@ -32,9 +35,11 @@ public class DeezerApiConsumer {
     private final ArtistRepository artistRepository;
     private final SongRepository songRepository;
     private final GenreMapper genreMapper;
-
+    private final ArtistMapper artistMapper;
+    private  final AlbumMapper albumMapper;
+    private final SongMapper songMapper;
     @Autowired
-    public DeezerApiConsumer(RestTemplate restTemplate, JSONParser parser, GenreRepository genreRepository, AlbumRepository albumRepository, ArtistRepository artistRepository, SongRepository songRepository, GenreMapper genreMapper) {
+    public DeezerApiConsumer(RestTemplate restTemplate, JSONParser parser, GenreRepository genreRepository, AlbumRepository albumRepository, ArtistRepository artistRepository, SongRepository songRepository, GenreMapper genreMapper, ArtistMapper artistMapper, AlbumMapper albumMapper, SongMapper songMapper) {
         this.restTemplate = restTemplate;
         this.parser = parser;
         this.genreRepository = genreRepository;
@@ -42,6 +47,9 @@ public class DeezerApiConsumer {
         this.artistRepository = artistRepository;
         this.songRepository = songRepository;
         this.genreMapper = genreMapper;
+        this.artistMapper = artistMapper;
+        this.albumMapper = albumMapper;
+        this.songMapper = songMapper;
     }
 
     public void populateGenres() throws ParseException {
@@ -51,26 +59,20 @@ public class DeezerApiConsumer {
         JSONArray array = (JSONArray) object.get("data");
         for (int i = 1; i < array.size(); i++) {
             JSONObject dataObject = (JSONObject) array.get(i);
-            Genre genre = genreMapper.fromMapToGenre(dataObject);
+            Genre genre = genreMapper.fromJsonToGenre(dataObject);
             genreRepository.save(genre);
 
         }
     }
 
     public void populateArtists() throws ParseException {
-        int i = 1;
+        int i = 259;
         List<Artist> artistList = new ArrayList<>();
-        while (i < 10) {
+        while (i <= 259) {
             String artistUrl = String.format("https://api.deezer.com/artist/%d", i);
             String response = restTemplate.getForObject(artistUrl, String.class);
             JSONObject object = (JSONObject) parser.parse(response);
-            Long id = (Long) object.get("id");
-            String name = (String) object.get("name");
-            String trackList = (String) object.get("tracklist");
-            Artist artist = new Artist(); // artist
-            artist.setId(id);
-            artist.setName(name);
-            artist.setArtistTrackListUrl(trackList);
+            Artist artist = artistMapper.fromJsonToArtist(object);
             artistList.add(artist);
             i++;
         }
@@ -88,19 +90,13 @@ public class DeezerApiConsumer {
             JSONArray albumArray = (JSONArray) albumJson.get("data");
             for (int j = 0; j < albumArray.size() / 2; j++) {
                 JSONObject singleAlbum = (JSONObject) albumArray.get(j);
-                Long albumId = (Long) singleAlbum.get("id");
-                String albumName = (String) singleAlbum.get("title");
                 Long genreId = (Long) singleAlbum.get("genre_id");
                 // one of Snoop Dogg albums is with genre_id -1 ?! Blame Deezer not me ! :)
                 if (genreId == -1) {
                     continue;
                 }
-                String albumTracklist = (String) singleAlbum.get("tracklist");
                 Genre genre = genreRepository.getReferenceById(genreId);
-                Album album = new Album();
-                album.setId(albumId);
-                album.setName(albumName);
-                album.setAlbumTrackListUrl(albumTracklist);
+                Album album = albumMapper.fromJsonToAlbum(singleAlbum);
                 album.setGenre(genre);
                 albumList.add(album);
             }
@@ -121,24 +117,11 @@ public class DeezerApiConsumer {
             JSONObject artist = (JSONObject) trackJsonObject.get("artist");
             Long artistId = (Long) artist.get("id");
 
-
             for (int k = 0; k < tracksArray.size() / 2; k++) {
                 JSONObject singleJsonTrack = (JSONObject) tracksArray.get(k);
-                Long trackId = (Long) singleJsonTrack.get("id");
-                String trackTitle = (String) singleJsonTrack.get("title");
-                Long duration = (Long) singleJsonTrack.get("duration");
-                Long rank = (Long) singleJsonTrack.get("rank");
-                String link = (String) singleJsonTrack.get("link");
-                String preview = (String) singleJsonTrack.get("preview");
-                Song song = new Song();
-                song.setId(trackId);
-                song.setTitle(trackTitle);
+                Song song = songMapper.fromJsonToSong(singleJsonTrack);
                 song.setArtist(artistRepository.getReferenceById(artistId));
                 song.setAlbum(album);
-                song.setRank(rank);
-                song.setDuration(duration);
-                song.setLink(link);
-                song.setPreviewUrl(preview);
                 songsList.add(song);
             }
 

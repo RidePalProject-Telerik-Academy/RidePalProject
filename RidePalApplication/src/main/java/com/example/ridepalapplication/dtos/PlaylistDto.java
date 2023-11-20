@@ -7,8 +7,6 @@ public class PlaylistDto {
     private  List<GenreDto> genreDtoList;
     private String name;
 
-
-
     public PlaylistDto() {
     }
 
