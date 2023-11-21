@@ -2,7 +2,6 @@ package com.example.ridepalapplication.services;
 
 import com.example.ridepalapplication.dtos.GenreDto;
 import com.example.ridepalapplication.exceptions.EntityNotFoundException;
-import com.example.ridepalapplication.exceptions.EntityNotFoundException;
 import com.example.ridepalapplication.helpers.CheckPermissions;
 import com.example.ridepalapplication.models.Genre;
 import com.example.ridepalapplication.models.Playlist;
@@ -12,14 +11,9 @@ import com.example.ridepalapplication.repositories.GenreRepository;
 import com.example.ridepalapplication.repositories.PlaylistRepository;
 import com.example.ridepalapplication.repositories.SongRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 import static com.example.ridepalapplication.helpers.CheckPermissions.checkAuthorization;
 
@@ -65,18 +59,30 @@ public class PlaylistServiceImpl implements PlaylistService {
                 throw new EntityNotFoundException("Genre","name",genreDto.getName());
             }
 
+            List<Long> artistsId = new ArrayList<>();
+
             while (currentGenreDuration < totalGenreDuration) {
-                List<Song> songs = songRepository.getMeSingleSongByGenre(genre.getId());
+                List<Song> songs;
 
-                boolean artistExist =  playlistSongs.stream().anyMatch(song -> song.getArtist().equals(songs.get(0).getArtist()));
-                    if(artistExist){
-                 continue;
-                     }
+                if(artistsId.isEmpty()){
+                    songs = songRepository.getMeSingleSongByGenre(genre.getId());
 
-                if (songs.isEmpty()) {
-                    //TODO implement exception
-                    break;
                 }
+                else {
+                    songs = songRepository.getMeSingleSongByGenreAndUniqueArtist(genre.getId(), artistsId);
+
+                    if (songs.isEmpty()) {
+                        throw new UnsupportedOperationException(String.format("The application does not support enough unique songs with genre " +
+                                "%s to satisfy your request !",genre.getName()));
+                    }
+                }
+
+                Long artistId = songs.get(0).getArtist().getId();
+                artistsId.add(artistId);
+
+
+
+
                 playlistSongs.add(songs.get(0));
                 currentGenreDuration  += songs.get(0).getDuration();
                 totalPlaylistDuration += songs.get(0).getDuration();

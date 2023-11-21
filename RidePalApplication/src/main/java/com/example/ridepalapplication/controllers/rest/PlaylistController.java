@@ -75,6 +75,9 @@ public class PlaylistController {
         } catch (AuthorizationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
+        catch (UnsupportedOperationException e){
+            throw new ResponseStatusException(HttpStatus.CONFLICT,e.getMessage());
+        }
     }
 
     @PutMapping("/{id}/name")
