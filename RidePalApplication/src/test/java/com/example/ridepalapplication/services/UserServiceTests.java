@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static com.example.ridepalapplication.MockHelpers.createAdminMockUser;
 import static com.example.ridepalapplication.MockHelpers.createMockUser;
 
 @ExtendWith(MockitoExtension.class)
@@ -145,14 +146,29 @@ public class UserServiceTests {
 
     @Test
     void updateUser_Should_ReturnUser_When_EmailNotExists_And_SameUser() {
+        User loggedUser = createMockUser();
+        User userToUpdate = createMockUser();
+        userToUpdate.setEmail("test@gmail.com");
+
+        Mockito.when(mockRepository.findByEmail(userToUpdate.getEmail()))
+                .thenReturn(null);
+
+        service.updateUser(loggedUser, userToUpdate);
+
+        Mockito.verify(mockRepository, Mockito.times(1))
+                .save(userToUpdate);
+    }
+
+    //TODO: fix logic
+    @Test
+    void updateUser_Should_ReturnUser_When_EmailNotExists_And_Admin() {
         User mockUser = createMockUser();
+        User adminMockUser = createAdminMockUser();
 
         Mockito.when(mockRepository.save(mockUser))
                 .thenReturn(mockUser);
 
-        mockUser.setEmail("new_mock_email@mock.com");
-
-        User result = service.updateUser(mockUser, mockUser);
+        User result = service.updateUser(adminMockUser, mockUser);
         Assertions.assertEquals(mockUser, result);
 
         Mockito.verify(mockRepository, Mockito.times(1))
@@ -162,10 +178,11 @@ public class UserServiceTests {
     @Test
     void updateUser_Should_ThrowException_When_EmailExists() {
         User mockUser = createMockUser();
-        service.createUser(mockUser);
+        User anotherUser = createAdminMockUser();
+        anotherUser.setEmail("mock_user@user.com");
 
         Mockito.when(mockRepository.findByEmail(mockUser.getEmail()))
-                .thenReturn(mockUser);
+                .thenReturn(anotherUser);
 
         EntityDuplicateException exception = Assertions.assertThrows(
                 EntityDuplicateException.class,
@@ -186,11 +203,29 @@ public class UserServiceTests {
         Assertions.assertEquals(String.format("You are not allowed to %s other users.", "update"), exception.getMessage());
     }
 
+
     @Test
     void deleteUser_should_CallRepository_When_SameUser() {
         User mockUser = createMockUser();
 
+        Mockito.when(mockRepository.findById(mockUser.getId()))
+                .thenReturn(Optional.of(mockUser));
+
         service.deleteUser(mockUser, mockUser.getId());
+
+        Mockito.verify(mockRepository, Mockito.times(1))
+                .deleteById(mockUser.getId());
+    }
+
+    @Test
+    void deleteUser_should_CallRepository_WhenAdmin() {
+        User mockUser = createMockUser();
+        User adminMockUser = createAdminMockUser();
+
+        Mockito.when(mockRepository.findById(mockUser.getId()))
+                .thenReturn(Optional.of(mockUser));
+
+        service.deleteUser(adminMockUser, mockUser.getId());
 
         Mockito.verify(mockRepository, Mockito.times(1))
                 .deleteById(mockUser.getId());
