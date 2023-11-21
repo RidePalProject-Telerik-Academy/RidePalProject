@@ -145,6 +145,10 @@ public class PlaylistController {
     public void populateArtists() throws ParseException {
         deezerApiConsumer.populateArtists();
     }
+    @GetMapping("/genres")
+    public void populateGenres() throws ParseException {
+        deezerApiConsumer.populateGenres();
+    }
 
     @GetMapping("/albums")
     public void populateAlbums() throws ParseException {
