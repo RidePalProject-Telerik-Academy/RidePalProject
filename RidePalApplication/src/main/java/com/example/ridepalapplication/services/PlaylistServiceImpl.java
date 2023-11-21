@@ -44,6 +44,12 @@ public class PlaylistServiceImpl implements PlaylistService {
 
             while (currentGenreDuration < totalGenreDuration) {
                 List<Song> songs = songRepository.getMeSingleSongByGenre(genre.getId());
+
+                boolean artistExist =  playlistSongs.stream().anyMatch(song -> song.getArtist().equals(songs.get(0).getArtist()));
+                    if(artistExist){
+                 continue;
+                     }
+
                 if (songs.isEmpty()) {
                     //TODO implement exception
                     break;

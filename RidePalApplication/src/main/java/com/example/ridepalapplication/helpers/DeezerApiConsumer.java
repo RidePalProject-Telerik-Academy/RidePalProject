@@ -1,6 +1,7 @@
 package com.example.ridepalapplication.helpers;
 
 
+import com.example.ridepalapplication.exceptions.EntityNotFoundException;
 import com.example.ridepalapplication.mappers.AlbumMapper;
 import com.example.ridepalapplication.mappers.ArtistMapper;
 import com.example.ridepalapplication.mappers.GenreMapper;
@@ -23,6 +24,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 @Component
@@ -66,12 +68,17 @@ public class DeezerApiConsumer {
     }
 
     public void populateArtists() throws ParseException {
-        int i = 259;
+        int i = 1;
         List<Artist> artistList = new ArrayList<>();
-        while (i <= 259) {
+        while (i <= 1024) {
             String artistUrl = String.format("https://api.deezer.com/artist/%d", i);
             String response = restTemplate.getForObject(artistUrl, String.class);
             JSONObject object = (JSONObject) parser.parse(response);
+            if(object.containsKey("error")){
+                i++;
+                continue;
+
+            }
             Artist artist = artistMapper.fromJsonToArtist(object);
             artistList.add(artist);
             i++;
@@ -82,27 +89,33 @@ public class DeezerApiConsumer {
     public void populateAlbums() throws ParseException {
         List<Artist> artists = artistRepository.findAll();
         List<Album> albumList = new ArrayList<>();
-        int i = 1;
-        while (i < artists.size()) {
-            String albumUrl = String.format("https://api.deezer.com/artist/%d/albums", i);
+        for (Artist artist : artists) {
+
+            String albumUrl = String.format("https://api.deezer.com/artist/%d/albums", artist.getId());
             String albumResponse = restTemplate.getForObject(albumUrl, String.class);
             JSONObject albumJson = (JSONObject) parser.parse(albumResponse);
             JSONArray albumArray = (JSONArray) albumJson.get("data");
-            for (int j = 0; j < albumArray.size() / 2; j++) {
+            for (int j = 0; j < albumArray.size() / 8; j++) {
                 JSONObject singleAlbum = (JSONObject) albumArray.get(j);
                 Long genreId = (Long) singleAlbum.get("genre_id");
-                // one of Snoop Dogg albums is with genre_id -1 ?! Blame Deezer not me ! :)
-                if (genreId == -1) {
-                    continue;
-                }
-                Genre genre = genreRepository.getReferenceById(genreId);
+                Genre genre;
+
+                try {
+                    genre = (genreRepository.findById(genreId).orElseThrow(
+                           () -> new EntityNotFoundException("Genre", genreId)));
+               }
+               catch (EntityNotFoundException e){
+                   continue;
+               }
+
+
                 Album album = albumMapper.fromJsonToAlbum(singleAlbum);
                 album.setGenre(genre);
                 albumList.add(album);
             }
             albumRepository.saveAll(albumList);
-        }
 
+    }
     }
     public void populateSongs() throws ParseException {
         List<Album> albumList = albumRepository.findAll();
@@ -116,6 +129,15 @@ public class DeezerApiConsumer {
             JSONArray tracksArray = (JSONArray) tracks.get("data");
             JSONObject artist = (JSONObject) trackJsonObject.get("artist");
             Long artistId = (Long) artist.get("id");
+            Artist existingArtist;
+            try {
+                existingArtist = artistRepository.findById(artistId).orElseThrow(
+                        ()->new EntityNotFoundException("Artist",artistId));
+            }
+            catch (EntityNotFoundException e){
+                existingArtist = artistMapper.fromJsonToArtist(artist);
+                artistRepository.save(existingArtist);
+            }
 
             for (int k = 0; k < tracksArray.size() / 2; k++) {
                 JSONObject singleJsonTrack = (JSONObject) tracksArray.get(k);

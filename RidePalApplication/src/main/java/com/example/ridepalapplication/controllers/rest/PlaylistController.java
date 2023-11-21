@@ -4,6 +4,7 @@ import com.example.ridepalapplication.dtos.GenreDto;
 import com.example.ridepalapplication.dtos.PlaylistDto;
 import com.example.ridepalapplication.exceptions.AuthorizationException;
 import com.example.ridepalapplication.helpers.AuthenticationHelper;
+import com.example.ridepalapplication.helpers.DeezerApiConsumer;
 import com.example.ridepalapplication.mappers.PlaylistMapper;
 import com.example.ridepalapplication.models.Playlist;
 import com.example.ridepalapplication.models.User;
@@ -24,13 +25,15 @@ public class PlaylistController {
     private final BingController bingController;
     private final PlaylistService playlistService;
     private final PlaylistMapper playlistMapper;
+   private final DeezerApiConsumer deezerApiConsumer;
 
     @Autowired
-    public PlaylistController(AuthenticationHelper authenticationHelper, BingController bingController, PlaylistService playlistService, PlaylistMapper playlistMapper) {
+    public PlaylistController(AuthenticationHelper authenticationHelper, BingController bingController, PlaylistService playlistService, PlaylistMapper playlistMapper, DeezerApiConsumer deezerApiConsumer) {
         this.authenticationHelper = authenticationHelper;
         this.bingController = bingController;
         this.playlistService = playlistService;
         this.playlistMapper = playlistMapper;
+        this.deezerApiConsumer = deezerApiConsumer;
     }
 
     @PostMapping
@@ -60,5 +63,17 @@ public class PlaylistController {
             throw new ResponseStatusException(HttpStatus.CONFLICT,"Total genres percentage exceeded !");
         }
         return genres;
+    }
+    @GetMapping("/artists")
+    public void populateArtists() throws ParseException{
+        deezerApiConsumer.populateArtists();
+    }
+    @GetMapping("/albums")
+    public void populateAlbums() throws ParseException{
+        deezerApiConsumer.populateAlbums();
+    }
+    @GetMapping("/songs")
+    public void populateSongs() throws ParseException{
+        deezerApiConsumer.populateSongs();
     }
 }
