@@ -9,6 +9,7 @@ import java.util.*;
 
 @Repository
 public interface PlaylistRepository extends JpaRepository<Playlist, Long> {
-//    List<Playlist> findPlaylistByNameContainingAndDurationBetweenAndTagsInOrderByRankDesc(String name, Integer min, Integer max, Collection<Set<Tag>> tags);
+    List<Playlist> findPlaylistByNameContainingAndDurationBetweenAndTagsInOrderByRankDesc(String name, Integer min, Integer max, Collection<Tag> tag);
+
     List<Playlist> findPlaylistByNameContainingAndDurationBetweenOrderByRankDesc(String name, Integer min, Integer max);
 }

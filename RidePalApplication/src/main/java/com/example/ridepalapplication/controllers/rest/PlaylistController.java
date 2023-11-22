@@ -52,9 +52,11 @@ public class PlaylistController {
     public List<Playlist> getAll(@RequestParam (required = false) String name,
                                  @RequestParam (required = false) Integer minDuration,
                                  @RequestParam (required = false) Integer maxDuration,
-                                 @RequestParam (required = false) String tag) {
+                                 @RequestParam (required = false) List<String> tags) {
 
-        return playlistService.getAll(name, minDuration, maxDuration, tag);
+
+
+        return playlistService.getAll(name, minDuration, maxDuration, tags);
     }
 
     //TODO: see how to implement filtering - get() - name, duration, genre(tags)

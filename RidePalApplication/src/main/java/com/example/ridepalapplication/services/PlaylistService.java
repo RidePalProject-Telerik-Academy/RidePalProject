@@ -11,7 +11,7 @@ import java.util.Optional;
 
 public interface PlaylistService {
 
-    List<Playlist> getAll(String name, Integer minDuration, Integer maxDuration, String tag);
+    List<Playlist> getAll(String name, Integer minDuration, Integer maxDuration, List<String> tags);
 
     Optional<Playlist> getById(long id);
 

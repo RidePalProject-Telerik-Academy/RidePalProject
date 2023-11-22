@@ -34,7 +34,8 @@ public class PlaylistServiceImpl implements PlaylistService {
 
 
     @Override
-    public List<Playlist> getAll(String name, Integer minDuration, Integer maxDuration, String tag) {
+    public List<Playlist> getAll(String name, Integer minDuration, Integer maxDuration, List<String> tags) {
+
         if (name == null) {
             name = "";
         }
@@ -44,14 +45,16 @@ public class PlaylistServiceImpl implements PlaylistService {
         if (maxDuration == null) {
             maxDuration = Integer.MAX_VALUE;
         }
-
-//        Tag tagToCheck = tagRepository.findByName(tag);
-//        Set<Tag> tagSet = new HashSet<>();
-//        tagSet.add(tagToCheck);
-//        Collection collection = new HashSet();
-//        collection.add(tagSet);
-
-        return playlistRepository.findPlaylistByNameContainingAndDurationBetweenOrderByRankDesc(name, minDuration, maxDuration);
+        Set<Tag> tagSet = new HashSet<>();
+        if (tags == null || tags.isEmpty()) {
+            return playlistRepository.findPlaylistByNameContainingAndDurationBetweenOrderByRankDesc(name, minDuration, maxDuration);
+        } else {
+            for (String tag : tags) {
+                Tag currentTag = tagRepository.findByName(tag);
+                tagSet.add(currentTag);
+            }
+            return playlistRepository.findPlaylistByNameContainingAndDurationBetweenAndTagsInOrderByRankDesc(name, minDuration, maxDuration, tagSet);
+        }
     }
 
     @Override
