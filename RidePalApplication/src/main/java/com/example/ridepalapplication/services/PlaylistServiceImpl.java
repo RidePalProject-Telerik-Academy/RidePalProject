@@ -179,6 +179,4 @@ public class PlaylistServiceImpl implements PlaylistService {
 
         playlistRepository.deleteById(id);
     }
-
-
 }
