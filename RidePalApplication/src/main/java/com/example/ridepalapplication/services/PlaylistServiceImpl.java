@@ -3,10 +3,7 @@ package com.example.ridepalapplication.services;
 import com.example.ridepalapplication.dtos.GenreDto;
 import com.example.ridepalapplication.exceptions.EntityNotFoundException;
 import com.example.ridepalapplication.helpers.CheckPermissions;
-import com.example.ridepalapplication.models.Genre;
-import com.example.ridepalapplication.models.Playlist;
-import com.example.ridepalapplication.models.Song;
-import com.example.ridepalapplication.models.User;
+import com.example.ridepalapplication.models.*;
 import com.example.ridepalapplication.repositories.GenreRepository;
 import com.example.ridepalapplication.repositories.PlaylistRepository;
 import com.example.ridepalapplication.repositories.SongRepository;
@@ -47,6 +44,7 @@ public class PlaylistServiceImpl implements PlaylistService {
     @Override
     public Playlist generatePlaylist(Playlist playlist,int travelDuration,List<GenreDto> genreDtoList) {
         Set<Song> playlistSongs = new HashSet<>();
+        List<Long> artistsId = new ArrayList<>();
         int totalPlaylistDuration = 0;
         for (GenreDto genreDto : genreDtoList) {
             int getGenrePercentage = genreDto.getPercentage();
@@ -58,8 +56,6 @@ public class PlaylistServiceImpl implements PlaylistService {
             if(genre == null){
                 throw new EntityNotFoundException("Genre","name",genreDto.getName());
             }
-
-            List<Long> artistsId = new ArrayList<>();
 
             while (currentGenreDuration < totalGenreDuration) {
                 List<Song> songs;
@@ -79,9 +75,6 @@ public class PlaylistServiceImpl implements PlaylistService {
 
                 Long artistId = songs.get(0).getArtist().getId();
                 artistsId.add(artistId);
-
-
-
 
                 playlistSongs.add(songs.get(0));
                 currentGenreDuration  += songs.get(0).getDuration();
