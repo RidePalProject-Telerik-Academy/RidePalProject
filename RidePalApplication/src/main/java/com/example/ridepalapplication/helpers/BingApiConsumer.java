@@ -1,5 +1,6 @@
 package com.example.ridepalapplication.helpers;
 
+import com.example.ridepalapplication.dtos.LocationDto;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -22,7 +23,8 @@ public class BingApiConsumer {
     }
 
     public String extractCoordinates(String inputLocation) throws ParseException {
-        String url = String.format("https://dev.virtualearth.net/REST/v1/Locations?query=%s&key=%s",inputLocation, BING_KEY);
+//        String url = String.format("https://dev.virtualearth.net/REST/v1/Locations?query=%s&key=%s",inputLocation, BING_KEY);
+        String url= String.format("https://dev.virtualearth.net/REST/v1/Locations?q=%s&key=%s", inputLocation, BING_KEY);
         String response = restTemplate.getForObject(url, String.class);
         JSONObject object = (JSONObject) parser.parse(response);
         JSONArray results = (JSONArray) object.get("resourceSets");
@@ -32,8 +34,8 @@ public class BingApiConsumer {
         JSONArray geo = (JSONArray) location.get("geocodePoints");
         JSONObject point = (JSONObject) geo.get(0);
         JSONArray coordinates = (JSONArray) point.get("coordinates");
-        String lat = (String) coordinates.get(0).toString();
-        String lon = (String) coordinates.get(1).toString();
+        String lat = coordinates.get(0).toString();
+        String lon = coordinates.get(1).toString();
         return lat + "," + lon;
     }
 

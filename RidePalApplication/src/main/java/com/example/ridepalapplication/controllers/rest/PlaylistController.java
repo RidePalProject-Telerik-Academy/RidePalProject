@@ -4,12 +4,14 @@ import com.example.ridepalapplication.dtos.GenreDto;
 import com.example.ridepalapplication.dtos.PlaylistDto;
 import com.example.ridepalapplication.dtos.*;
 import com.example.ridepalapplication.exceptions.AuthorizationException;
+import com.example.ridepalapplication.exceptions.EntityDuplicateException;
 import com.example.ridepalapplication.exceptions.EntityNotFoundException;
 import com.example.ridepalapplication.helpers.AuthenticationHelper;
 import com.example.ridepalapplication.helpers.DeezerApiConsumer;
 import com.example.ridepalapplication.mappers.PlaylistMapper;
 import com.example.ridepalapplication.models.Playlist;
 import com.example.ridepalapplication.models.Song;
+import com.example.ridepalapplication.models.Tag;
 import com.example.ridepalapplication.models.User;
 import com.example.ridepalapplication.services.PlaylistService;
 import com.example.ridepalapplication.services.SongService;
@@ -47,11 +49,18 @@ public class PlaylistController {
     }
 
     @GetMapping
-    public List<Playlist> getAll() {
-        return playlistService.getAll();
+    public List<Playlist> getAll(@RequestParam (required = false) String name,
+                                 @RequestParam (required = false) Integer minDuration,
+                                 @RequestParam (required = false) Integer maxDuration,
+                                 @RequestParam (required = false) List<String> tags) {
+
+
+
+        return playlistService.getAll(name, minDuration, maxDuration, tags);
     }
 
-    //TODO: see how to implement filtering - get() - name, creator, duration
+    //TODO: see how to implement filtering - get() - name, duration, genre(tags)
+    //TODO: sort -> default, playlists must be sorted by average rank descending
 
     @GetMapping("/{id}")
     public Optional<Playlist> getById(@PathVariable long id) {
@@ -74,9 +83,8 @@ public class PlaylistController {
             return playlistService.generatePlaylist(playlist, travelDuration, genreList);
         } catch (AuthorizationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
-        }
-        catch (UnsupportedOperationException e){
-            throw new ResponseStatusException(HttpStatus.CONFLICT,e.getMessage());
+        } catch (UnsupportedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         }
     }
 
@@ -115,9 +123,37 @@ public class PlaylistController {
         }
     }
 
+    @PostMapping("/{id}/tag")
+    public Playlist createTag(@RequestHeader HttpHeaders headers, @PathVariable int id, @RequestBody Tag tag) {
+        try {
+            User user = authenticationHelper.tryGetUser(headers);
+            Playlist playlistToUpdate = playlistService.getById(id)
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Playlist with id %s not found.", id)));
 
-    //TODO: addTag(to Tags table + playlist)
-    //TODO: deleteTag(from playlist, not from Tag table)
+            playlistService.createTag(user, tag, playlistToUpdate);
+            return playlistToUpdate;
+        } catch (AuthorizationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        } catch (EntityDuplicateException e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/{id}/tag")
+    public Playlist deleteTag(@RequestHeader HttpHeaders headers, @PathVariable int id, @RequestBody Tag tag) {
+        try {
+            User user = authenticationHelper.tryGetUser(headers);
+            Playlist playlistToUpdate = playlistService.getById(id)
+                    .orElseThrow( () -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Playlist with id %s not found.", id)));
+
+            playlistService.deleteTag(user, tag, playlistToUpdate);
+            return playlistToUpdate;
+        } catch (AuthorizationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
 
     @DeleteMapping("/{id}")
     public void delete(@RequestHeader HttpHeaders headers, @PathVariable long id) {
@@ -147,6 +183,10 @@ public class PlaylistController {
     @GetMapping("/artists")
     public void populateArtists() throws ParseException {
         deezerApiConsumer.populateArtists();
+    }
+    @GetMapping("/genres")
+    public void populateGenres() throws ParseException {
+        deezerApiConsumer.populateGenres();
     }
 
     @GetMapping("/albums")

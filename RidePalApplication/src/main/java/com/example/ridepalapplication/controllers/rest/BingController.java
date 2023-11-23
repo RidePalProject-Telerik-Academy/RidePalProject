@@ -19,10 +19,8 @@ public class BingController {
 
     @GetMapping
     public int calculateTravelTime(@RequestBody LocationDto locationDto) throws ParseException {
-        String startLocation = locationDto.getStartLocation();
-        String endLocation = locationDto.getEndLocation();
-        String startCoordinates = bingApiConsumer.extractCoordinates(startLocation);
-        String endCoordinates = bingApiConsumer.extractCoordinates(endLocation);
+        String startCoordinates = bingApiConsumer.extractCoordinates(locationDto.getStartLocation()+ "," + locationDto.getStartAddress());
+        String endCoordinates = bingApiConsumer.extractCoordinates(locationDto.getEndLocation()+ "," + locationDto.getEndAddress());
         double time = bingApiConsumer.getTime(startCoordinates, endCoordinates);
         return (int)time * 60;
     }
