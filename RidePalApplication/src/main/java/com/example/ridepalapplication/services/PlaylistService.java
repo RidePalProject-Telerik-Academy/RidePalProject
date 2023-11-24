@@ -19,7 +19,9 @@ public interface PlaylistService {
 
     Playlist updateName(User user, Playlist playlistToUpdate, String newName);
 
-    Playlist updateSong(User user, Song songToUpdate, Playlist playlistToUpdate, boolean isAdded);
+    Playlist addSong(User user, Song songToAdd, Playlist playlistToUpdate);
+
+    Playlist deleteSong(User user, Song songToDelete, Playlist playlistToUpdate);
 
     void createTag(User user, Tag tag, Playlist playlistToUpdate);
 

@@ -49,18 +49,14 @@ public class PlaylistController {
     }
 
     @GetMapping
-    public List<Playlist> getAll(@RequestParam (required = false) String name,
-                                 @RequestParam (required = false) Integer minDuration,
-                                 @RequestParam (required = false) Integer maxDuration,
-                                 @RequestParam (required = false) List<String> tags) {
-
+    public List<Playlist> getAll(@RequestParam(required = false) String name,
+                                 @RequestParam(required = false) Integer minDuration,
+                                 @RequestParam(required = false) Integer maxDuration,
+                                 @RequestParam(required = false) List<String> tags) {
 
 
         return playlistService.getAll(name, minDuration, maxDuration, tags);
     }
-
-    //TODO: see how to implement filtering - get() - name, duration, genre(tags)
-    //TODO: sort -> default, playlists must be sorted by average rank descending
 
     @GetMapping("/{id}")
     public Optional<Playlist> getById(@PathVariable long id) {
@@ -104,18 +100,35 @@ public class PlaylistController {
         }
     }
 
-    @PutMapping("/{id}/song")
-    public Playlist updateSong(@RequestHeader HttpHeaders headers,
-                               @PathVariable int id,
-                               @Valid @RequestBody UpdatePlaylistSongDto updatePlaylistSongDto,
-                               @RequestParam boolean isAdded) {
-
+    @PostMapping("/{id}/song")
+    public Playlist addSong(@RequestHeader HttpHeaders headers,
+                            @PathVariable int id,
+                            @Valid @RequestBody UpdatePlaylistSongDto updatePlaylistSongDto) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
             Song songToUpdate = songService.getByTitleAndArtist(updatePlaylistSongDto.getTitle(), updatePlaylistSongDto.getArtist());
             Playlist playlistToUpdate = playlistService.getById(id)
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Playlist with id %s not found.", id)));
-            return playlistService.updateSong(user, songToUpdate, playlistToUpdate, isAdded);
+            return playlistService.addSong(user, songToUpdate, playlistToUpdate);
+        } catch (AuthorizationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (EntityDuplicateException e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/{id}/song")
+    public Playlist deleteSong(@RequestHeader HttpHeaders headers,
+                               @PathVariable int id,
+                               @Valid @RequestBody UpdatePlaylistSongDto updatePlaylistSongDto) {
+        try {
+            User user = authenticationHelper.tryGetUser(headers);
+            Song songToUpdate = songService.getByTitleAndArtist(updatePlaylistSongDto.getTitle(), updatePlaylistSongDto.getArtist());
+            Playlist playlistToUpdate = playlistService.getById(id)
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Playlist with id %s not found.", id)));
+            return playlistService.deleteSong(user, songToUpdate, playlistToUpdate);
         } catch (AuthorizationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         } catch (EntityNotFoundException e) {
@@ -144,7 +157,7 @@ public class PlaylistController {
         try {
             User user = authenticationHelper.tryGetUser(headers);
             Playlist playlistToUpdate = playlistService.getById(id)
-                    .orElseThrow( () -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Playlist with id %s not found.", id)));
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Playlist with id %s not found.", id)));
 
             playlistService.deleteTag(user, tag, playlistToUpdate);
             return playlistToUpdate;
@@ -184,6 +197,7 @@ public class PlaylistController {
     public void populateArtists() throws ParseException {
         deezerApiConsumer.populateArtists();
     }
+
     @GetMapping("/genres")
     public void populateGenres() throws ParseException {
         deezerApiConsumer.populateGenres();
