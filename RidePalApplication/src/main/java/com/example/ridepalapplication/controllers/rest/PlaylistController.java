@@ -100,18 +100,35 @@ public class PlaylistController {
         }
     }
 
-    @PutMapping("/{id}/song")
-    public Playlist updateSong(@RequestHeader HttpHeaders headers,
-                               @PathVariable int id,
-                               @Valid @RequestBody UpdatePlaylistSongDto updatePlaylistSongDto,
-                               @RequestParam boolean isAdded) {
-
+    @PostMapping("/{id}/song")
+    public Playlist addSong(@RequestHeader HttpHeaders headers,
+                            @PathVariable int id,
+                            @Valid @RequestBody UpdatePlaylistSongDto updatePlaylistSongDto) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
             Song songToUpdate = songService.getByTitleAndArtist(updatePlaylistSongDto.getTitle(), updatePlaylistSongDto.getArtist());
             Playlist playlistToUpdate = playlistService.getById(id)
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Playlist with id %s not found.", id)));
-            return playlistService.updateSong(user, songToUpdate, playlistToUpdate, isAdded);
+            return playlistService.addSong(user, songToUpdate, playlistToUpdate);
+        } catch (AuthorizationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (EntityDuplicateException e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/{id}/song")
+    public Playlist deleteSong(@RequestHeader HttpHeaders headers,
+                               @PathVariable int id,
+                               @Valid @RequestBody UpdatePlaylistSongDto updatePlaylistSongDto) {
+        try {
+            User user = authenticationHelper.tryGetUser(headers);
+            Song songToUpdate = songService.getByTitleAndArtist(updatePlaylistSongDto.getTitle(), updatePlaylistSongDto.getArtist());
+            Playlist playlistToUpdate = playlistService.getById(id)
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Playlist with id %s not found.", id)));
+            return playlistService.deleteSong(user, songToUpdate, playlistToUpdate);
         } catch (AuthorizationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         } catch (EntityNotFoundException e) {
