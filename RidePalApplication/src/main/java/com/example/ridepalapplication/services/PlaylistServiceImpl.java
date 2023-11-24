@@ -131,22 +131,58 @@ public class PlaylistServiceImpl implements PlaylistService {
     }
 
     @Override
-    public Playlist updateSong(User user, Song songToUpdate, Playlist playlistToUpdate, boolean isAdded) {
+    public Playlist addSong(User user, Song songToAdd, Playlist playlistToUpdate) {
         checkAuthorization(user, playlistToUpdate.getCreator(), "update playlist songs");
         int currentPlaylistDuration = playlistToUpdate.getDuration();
+        Long currentPlaylistRank = playlistToUpdate.getRank();
 
-        Long currentSongDuration = songToUpdate.getDuration();
+        Long currentSongDuration = songToAdd.getDuration();
         int temp = Math.toIntExact(currentSongDuration);
 
-        if (isAdded) {
-            playlistToUpdate.addSong(songToUpdate);
-            currentPlaylistDuration += temp;
-        } else {
-            playlistToUpdate.removeSong(songToUpdate);
-            currentPlaylistDuration -= temp;
+        Long currentSongRank = songToAdd.getRank();
+
+        if (playlistToUpdate.getSongs().contains(songToAdd)) {
+            throw new EntityDuplicateException("Song", "title", songToAdd.getTitle(), "in the playlist");
         }
 
+        Long totalPlaylistRank = playlistToUpdate.getSongs().size()*currentPlaylistRank;
+        totalPlaylistRank += currentSongRank;
+        playlistToUpdate.addSong(songToAdd);
+        Long newRank = totalPlaylistRank / playlistToUpdate.getSongs().size();
+        currentPlaylistDuration += temp;
+
         playlistToUpdate.setDuration(currentPlaylistDuration);
+        playlistToUpdate.setRank(newRank);
+
+        playlistRepository.save(playlistToUpdate);
+        return playlistToUpdate;
+    }
+
+
+    @Override
+    public Playlist deleteSong(User user, Song songToDelete, Playlist playlistToUpdate) {
+        checkAuthorization(user, playlistToUpdate.getCreator(), "update playlist songs");
+        int currentPlaylistDuration = playlistToUpdate.getDuration();
+        Long currentPlaylistRank = playlistToUpdate.getRank();
+
+        Long currentSongDuration = songToDelete.getDuration();
+        int temp = Math.toIntExact(currentSongDuration);
+
+        Long currentSongRank = songToDelete.getRank();
+
+        if (!playlistToUpdate.getSongs().contains(songToDelete)) {
+            throw new EntityNotFoundException("Song", "title", songToDelete.getTitle());
+        }
+
+        Long totalPlaylistRank = playlistToUpdate.getSongs().size()*currentPlaylistRank;
+        totalPlaylistRank -=currentSongRank;
+        playlistToUpdate.removeSong(songToDelete);
+        Long newRank = totalPlaylistRank / playlistToUpdate.getSongs().size();
+        currentPlaylistDuration -= temp;
+
+        playlistToUpdate.setDuration(currentPlaylistDuration);
+        playlistToUpdate.setRank(newRank);
+
         playlistRepository.save(playlistToUpdate);
         return playlistToUpdate;
     }
