@@ -34,8 +34,8 @@ public class AlbumServiceImpl implements AlbumService {
     }
 
     @Override
-    public Page<Album> findAll(Integer page, Integer pageSize, String albumTitle, String genre) {
-        List<Specification<Album>> specifications = new ArrayList<>();
+    public List<Album> findAll(Integer page, Integer pageSize, String albumTitle, String genre) {
+
         PageRequest pageable = PageRequest.of(page, pageSize);
 
         Specification<Album> albumTitleSpecification = (root, query, criteriaBuilder) ->
@@ -47,11 +47,10 @@ public class AlbumServiceImpl implements AlbumService {
             return criteriaBuilder.like(criteriaBuilder.upper(artistJoin.get("name").as(String.class)),
                     "%" + genre + "%");
         };
-        specifications.add(albumTitleSpecification);
-        specifications.add(albumGenreSpecification);
 
-        Specification<Album> albumSpecifications = Specification.allOf(specifications);
 
-       return albumRepository.findAll(albumSpecifications,pageable);
+        Specification<Album> albumSpecifications = Specification.allOf(albumGenreSpecification,albumTitleSpecification);
+
+       return albumRepository.findAll(albumSpecifications,pageable).getContent();
     }
 }

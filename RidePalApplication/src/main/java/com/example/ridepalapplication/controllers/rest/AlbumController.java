@@ -2,13 +2,11 @@ package com.example.ridepalapplication.controllers.rest;
 
 import com.example.ridepalapplication.exceptions.EntityNotFoundException;
 import com.example.ridepalapplication.models.Album;
-import com.example.ridepalapplication.models.Song;
 import com.example.ridepalapplication.services.AlbumService;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -27,8 +25,7 @@ public class AlbumController {
                              @RequestParam(required = false,defaultValue = "10")Integer pageSize,
                              @RequestParam(required = false,defaultValue = "")String albumTitle,
                              @RequestParam(required = false,defaultValue = "")String genre){
-        Page<Album> albums = albumService.findAll(page,pageSize,albumTitle,genre);
-        return albums.getContent();
+        return albumService.findAll(page,pageSize,albumTitle,genre);
     }
 
     @GetMapping("{id}")

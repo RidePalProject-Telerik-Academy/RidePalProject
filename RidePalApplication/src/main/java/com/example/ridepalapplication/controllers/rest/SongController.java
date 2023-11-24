@@ -27,8 +27,8 @@ public class SongController {
                              @RequestParam(required = false,defaultValue = "10")Integer pageSize,
                              @RequestParam(required = false,defaultValue = "")String songTitle,
                              @RequestParam(required = false,defaultValue = "")String artist){
-        Page<Song> songs = songService.findAll(page,pageSize,songTitle,artist);
-      return songs.getContent();
+
+      return songService.findAll(page,pageSize,songTitle,artist);
     }
 
     @GetMapping("{id}")

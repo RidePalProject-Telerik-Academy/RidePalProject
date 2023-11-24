@@ -8,6 +8,7 @@ import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -26,8 +27,9 @@ public class SongServiceImpl implements SongService {
     }
 
     @Override
-    public Page<Song> findAll(Integer page, Integer pageSize, String songTitle,String artist) {
-        List<Specification<Song>> specifications = new ArrayList<>();
+    public List<Song> findAll(Integer page, Integer pageSize, String songTitle,String artist) {
+        PageRequest pageable = PageRequest.of(page, pageSize);
+
         Specification<Song> songTitleSpecification = (root, query, criteriaBuilder) ->
                 criteriaBuilder.like(criteriaBuilder.upper(root.get("title").as(String.class)),
                         "%" + songTitle + "%");
@@ -37,13 +39,10 @@ public class SongServiceImpl implements SongService {
             return criteriaBuilder.like(criteriaBuilder.upper(artistJoin.get("name").as(String.class)),
                     "%" + artist + "%");
         };
-        specifications.add(songTitleSpecification);
-        specifications.add(songArtistSpecification);
 
-        Specification<Song> songSpecification = Specification.allOf(specifications);
+        Specification<Song> songSpecification = Specification.allOf(songTitleSpecification,songArtistSpecification);
 
-        PageRequest pageable = PageRequest.of(page, pageSize);
-        return songRepository.findAll(songSpecification, pageable);
+        return songRepository.findAll(songSpecification, pageable.withSort(Sort.Direction.DESC,"rank")).getContent();
     }
     @Override
     public Optional<Song> getById(Long id) {

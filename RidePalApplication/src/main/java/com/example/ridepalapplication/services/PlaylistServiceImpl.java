@@ -9,8 +9,13 @@ import com.example.ridepalapplication.repositories.GenreRepository;
 import com.example.ridepalapplication.repositories.PlaylistRepository;
 import com.example.ridepalapplication.repositories.SongRepository;
 import com.example.ridepalapplication.repositories.TagRepository;
+import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.JoinType;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -34,28 +39,34 @@ public class PlaylistServiceImpl implements PlaylistService {
 
 
     @Override
-    public List<Playlist> getAll(String name, Integer minDuration, Integer maxDuration, List<String> tags) {
+    public List<Playlist> getAll(Integer page, Integer pageSize, String name, Integer minDuration, Integer maxDuration, List<String> tagName) {
+        PageRequest pageRequest = PageRequest.of(page, pageSize);
+        Specification<Playlist> playlistSpecification;
 
-        if (name == null) {
-            name = "";
+        Specification<Playlist> titleSpec = (root, query, criteriaBuilder) ->
+                criteriaBuilder.like(criteriaBuilder.upper(root.get("name").as(String.class)), "%" + name + "%");
+
+        Specification<Playlist> durationSpec = (root, query, criteriaBuilder) ->
+                criteriaBuilder.between(root.get("duration"), minDuration, maxDuration);
+        Specification<Playlist> tagNameSpec;
+        if(!tagName.isEmpty()){
+            tagNameSpec = (root, query, criteriaBuilder) -> {
+
+                Join<Playlist, Tag> tagJoin = root.join("tags", JoinType.INNER);
+                return tagJoin.get("name").as(String.class).in(tagName);
+
+
+            };
+            playlistSpecification= Specification.allOf(titleSpec, durationSpec, tagNameSpec);
         }
-        if (minDuration == null) {
-            minDuration = 0;
-        }
-        if (maxDuration == null) {
-            maxDuration = Integer.MAX_VALUE;
-        }
-        Set<Tag> tagSet = new HashSet<>();
-        if (tags == null || tags.isEmpty()) {
-            return playlistRepository.findPlaylistByNameContainingAndDurationBetweenOrderByRankDesc(name, minDuration, maxDuration);
-        } else {
-            for (String tag : tags) {
-                Tag currentTag = tagRepository.findByName(tag);
-                tagSet.add(currentTag);
-            }
-            return playlistRepository.findPlaylistByNameContainingAndDurationBetweenAndTagsInOrderByRankDesc(name, minDuration, maxDuration, tagSet);
-        }
+
+        else playlistSpecification = Specification.allOf(titleSpec,durationSpec);
+
+        return playlistRepository.findAll(playlistSpecification, pageRequest
+                        .withSort(Sort.Direction.DESC, "rank"))
+                .getContent();
     }
+
 
     @Override
     public Optional<Playlist> getById(long id) {

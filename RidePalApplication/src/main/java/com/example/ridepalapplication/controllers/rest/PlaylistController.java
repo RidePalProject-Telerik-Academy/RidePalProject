@@ -33,34 +33,30 @@ public class PlaylistController {
     private final BingController bingController;
     private final PlaylistService playlistService;
     private final PlaylistMapper playlistMapper;
-    private final DeezerApiConsumer deezerApiConsumer;
+
     private final SongService songService;
 
     @Autowired
     public PlaylistController(AuthenticationHelper authenticationHelper, BingController bingController,
                               PlaylistService playlistService, PlaylistMapper playlistMapper,
-                              DeezerApiConsumer deezerApiConsumer, SongService songService) {
+                              SongService songService) {
         this.authenticationHelper = authenticationHelper;
         this.bingController = bingController;
         this.playlistService = playlistService;
         this.playlistMapper = playlistMapper;
-        this.deezerApiConsumer = deezerApiConsumer;
         this.songService = songService;
     }
 
     @GetMapping
-    public List<Playlist> getAll(@RequestParam (required = false) String name,
-                                 @RequestParam (required = false) Integer minDuration,
-                                 @RequestParam (required = false) Integer maxDuration,
-                                 @RequestParam (required = false) List<String> tags) {
+    public List<Playlist> getAll(@RequestParam(required = false,defaultValue = "0")Integer page,
+                                 @RequestParam(required = false,defaultValue = "10")Integer pageSize,
+                                 @RequestParam (required = false,defaultValue = "") String name,
+                                 @RequestParam (required = false,defaultValue = "0") Integer minDuration,
+                                 @RequestParam (required = false,defaultValue = "2147483647") Integer maxDuration,
+                                 @RequestParam(required = false,defaultValue = "")List<String> tagName) {
 
-
-
-        return playlistService.getAll(name, minDuration, maxDuration, tags);
+        return playlistService.getAll(page,pageSize,name, minDuration, maxDuration,tagName);
     }
-
-    //TODO: see how to implement filtering - get() - name, duration, genre(tags)
-    //TODO: sort -> default, playlists must be sorted by average rank descending
 
     @GetMapping("/{id}")
     public Optional<Playlist> getById(@PathVariable long id) {
@@ -178,24 +174,5 @@ public class PlaylistController {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Total genres percentage exceeded!");
         }
         return genres;
-    }
-
-    @GetMapping("/artists")
-    public void populateArtists() throws ParseException {
-        deezerApiConsumer.populateArtists();
-    }
-    @GetMapping("/genres")
-    public void populateGenres() throws ParseException {
-        deezerApiConsumer.populateGenres();
-    }
-
-    @GetMapping("/albums")
-    public void populateAlbums() throws ParseException {
-        deezerApiConsumer.populateAlbums();
-    }
-
-    @GetMapping("/songs")
-    public void populateSongs() throws ParseException {
-        deezerApiConsumer.populateSongs();
     }
 }
