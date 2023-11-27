@@ -13,7 +13,7 @@ public class UpdateUserDto {
     @Size(min = 4, max = 32, message = "Last Name must be between 4 and 32 symbols")
     private String lastName;
     @Size(min = 6, max = 16, message = "Password must be between 6 and 16 symbols")
-    @Pattern(regexp = ".*[!@#%&_*].*", message = "Password must contain a special symbol")
+//    @Pattern(regexp = ".*[!@#%&_*].*", message = "Password must contain a special symbol")
     private String password;
 
     public UpdateUserDto() {

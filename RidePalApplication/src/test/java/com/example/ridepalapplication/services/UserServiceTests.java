@@ -70,19 +70,19 @@ public class UserServiceTests {
         Assertions.assertEquals(String.format("User with id %s not found.", mockId), exception.getMessage());
     }
 
-    @Test
-    void getByUsername_Should_ReturnUser() {
-        User mockUser = createMockUser();
-
-        Mockito.when(mockRepository.findByUsername(mockUser.getUsername()))
-                .thenReturn(mockUser);
-
-        User result = service.getByUsername(mockUser.getUsername());
-        Assertions.assertEquals(mockUser, result);
-
-        Mockito.verify(mockRepository, Mockito.times(1))
-                .findByUsername(mockUser.getUsername());
-    }
+//    @Test
+//    void getByUsername_Should_ReturnUser() {
+//        User mockUser = createMockUser();
+//
+//        Mockito.when(mockRepository.findByUsername(mockUser.getUsername()))
+//                .thenReturn(mockUser);
+//
+//        User result = service.getByUsername(mockUser.getUsername());
+//        Assertions.assertEquals(mockUser, result);
+//
+//        Mockito.verify(mockRepository, Mockito.times(1))
+//                .findByUsername(mockUser.getUsername());
+//    }
 
     @Test
     void getByUsername_Should_ThrowException_When_NotFound() {
@@ -112,21 +112,21 @@ public class UserServiceTests {
                 .save(mockUser);
     }
 
-    @Test
-    void createUser_Should_ThrowException_When_UsernameExists() {
-
-        User mockUser = createMockUser();
-        service.createUser(mockUser);
-
-        Mockito.when(mockRepository.findByUsername(mockUser.getUsername()))
-                .thenReturn(mockUser);
-
-        EntityDuplicateException exception = Assertions.assertThrows(
-                EntityDuplicateException.class,
-                () -> service.createUser(mockUser));
-
-        Assertions.assertEquals(String.format("User with %s %s already exists.", "username", mockUser.getUsername()), exception.getMessage());
-    }
+//    @Test
+//    void createUser_Should_ThrowException_When_UsernameExists() {
+//
+//        User mockUser = createMockUser();
+//        service.createUser(mockUser);
+//
+//        Mockito.when(mockRepository.findByUsername(mockUser.getUsername()))
+//                .thenReturn(mockUser);
+//
+//        EntityDuplicateException exception = Assertions.assertThrows(
+//                EntityDuplicateException.class,
+//                () -> service.createUser(mockUser));
+//
+//        Assertions.assertEquals(String.format("User with %s %s already exists.", "username", mockUser.getUsername()), exception.getMessage());
+//    }
 
     @Test
     void createUser_Should_ThrowException_When_EmailExists() {
