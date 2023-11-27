@@ -6,7 +6,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -33,6 +32,7 @@ public class User implements UserDetails {
     private boolean isAdmin;
 
     @ManyToMany(fetch = FetchType.EAGER)
+
     @JoinTable(
             name = "users_roles",
             joinColumns = { @JoinColumn(name = "user_id") },
@@ -98,6 +98,7 @@ public class User implements UserDetails {
     }
 
     @Override
+    @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return this.authorities;
     }

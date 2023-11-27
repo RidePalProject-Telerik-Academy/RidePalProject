@@ -43,9 +43,6 @@ public class PlaylistController {
     private final PlaylistService playlistService;
     private final PlaylistMapper playlistMapper;
     private final SongService songService;
-    private final UserDetailsService userDetailsService;
-    private final UserService userService;
-    private final AuthenticationManager authenticationManager;
     private final TagMapper tagMapper;
 
     @Autowired
@@ -54,18 +51,13 @@ public class PlaylistController {
                               PlaylistService playlistService,
                               PlaylistMapper playlistMapper,
                               SongService songService,
-                              UserDetailsService userDetailsService,
-                              UserService userService,
-                              AuthenticationManager authenticationManager,
                               TagMapper tagMapper) {
         this.authenticationHelper = authenticationHelper;
         this.bingController = bingController;
         this.playlistService = playlistService;
         this.playlistMapper = playlistMapper;
         this.songService = songService;
-        this.userDetailsService = userDetailsService;
-        this.userService = userService;
-        this.authenticationManager = authenticationManager;
+
         this.tagMapper = tagMapper;
     }
 
@@ -94,14 +86,7 @@ public class PlaylistController {
     public Playlist generatePlaylist(@RequestBody PlaylistDto playlistDto, @RequestHeader HttpHeaders headers) throws ParseException {
 
         try {
-            String authorization = headers.get("Authorization").get(0);
-            String base64Credentials = authorization.substring("Basic".length()).trim();
-            byte[] credDecoded = Base64.getDecoder().decode(base64Credentials);
-            String credentials = new String(credDecoded, StandardCharsets.UTF_8);
-            // credentials = username:password
-            final String[] values = credentials.split(":", 2);
-            final String username = values[0];
-            User user = userService.getByUsername(username);
+            User user = authenticationHelper.tryGetUser(headers);
             List<GenreDto> genreList = verifyTotalPercentage(playlistDto);
             Playlist playlist = playlistMapper.fromDto(playlistDto, user);
             int travelDuration = bingController.calculateTravelTime(playlistDto.getLocationDto());

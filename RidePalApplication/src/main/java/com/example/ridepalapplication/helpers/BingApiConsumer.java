@@ -1,37 +1,31 @@
 package com.example.ridepalapplication.helpers;
 
-import com.example.ridepalapplication.dtos.LocationDto;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
 
 
 @Component
 public class BingApiConsumer {
 
-    private static final String BING_KEY = "Ala7uM9ba62lN6JsHjAOf_-q-eNAoNfZdztFvccxqZs6DT8Ttaw-1oYNc9sKXZbW";
-
-    private final RestTemplate restTemplate;
+    @Value("${bing.key}")
+    private String bingKey;
+    private final WebClient webClient;
     private final JSONParser parser;
 
-    public BingApiConsumer(RestTemplate restTemplate, JSONParser parser) {
-        this.restTemplate = restTemplate;
+    public BingApiConsumer(WebClient webClient, JSONParser parser) {
+        this.webClient = webClient;
         this.parser = parser;
     }
 
     public String extractCoordinates(String inputLocation) throws ParseException {
-//        String url = String.format("https://dev.virtualearth.net/REST/v1/Locations?query=%s&key=%s",inputLocation, BING_KEY);
-        String url= String.format("https://dev.virtualearth.net/REST/v1/Locations?q=%s&key=%s", inputLocation, BING_KEY);
-        String response = restTemplate.getForObject(url, String.class);
-        JSONObject object = (JSONObject) parser.parse(response);
-        JSONArray results = (JSONArray) object.get("resourceSets");
-        JSONObject result = (JSONObject) results.get(0);
-        JSONArray locations = (JSONArray) result.get("resources");
-        JSONObject location = (JSONObject) locations.get(0);
-        JSONArray geo = (JSONArray) location.get("geocodePoints");
+        String url = String.format("https://dev.virtualearth.net/REST/v1/Locations?q=%s&key=%s", inputLocation, bingKey);
+        JSONObject locationInfo = getInfo(url);
+        JSONArray geo = (JSONArray) locationInfo.get("geocodePoints");
         JSONObject point = (JSONObject) geo.get(0);
         JSONArray coordinates = (JSONArray) point.get("coordinates");
         String lat = coordinates.get(0).toString();
@@ -41,15 +35,19 @@ public class BingApiConsumer {
 
     public double getTime(String startLocation, String endLocation) throws ParseException {
         String url = String.format("https://dev.virtualearth.net/REST/v1/Routes/DistanceMatrix?origins=%s&destinations=%s&travelMode=driving&key=%s",
-                startLocation, endLocation, BING_KEY);
-        String response = restTemplate.getForObject(url, String.class);
+                startLocation, endLocation, bingKey);
+        JSONObject routeInfo = getInfo(url);
+        JSONArray summary = (JSONArray) routeInfo.get("results");
+        JSONObject summaryObject = (JSONObject) summary.get(0);
+        return (double) summaryObject.get("travelDuration");
+    }
+
+    private JSONObject getInfo(String url) throws ParseException {
+        String response = webClient.get().uri(url).retrieve().bodyToMono(String.class).block();
         JSONObject object = (JSONObject) parser.parse(response);
         JSONArray results = (JSONArray) object.get("resourceSets");
         JSONObject result = (JSONObject) results.get(0);
-        JSONArray routes = (JSONArray) result.get("resources");
-        JSONObject route = (JSONObject) routes.get(0);
-        JSONArray summary = (JSONArray) route.get("results");
-        JSONObject summaryObject = (JSONObject) summary.get(0);
-        return (double) summaryObject.get("travelDuration");
+        JSONArray resources = (JSONArray) result.get("resources");
+        return (JSONObject) resources.get(0);
     }
 }
