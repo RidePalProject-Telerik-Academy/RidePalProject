@@ -327,7 +327,7 @@ public class PlaylistServiceTests {
                 EntityDuplicateException.class,
                 () -> service.createTag(mockUser, tag, playlist));
 
-        Assertions.assertEquals(String.format("Tag with playlist %s already exists.", tag.getName()), exception.getMessage());
+        Assertions.assertEquals(String.format("Tag with name %s already exists.", tag.getName()), exception.getMessage());
     }
 
     @Test
@@ -392,7 +392,7 @@ public class PlaylistServiceTests {
                 EntityNotFoundException.class,
                 () -> service.deleteTag(mockUser, tag, playlist));
 
-        Assertions.assertEquals(String.format("Tag with playlist %s not found.", tag.getName()), exception.getMessage());
+        Assertions.assertEquals(String.format("Tag with name %s not found.", tag.getName()), exception.getMessage());
     }
 
 
