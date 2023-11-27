@@ -1,26 +1,17 @@
 package com.example.ridepalapplication.dtos;
 
-public class GenreDto {
+import jakarta.validation.constraints.NotNull;
 
-    private String name;
-    private int percentage;
-    public GenreDto(){
+public record GenreDto(@NotNull(message = "Genre playlist is required.") String name, int percentage) {
 
+    public GenreDto {
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public int getPercentage() {
         return percentage;
-    }
-
-    public void setPercentage(int percentage) {
-        this.percentage = percentage;
     }
 }

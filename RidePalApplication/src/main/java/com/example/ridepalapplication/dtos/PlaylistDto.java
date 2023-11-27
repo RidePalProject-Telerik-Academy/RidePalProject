@@ -1,11 +1,16 @@
 package com.example.ridepalapplication.dtos;
 
+import jakarta.validation.constraints.NotNull;
+
 import java.util.List;
 
-public class PlaylistDto {
-    private  LocationDto locationDto;
-    private  List<GenreDto> genreDtoList;
-    private String name;
+public class PlaylistDto extends UpdatePlaylistDto {
+
+    @NotNull(message = "Location is required.")
+    private LocationDto locationDto;
+
+    @NotNull(message = "Genre is required.")
+    private List<GenreDto> genreDtoList;
 
     public PlaylistDto() {
     }
@@ -14,22 +19,8 @@ public class PlaylistDto {
         return locationDto;
     }
 
-    public void setLocationDto(LocationDto locationDto) {
-        this.locationDto = locationDto;
-    }
-
     public List<GenreDto> getGenreDtoList() {
         return genreDtoList;
     }
 
-    public void setGenreDtoList(List<GenreDto> genreDtoList) {
-        this.genreDtoList = genreDtoList;
-    }
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 }

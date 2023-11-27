@@ -22,15 +22,11 @@ import java.util.Set;
 import static com.example.ridepalapplication.helpers.CheckPermissions.checkAuthorization;
 
 @Service
-public class UserServiceImpl implements UserService, UserDetailsService {
+public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
-    private final RoleRepository roleRepository;
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, RoleRepository roleRepository) {
+    public UserServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-        this.roleRepository = roleRepository;
     }
 
     @Override
@@ -76,20 +72,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             throw new EntityDuplicateException("User", "email", user.getEmail());
         }
 
-        String encodedPassword = passwordEncoder.encode(user.getPassword());
-        Role userRole = roleRepository.findByAuthority("USER").get();
-
-        Set<Role> authorities = new HashSet<>();
-
-        authorities.add(userRole);
-
-        return userRepository.save(new User(
-                user.getUsername(),
-                encodedPassword,
-                user.getEmail(),
-                user.getFirstName(),
-                user.getLastName(),
-                authorities));
+        return userRepository.save(user);
     }
 
     @Override

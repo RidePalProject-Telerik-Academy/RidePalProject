@@ -49,13 +49,11 @@ public class UserController {
         }
     }
 
-    @PostMapping("/register")
+    @PostMapping()
     public User create(@Valid @RequestBody UserDto userDto) {
         try {
             User user = userMapper.fromDto(userDto);
-            userService.createUser(user);
-//            authenticationService.registerUser(userDto);
-            return user;
+            return userService.createUser(user);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (EntityDuplicateException e) {

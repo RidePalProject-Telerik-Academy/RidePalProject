@@ -20,5 +20,5 @@ public interface SongRepository extends JpaRepository<Song,Long> , JpaSpecificat
     @Query(nativeQuery = true,value = "SELECT songs.* FROM songs JOIN albums ON songs.album_id = albums.id WHERE albums.genre_id = :id and songs.artist_id not in :artistId ORDER BY RAND() LIMIT 1;")
     List<Song> getMeSingleSongByGenreAndUniqueArtist(@Param("id") Long id, @Param("artistId") List<Long> artistId);
 
-    List<Song> findByTitleAndArtistName(String name, String artist);
+    Song findByTitleAndArtistName(String name, String artist);
 }

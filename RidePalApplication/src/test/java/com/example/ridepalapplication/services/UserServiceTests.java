@@ -48,10 +48,10 @@ public class UserServiceTests {
     void getById_Should_ReturnUser() {
         User mockUser = createMockUser();
 
-        Mockito.when(mockRepository.findById(Mockito.anyLong()))
+        Mockito.when(mockRepository.findById(mockUser.getId()))
                 .thenReturn(Optional.of(mockUser));
 
-        Optional<User> result = service.getById(Mockito.anyLong());
+        Optional<User> result = service.getById(mockUser.getId());
         Assertions.assertEquals(mockUser, result.orElse(null));
 
         Mockito.verify(mockRepository, Mockito.times(1))

@@ -8,6 +8,7 @@ import com.example.ridepalapplication.exceptions.EntityDuplicateException;
 import com.example.ridepalapplication.exceptions.EntityNotFoundException;
 import com.example.ridepalapplication.helpers.AuthenticationHelper;
 import com.example.ridepalapplication.mappers.PlaylistMapper;
+import com.example.ridepalapplication.mappers.TagMapper;
 import com.example.ridepalapplication.models.Playlist;
 import com.example.ridepalapplication.models.Song;
 import com.example.ridepalapplication.models.Tag;
@@ -45,15 +46,18 @@ public class PlaylistController {
     private final UserDetailsService userDetailsService;
     private final UserService userService;
     private final AuthenticationManager authenticationManager;
+    private final TagMapper tagMapper;
 
     @Autowired
     public PlaylistController(AuthenticationHelper authenticationHelper,
                               BingController bingController,
-                              PlaylistService playlistService, PlaylistMapper playlistMapper,
+                              PlaylistService playlistService,
+                              PlaylistMapper playlistMapper,
                               SongService songService,
                               UserDetailsService userDetailsService,
                               UserService userService,
-                              AuthenticationManager authenticationManager) {
+                              AuthenticationManager authenticationManager,
+                              TagMapper tagMapper) {
         this.authenticationHelper = authenticationHelper;
         this.bingController = bingController;
         this.playlistService = playlistService;
@@ -62,7 +66,9 @@ public class PlaylistController {
         this.userDetailsService = userDetailsService;
         this.userService = userService;
         this.authenticationManager = authenticationManager;
+        this.tagMapper = tagMapper;
     }
+
 
     @GetMapping
     public List<Playlist> getAll(@RequestParam(required = false, defaultValue = "0") Integer page,
@@ -108,14 +114,14 @@ public class PlaylistController {
         }
     }
 
-    @PutMapping("/{id}/name")
+    @PutMapping("/{id}")
     public Playlist updateName(@RequestHeader HttpHeaders headers, @PathVariable int id,
-                               @Valid @RequestBody UpdatePlaylistNameDto updatePlaylistNameDto) {
+                               @Valid @RequestBody UpdatePlaylistDto updatePlaylistDto) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
             Playlist playlistToUpdate = playlistService.getById(id)
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Playlist with id %s not found.", id)));
-            playlistService.updateName(user, playlistToUpdate, updatePlaylistNameDto.getName());
+            playlistService.updateName(user, playlistToUpdate, updatePlaylistDto.getName());
             return playlistToUpdate;
         } catch (AuthorizationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
@@ -127,10 +133,10 @@ public class PlaylistController {
     @PostMapping("/{id}/song")
     public Playlist addSong(@RequestHeader HttpHeaders headers,
                             @PathVariable int id,
-                            @Valid @RequestBody UpdatePlaylistSongDto updatePlaylistSongDto) {
+                            @Valid @RequestBody SongDto songDto) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
-            Song songToUpdate = songService.getByTitleAndArtist(updatePlaylistSongDto.getTitle(), updatePlaylistSongDto.getArtist());
+            Song songToUpdate = songService.getByTitleAndArtist(songDto.getTitle(), songDto.getArtist());
             Playlist playlistToUpdate = playlistService.getById(id)
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Playlist with id %s not found.", id)));
             return playlistService.addSong(user, songToUpdate, playlistToUpdate);
@@ -146,10 +152,10 @@ public class PlaylistController {
     @DeleteMapping("/{id}/song")
     public Playlist deleteSong(@RequestHeader HttpHeaders headers,
                                @PathVariable int id,
-                               @Valid @RequestBody UpdatePlaylistSongDto updatePlaylistSongDto) {
+                               @Valid @RequestBody SongDto songDto) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
-            Song songToUpdate = songService.getByTitleAndArtist(updatePlaylistSongDto.getTitle(), updatePlaylistSongDto.getArtist());
+            Song songToUpdate = songService.getByTitleAndArtist(songDto.getTitle(), songDto.getArtist());
             Playlist playlistToUpdate = playlistService.getById(id)
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Playlist with id %s not found.", id)));
             return playlistService.deleteSong(user, songToUpdate, playlistToUpdate);
@@ -161,11 +167,13 @@ public class PlaylistController {
     }
 
     @PostMapping("/{id}/tag")
-    public Playlist createTag(@RequestHeader HttpHeaders headers, @PathVariable int id, @RequestBody Tag tag) {
+    public Playlist createTag(@RequestHeader HttpHeaders headers, @PathVariable int id, @Valid @RequestBody TagDto tagDto) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
             Playlist playlistToUpdate = playlistService.getById(id)
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Playlist with id %s not found.", id)));
+
+            Tag tag = tagMapper.fromDto(tagDto);
 
             playlistService.createTag(user, tag, playlistToUpdate);
             return playlistToUpdate;
@@ -177,11 +185,13 @@ public class PlaylistController {
     }
 
     @DeleteMapping("/{id}/tag")
-    public Playlist deleteTag(@RequestHeader HttpHeaders headers, @PathVariable int id, @RequestBody Tag tag) {
+    public Playlist deleteTag(@RequestHeader HttpHeaders headers, @PathVariable int id, @Valid @RequestBody TagDto tagDto) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
             Playlist playlistToUpdate = playlistService.getById(id)
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Playlist with id %s not found.", id)));
+
+            Tag tag = tagMapper.fromDto(tagDto);
 
             playlistService.deleteTag(user, tag, playlistToUpdate);
             return playlistToUpdate;

@@ -1,17 +1,12 @@
 package com.example.ridepalapplication.dtos;
+import jakarta.validation.constraints.NotNull;
 
-public class TagDto {
-
-    String tagName;
-
-    public TagDto() {
+public record TagDto(@NotNull(message = "Tag playlist is required.") String tagName) {
+    public TagDto {
     }
 
     public String getTagName() {
         return tagName;
     }
 
-    public void setTagName(String tagName) {
-        this.tagName = tagName;
-    }
 }
