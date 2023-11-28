@@ -34,7 +34,7 @@ public class UserMapper {
         existingUser.setFirstName(updateUserDto.getFirstName());
         existingUser.setLastName(updateUserDto.getLastName());
         existingUser.setEmail(updateUserDto.getEmail());
-        existingUser.setPassword(updateUserDto.getPassword());
+        existingUser.setPassword(passwordEncoder.encode(updateUserDto.getPassword()));
 
         return existingUser;
     }
@@ -43,7 +43,7 @@ public class UserMapper {
     public User fromDto(UserDto userDto) {
 
         String password = passwordEncoder.encode(userDto.getPassword());
-        Role userRole = roleRepository.findByAuthority("USER").get();
+        Role userRole = roleRepository.findByAuthority("USER");
 
         Set<Role> rolesSet = new HashSet<>();
         rolesSet.add(userRole);

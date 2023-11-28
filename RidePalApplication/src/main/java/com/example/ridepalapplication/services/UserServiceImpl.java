@@ -2,31 +2,30 @@ package com.example.ridepalapplication.services;
 
 import com.example.ridepalapplication.exceptions.EntityDuplicateException;
 import com.example.ridepalapplication.exceptions.EntityNotFoundException;
-import com.example.ridepalapplication.helpers.CheckPermissions;
-import com.example.ridepalapplication.models.Role;
+import com.example.ridepalapplication.helpers.AuthorizationHelper;
+import com.example.ridepalapplication.models.Playlist;
 import com.example.ridepalapplication.models.User;
-import com.example.ridepalapplication.repositories.RoleRepository;
+import com.example.ridepalapplication.repositories.PlaylistRepository;
 import com.example.ridepalapplication.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
-import static com.example.ridepalapplication.helpers.CheckPermissions.checkAuthorization;
 
 @Service
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
+    private final AuthorizationHelper authorizationHelper;
+    private final PlaylistRepository playlistRepository;
     @Autowired
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, AuthorizationHelper authorizationHelper, PlaylistRepository playlistRepository) {
         this.userRepository = userRepository;
+        this.authorizationHelper = authorizationHelper;
+
+        this.playlistRepository = playlistRepository;
     }
 
     @Override
@@ -56,12 +55,6 @@ public class UserServiceImpl implements UserService {
         } catch (UsernameNotFoundException e) {
             usernameExists = false;
         }
-//        if (loadUserByUsername(user.getUsername()) == null) {
-//            usernameExists = false;
-//        }
-//        if (userRepository.findByUsername(user.getUsername()).isEmpty()) {
-//            usernameExists = false;
-//        }
         if (usernameExists) {
             throw new EntityDuplicateException("User", "username", user.getUsername());
         }
@@ -77,7 +70,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User updateUser(User loggedUser, User userToBeUpdated) {
-        checkAuthorization(loggedUser, userToBeUpdated, "update other users");
+        authorizationHelper.checkAuthorization(loggedUser, userToBeUpdated, "update other users");
 
         boolean emailExists = true;
 
@@ -96,14 +89,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteUser(User loggedUser, Long id) {
-        CheckPermissions.checkAuthorization(loggedUser, id, "delete other users");
-
+        authorizationHelper.checkAuthorization(loggedUser, id, "delete other users");
         Optional<User> userToUpdate = userRepository.findById(id);
-        if (userToUpdate.isPresent()) {
-            userRepository.deleteById(id);
-        } else {
-            throw new EntityNotFoundException("User", id);
-        }
+        List<Playlist> userPlaylists = playlistRepository.findAllByCreator(userToUpdate.orElseThrow(()->new EntityNotFoundException("User",id)));
+        playlistRepository.deleteAll(userPlaylists);
+        userRepository.deleteById(id);
     }
 
     @Override

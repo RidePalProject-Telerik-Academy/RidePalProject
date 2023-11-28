@@ -7,6 +7,7 @@ import com.example.ridepalapplication.exceptions.AuthorizationException;
 import com.example.ridepalapplication.exceptions.EntityDuplicateException;
 import com.example.ridepalapplication.exceptions.EntityNotFoundException;
 import com.example.ridepalapplication.helpers.AuthenticationHelper;
+import com.example.ridepalapplication.helpers.PlaylistHelper;
 import com.example.ridepalapplication.mappers.PlaylistMapper;
 import com.example.ridepalapplication.mappers.TagMapper;
 import com.example.ridepalapplication.models.Playlist;
@@ -15,23 +16,14 @@ import com.example.ridepalapplication.models.Tag;
 import com.example.ridepalapplication.models.User;
 import com.example.ridepalapplication.services.PlaylistService;
 import com.example.ridepalapplication.services.SongService;
-import com.example.ridepalapplication.services.UserService;
-import com.sun.net.httpserver.HttpContext;
 import jakarta.validation.Valid;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.servlet.server.Encoding;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 
@@ -83,15 +75,16 @@ public class PlaylistController {
     }
 
     @PostMapping
-    public Playlist generatePlaylist(@RequestBody PlaylistDto playlistDto, @RequestHeader HttpHeaders headers) throws ParseException {
+    public Playlist generatePlaylist(@RequestParam(required = false) Optional<Boolean> uniqueArtist,
+                                     @RequestBody PlaylistDto playlistDto,
+                                     Authentication authentication) throws ParseException {
 
         try {
-            User user = authenticationHelper.tryGetUser(headers);
-            List<GenreDto> genreList = verifyTotalPercentage(playlistDto);
+            User user = authenticationHelper.tryGetUser(authentication);
+            List<GenreDto> genreList = PlaylistHelper.verifyTotalPercentage(playlistDto);
             Playlist playlist = playlistMapper.fromDto(playlistDto, user);
             int travelDuration = bingController.calculateTravelTime(playlistDto.getLocationDto());
-            return playlistService.generatePlaylist(playlist, travelDuration, genreList);
-
+            return playlistService.generatePlaylist(playlist,travelDuration,genreList);
         } catch (AuthorizationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         } catch (UnsupportedOperationException e) {
@@ -100,14 +93,14 @@ public class PlaylistController {
     }
 
     @PutMapping("/{id}")
-    public Playlist updateName(@RequestHeader HttpHeaders headers, @PathVariable int id,
+    public Playlist update(Authentication authentication, @PathVariable int id,
                                @Valid @RequestBody UpdatePlaylistDto updatePlaylistDto) {
         try {
-            User user = authenticationHelper.tryGetUser(headers);
+            User user = authenticationHelper.tryGetUser(authentication);
             Playlist playlistToUpdate = playlistService.getById(id)
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Playlist with id %s not found.", id)));
-            playlistService.updateName(user, playlistToUpdate, updatePlaylistDto.getName());
-            return playlistToUpdate;
+          return  playlistService.update(user, playlistToUpdate, updatePlaylistDto.getName());
+
         } catch (AuthorizationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         } catch (EntityNotFoundException e) {
@@ -116,11 +109,11 @@ public class PlaylistController {
     }
 
     @PostMapping("/{id}/song")
-    public Playlist addSong(@RequestHeader HttpHeaders headers,
+    public Playlist addSong(Authentication authentication,
                             @PathVariable int id,
                             @Valid @RequestBody SongDto songDto) {
         try {
-            User user = authenticationHelper.tryGetUser(headers);
+            User user = authenticationHelper.tryGetUser(authentication);
             Song songToUpdate = songService.getByTitleAndArtist(songDto.getTitle(), songDto.getArtist());
             Playlist playlistToUpdate = playlistService.getById(id)
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Playlist with id %s not found.", id)));
@@ -135,11 +128,11 @@ public class PlaylistController {
     }
 
     @DeleteMapping("/{id}/song")
-    public Playlist deleteSong(@RequestHeader HttpHeaders headers,
+    public Playlist deleteSong(Authentication authentication,
                                @PathVariable int id,
                                @Valid @RequestBody SongDto songDto) {
         try {
-            User user = authenticationHelper.tryGetUser(headers);
+            User user = authenticationHelper.tryGetUser(authentication);
             Song songToUpdate = songService.getByTitleAndArtist(songDto.getTitle(), songDto.getArtist());
             Playlist playlistToUpdate = playlistService.getById(id)
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Playlist with id %s not found.", id)));
@@ -152,9 +145,9 @@ public class PlaylistController {
     }
 
     @PostMapping("/{id}/tag")
-    public Playlist createTag(@RequestHeader HttpHeaders headers, @PathVariable int id, @Valid @RequestBody TagDto tagDto) {
+    public Playlist createTag(Authentication authentication, @PathVariable int id, @Valid @RequestBody TagDto tagDto) {
         try {
-            User user = authenticationHelper.tryGetUser(headers);
+            User user = authenticationHelper.tryGetUser(authentication);
             Playlist playlistToUpdate = playlistService.getById(id)
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Playlist with id %s not found.", id)));
 
@@ -170,9 +163,9 @@ public class PlaylistController {
     }
 
     @DeleteMapping("/{id}/tag")
-    public Playlist deleteTag(@RequestHeader HttpHeaders headers, @PathVariable int id, @Valid @RequestBody TagDto tagDto) {
+    public Playlist deleteTag(Authentication authentication, @PathVariable int id, @Valid @RequestBody TagDto tagDto) {
         try {
-            User user = authenticationHelper.tryGetUser(headers);
+            User user = authenticationHelper.tryGetUser(authentication);
             Playlist playlistToUpdate = playlistService.getById(id)
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Playlist with id %s not found.", id)));
 
@@ -188,9 +181,9 @@ public class PlaylistController {
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@RequestHeader HttpHeaders headers, @PathVariable long id) {
+    public void delete(Authentication authentication, @PathVariable long id) {
         try {
-            User user = authenticationHelper.tryGetUser(headers);
+            User user = authenticationHelper.tryGetUser(authentication);
             playlistService.delete(user, id);
         } catch (AuthorizationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
@@ -199,16 +192,4 @@ public class PlaylistController {
         }
     }
 
-    private static List<GenreDto> verifyTotalPercentage(PlaylistDto playlistDto) {
-        List<GenreDto> genres = playlistDto.getGenreDtoList();
-        int totalGenrePercentage = 0;
-        for (GenreDto genreDto : genres) {
-            totalGenrePercentage += genreDto.getPercentage();
-
-        }
-        if (totalGenrePercentage > 100) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Total genres percentage exceeded!");
-        }
-        return genres;
-    }
 }

@@ -5,6 +5,7 @@ import com.example.ridepalapplication.models.User;
 import com.example.ridepalapplication.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
@@ -14,8 +15,6 @@ import java.util.Objects;
 @Component
 public class AuthenticationHelper {
 
-
-
     private final UserService userService;
 
     @Autowired
@@ -23,14 +22,8 @@ public class AuthenticationHelper {
         this.userService = userService;
     }
 
-
-    public User tryGetUser(HttpHeaders headers){
-        String authorization = Objects.requireNonNull(headers.get("Authorization")).get(0);
-        String base64Credentials = authorization.substring("Basic".length()).trim();
-        byte[] credDecoded = Base64.getDecoder().decode(base64Credentials);
-        String credentials = new String(credDecoded, StandardCharsets.UTF_8);
-        final String[] values = credentials.split(":", 2);
-        final String username = values[0];
+    public User tryGetUser(Authentication authentication){
+        String username = authentication.getName();
        return userService.getByUsername(username);
     }
 }

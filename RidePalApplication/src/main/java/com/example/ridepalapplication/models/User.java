@@ -27,9 +27,7 @@ public class User implements UserDetails {
     @Column(name = "last_name")
     private String lastName;
 
-    @Column(name = "is_admin")
-    @JsonIgnore
-    private boolean isAdmin;
+
 
     @ManyToMany(fetch = FetchType.EAGER)
 
@@ -40,26 +38,8 @@ public class User implements UserDetails {
     )
     private Set<Role> authorities;
 
-    public User(long id, String username, String password, String email, String firstName, String lastName, Set<Role> authorities) {
-        this.id = id;
-        this.username = username;
-        this.password = password;
-        this.email = email;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.authorities = authorities;
-    }
-
     public User() {
     }
-
-    public User(long i, String admin, String password, Set<Role> roles) {
-        this.id = i;
-        this.username = admin;
-        this.password = password;
-        this.authorities = roles;
-    }
-
     public User(String username, String encodedPassword, String email, String firstName, String lastName, Set<Role> authorities) {
         this.username = username;
         this.password = encodedPassword;
@@ -119,10 +99,6 @@ public class User implements UserDetails {
         return lastName;
     }
 
-    public boolean isAdmin() {
-        return isAdmin;
-    }
-
     public void setId(long id) {
         this.id = id;
     }
@@ -147,9 +123,7 @@ public class User implements UserDetails {
         this.lastName = lastName;
     }
 
-    public void setAdmin(boolean admin) {
-        isAdmin = admin;
-    }
+
 
     @Override
     public boolean equals(Object o) {
