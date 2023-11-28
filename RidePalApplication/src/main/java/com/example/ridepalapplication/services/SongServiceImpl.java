@@ -54,11 +54,10 @@ public class SongServiceImpl implements SongService {
 
     @Override
     public Song getByTitleAndArtist(String name, String artist) {
-        Song song = songRepository.findByTitleAndArtistName(name, artist);
-        if (song == null) {
-            throw new EntityNotFoundException("Song", "playlist", name);
-        }
-        return song;
+        List<Song> songs = songRepository.findByTitleAndArtistName(name,artist);
+       if(songs.isEmpty()){
+           throw  new EntityNotFoundException("Song","name",name);
+       }
+       return songs.get(0);
     }
-
 }

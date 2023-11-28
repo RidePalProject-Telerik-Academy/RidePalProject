@@ -21,16 +21,20 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 
 @Component
 public class DeezerApiConsumer {
     private static final String DEEZER_GENRE_URL = "https://api.deezer.com/genre";
-    private final RestTemplate restTemplate;
+    private static final String DEEZER_ALBUM_URL = "https://api.deezer.com/artist/%d";
+    private static final String DEEZER_ARTISTS_ALBUMS_URL = "https://api.deezer.com/artist/%d/albums";
+    private static final String DEEZER_ALBUM_SONGS_URL = "https://api.deezer.com/album/%d";
+
+    private final  WebClient webClient;
     private final JSONParser parser;
     private final GenreRepository genreRepository;
     private final AlbumRepository albumRepository;
@@ -41,8 +45,9 @@ public class DeezerApiConsumer {
     private  final AlbumMapper albumMapper;
     private final SongMapper songMapper;
     @Autowired
-    public DeezerApiConsumer(RestTemplate restTemplate, JSONParser parser, GenreRepository genreRepository, AlbumRepository albumRepository, ArtistRepository artistRepository, SongRepository songRepository, GenreMapper genreMapper, ArtistMapper artistMapper, AlbumMapper albumMapper, SongMapper songMapper) {
-        this.restTemplate = restTemplate;
+    public DeezerApiConsumer(WebClient webClient, JSONParser parser, GenreRepository genreRepository, AlbumRepository albumRepository, ArtistRepository artistRepository, SongRepository songRepository, GenreMapper genreMapper, ArtistMapper artistMapper, AlbumMapper albumMapper, SongMapper songMapper) {
+
+        this.webClient = webClient;
         this.parser = parser;
         this.genreRepository = genreRepository;
         this.albumRepository = albumRepository;
@@ -55,24 +60,30 @@ public class DeezerApiConsumer {
     }
 
     public void populateGenres() throws ParseException {
-        String url = DEEZER_GENRE_URL;
-        String response = restTemplate.getForObject(url, String.class);
+        List <Genre> genres = new ArrayList<>();
+        String response = webClient.get().uri(DEEZER_GENRE_URL)
+                .retrieve()
+                .bodyToMono(String.class)
+                .block();
         JSONObject object = (JSONObject) parser.parse(response);
         JSONArray array = (JSONArray) object.get("data");
         for (int i = 1; i < array.size(); i++) {
             JSONObject dataObject = (JSONObject) array.get(i);
             Genre genre = genreMapper.fromJsonToGenre(dataObject);
-            genreRepository.save(genre);
-
+            genres.add(genre);
         }
+        genreRepository.saveAll(genres);
     }
 
     public void populateArtists() throws ParseException {
         int i = 1;
         List<Artist> artistList = new ArrayList<>();
         while (i <= 1024) {
-            String artistUrl = String.format("https://api.deezer.com/artist/%d", i);
-            String response = restTemplate.getForObject(artistUrl, String.class);
+            String artistUrl = String.format(DEEZER_ALBUM_URL, i);
+            String response = webClient.get().uri(artistUrl)
+                    .retrieve()
+                    .bodyToMono(String.class)
+                    .block();
             JSONObject object = (JSONObject) parser.parse(response);
             if(object.containsKey("error")){
                 i++;
@@ -91,8 +102,11 @@ public class DeezerApiConsumer {
         List<Album> albumList = new ArrayList<>();
         for (Artist artist : artists) {
 
-            String albumUrl = String.format("https://api.deezer.com/artist/%d/albums", artist.getId());
-            String albumResponse = restTemplate.getForObject(albumUrl, String.class);
+            String albumUrl = String.format(DEEZER_ARTISTS_ALBUMS_URL, artist.getId());
+            String albumResponse = webClient.get().uri(albumUrl)
+                    .retrieve()
+                    .bodyToMono(String.class)
+                    .block();
             JSONObject albumJson = (JSONObject) parser.parse(albumResponse);
             JSONArray albumArray = (JSONArray) albumJson.get("data");
             for (int j = 0; j < albumArray.size() / 8; j++) {
@@ -122,8 +136,11 @@ public class DeezerApiConsumer {
         List<Song> songsList = new ArrayList<>();
         for (Album album : albumList
         ) {
-            String trackUrl = String.format("https://api.deezer.com/album/%d", album.getId());
-            String trackResponse = restTemplate.getForObject(trackUrl, String.class);
+            String trackUrl = String.format(DEEZER_ALBUM_SONGS_URL, album.getId());
+            String trackResponse = webClient.get().uri(trackUrl)
+                    .retrieve()
+                    .bodyToMono(String.class)
+                    .block();
             JSONObject trackJsonObject = (JSONObject) parser.parse(trackResponse);
             JSONObject tracks = (JSONObject) trackJsonObject.get("tracks");
             JSONArray tracksArray = (JSONArray) tracks.get("data");

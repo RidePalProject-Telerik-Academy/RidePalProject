@@ -2,29 +2,33 @@ package com.example.ridepalapplication;
 
 import com.example.ridepalapplication.models.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class MockHelpers {
 
     public static User createMockUser() {
-        var mockUser = new User();
-        mockUser.setId(1);
-        mockUser.setUsername("mock_username");
-        mockUser.setFirstName("MockFirstName");
-        mockUser.setLastName("MockLastName");
-        mockUser.setEmail("mock_user@user.com");
-        mockUser.setPassword("MockPassword98!@");
-        return mockUser;
+        Set<Role> authorities = new HashSet<>();
+        authorities.add(new Role("USER"));
+        return new User("mock_username",
+                "mockFirstName",
+                "mockFirstName",
+                "mock_email@gmail.com",
+                "mockPassword98!@",
+                authorities);
     }
 
     public static User createAdminMockUser() {
-        var mockUser = new User();
-        mockUser.setId(2);
-        mockUser.setUsername("admin_mock_username");
-        mockUser.setFirstName("AdminMockFirstName");
-        mockUser.setLastName("AdminMockLastName");
-        mockUser.setEmail("admin_mock_user@user.com");
-        mockUser.setPassword("Admin_MockPassword98!@");
-        mockUser.setAdmin(true);
-        return mockUser;
+        Set<Role> authorities = new HashSet<>();
+        authorities.add(new Role("ADMIN"));
+        return new User("admin_mock_username",
+                "AdminMockFirstName",
+                "AdminMockFirstName",
+                "admin_mock_user@user.com",
+                "Admin_MockPassword98!@",
+                authorities);
+
+
     }
 
     public static Playlist createMockPlaylist() {

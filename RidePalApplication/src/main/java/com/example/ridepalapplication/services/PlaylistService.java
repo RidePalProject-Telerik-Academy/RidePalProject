@@ -15,9 +15,15 @@ public interface PlaylistService {
 
     Optional<Playlist> getById(long id);
 
-    Playlist generatePlaylist(Playlist playlist, int travelDuration, List<GenreDto> genreDtoList);
+    Playlist generateDefaultRankUniqueArtistsPlaylist(Playlist playlist, int travelDuration, List<GenreDto> genreDtoList);
 
-    Playlist updateName(User user, Playlist playlistToUpdate, String newName);
+    Playlist generateTopRankSongsNonUniqueArtistPlaylist(Playlist playlist, int travelDuration, List<GenreDto> genreDtoList);
+
+    Playlist generateTopRankSongsUniqueArtistsPlaylist(Playlist playlist, int travelDuration, List<GenreDto> genreDtoList);
+
+    Playlist generateDefaultRankNonUniqueArtistPlaylist(Playlist playlist, int travelDuration, List<GenreDto> genreDtoList);
+
+    Playlist update(User user, Playlist playlistToUpdate, String newName);
 
     Playlist addSong(User user, Song songToAdd, Playlist playlistToUpdate);
 

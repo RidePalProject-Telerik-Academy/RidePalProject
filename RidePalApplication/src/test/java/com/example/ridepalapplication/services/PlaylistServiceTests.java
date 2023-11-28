@@ -107,7 +107,7 @@ public class PlaylistServiceTests {
 
         Mockito.when(mockRepository.save(mockPlaylist)).thenReturn(mockPlaylist);
 
-        Playlist result = service.generatePlaylist(new Playlist(), travelDuration, genresList);
+        Playlist result = service.generateDefaultRankUniqueArtistsPlaylist(new Playlist(), travelDuration, genresList);
 
         Mockito.verify(mockRepository, Mockito.times(1)).save(mockPlaylist);
     }
@@ -118,7 +118,7 @@ public class PlaylistServiceTests {
         Playlist mockPlaylist = createMockPlaylist();
         String newName = "new_name";
 
-        service.updateName(mockUser, mockPlaylist, newName);
+        service.update(mockUser, mockPlaylist, newName);
 
         Assertions.assertTrue(mockPlaylist.getName().equals(newName));
 
@@ -132,7 +132,7 @@ public class PlaylistServiceTests {
         Playlist mockPlaylist = createMockPlaylist();
         String newName = "new_name";
 
-        service.updateName(mockAdminUser, mockPlaylist, newName);
+        service.update(mockAdminUser, mockPlaylist, newName);
 
         Assertions.assertTrue(mockPlaylist.getName().equals(newName));
 
@@ -151,7 +151,7 @@ public class PlaylistServiceTests {
 
         AuthorizationException exception = Assertions.assertThrows(
                 AuthorizationException.class,
-                () -> service.updateName(otherMockUser, mockPlaylist, newName));
+                () -> service.update(otherMockUser, mockPlaylist, newName));
 
         Assertions.assertEquals(String.format("You are not allowed to update playlist."), exception.getMessage());
     }
