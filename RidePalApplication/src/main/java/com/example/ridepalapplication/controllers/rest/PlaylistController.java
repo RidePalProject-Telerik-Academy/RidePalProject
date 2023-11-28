@@ -75,9 +75,7 @@ public class PlaylistController {
     }
 
     @PostMapping
-    public Playlist generatePlaylist(@RequestParam(required = false) Optional<Boolean> uniqueArtist,
-                                     @RequestBody PlaylistDto playlistDto,
-                                     Authentication authentication) throws ParseException {
+    public Playlist generatePlaylist(@RequestBody PlaylistDto playlistDto, Authentication authentication) throws ParseException {
 
         try {
             User user = authenticationHelper.tryGetUser(authentication);
