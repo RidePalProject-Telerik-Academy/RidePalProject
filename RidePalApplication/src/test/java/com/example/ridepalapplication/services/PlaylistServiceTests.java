@@ -107,7 +107,7 @@ public class PlaylistServiceTests {
 
         Mockito.when(mockRepository.save(mockPlaylist)).thenReturn(mockPlaylist);
 
-        Playlist result = service.generateUniqueArtistPlaylist(new Playlist(), travelDuration, genresList);
+        Playlist result = service.generateDefaultRankUniqueArtistsPlaylist(new Playlist(), travelDuration, genresList);
 
         Mockito.verify(mockRepository, Mockito.times(1)).save(mockPlaylist);
     }

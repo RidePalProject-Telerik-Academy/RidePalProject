@@ -68,8 +68,6 @@ public class PlaylistServiceImpl implements PlaylistService {
                         .withSort(Sort.Direction.DESC, "rank"))
                 .getContent();
     }
-
-
     @Override
     public Optional<Playlist> getById(long id) {
         Optional<Playlist> playlist = playlistRepository.findById(id);
@@ -79,7 +77,7 @@ public class PlaylistServiceImpl implements PlaylistService {
     }
 
     @Override
-    public Playlist generateUniqueArtistPlaylist(Playlist playlist, int travelDuration, List<GenreDto> genreDtoList) {
+    public Playlist generateDefaultRankUniqueArtistsPlaylist(Playlist playlist, int travelDuration, List<GenreDto> genreDtoList) {
         Set<Song> playlistSongs = new HashSet<>();
         List<Long> artistsId = new ArrayList<>();
         int totalPlaylistDuration = 0;
@@ -100,13 +98,9 @@ public class PlaylistServiceImpl implements PlaylistService {
                 } else {
                     songs = songRepository.getMeSingleSongByGenreAndUniqueArtist(genre.getId(), artistsId);
 
-                    if (songs.isEmpty()) {
-                        throw new UnsupportedOperationException(String.format("The application does not support enough unique songs with genre " +
-                                "%s to satisfy your request !", genre.getName()));
-                    }
+                    PlaylistHelper.validateGenreAvailability(songs, genre);
                 }
-                Long artistId = songs.get(0).getArtist().getId();
-                artistsId.add(artistId);
+                PlaylistHelper.getSongArtist(songs, artistsId);
 
                 playlistSongs.add(songs.get(0));
                 totalRank += songs.get(0).getRank();
@@ -119,7 +113,77 @@ public class PlaylistServiceImpl implements PlaylistService {
         return playlistRepository.save(playlist);
     }
     @Override
-    public Playlist generatePlaylist(Playlist playlist, int travelDuration, List<GenreDto> genreDtoList){
+    public Playlist generateTopRankSongsNonUniqueArtistPlaylist(Playlist playlist, int travelDuration, List<GenreDto> genreDtoList){
+        Set<Song> playlistSongs = new HashSet<>();
+        int totalPlaylistDuration = 0;
+        Long totalRank = 0L;
+        for (GenreDto genreDto : genreDtoList) {
+            int getGenrePercentage = genreDto.getPercentage();
+            int currentGenreDuration = 0;
+            int totalGenreDuration = (travelDuration * getGenrePercentage) / 100;
+
+            Genre genre = PlaylistHelper.extractGenres(genreRepository,genreDto);
+
+            while (currentGenreDuration < totalGenreDuration) {
+                List<Song> songs = songRepository.getMeSingleTopSongByGenre(genre.getId());
+
+                PlaylistHelper.validateGenreAvailability(songs, genre);
+
+                playlistSongs.add(songs.get(0));
+                totalRank += songs.get(0).getRank();
+                currentGenreDuration += songs.get(0).getDuration();
+                totalPlaylistDuration += songs.get(0).getDuration();
+
+            }
+        }
+        PlaylistHelper.updatePlaylistDetails(playlist, totalRank, playlistSongs, totalPlaylistDuration);
+        return playlistRepository.save(playlist);
+    }
+
+
+
+    @Override
+    public Playlist generateTopRankSongsUniqueArtistsPlaylist(Playlist playlist, int travelDuration, List<GenreDto> genreDtoList) {
+        Set<Song> playlistSongs = new HashSet<>();
+        List<Long> artistsId = new ArrayList<>();
+        int totalPlaylistDuration = 0;
+        Long totalRank = 0L;
+        for (GenreDto genreDto : genreDtoList) {
+            int getGenrePercentage = genreDto.getPercentage();
+            int currentGenreDuration = 0;
+            int totalGenreDuration = (travelDuration * getGenrePercentage) / 100;
+
+            Genre genre = PlaylistHelper.extractGenres(genreRepository,genreDto);
+
+            while (currentGenreDuration < totalGenreDuration) {
+                List<Song> songs;
+
+                if (artistsId.isEmpty()) {
+                    songs = songRepository.getMeSingleTopSongByGenre(genre.getId());
+
+                } else {
+                    songs = songRepository.getMeSingleTopSongByGenreAndUniqueArtist(genre.getId(), artistsId);
+
+                    PlaylistHelper.validateGenreAvailability(songs, genre);
+                }
+                PlaylistHelper.getSongArtist(songs, artistsId);
+
+                playlistSongs.add(songs.get(0));
+                totalRank += songs.get(0).getRank();
+                currentGenreDuration += songs.get(0).getDuration();
+                totalPlaylistDuration += songs.get(0).getDuration();
+            }
+
+        }
+        PlaylistHelper.updatePlaylistDetails(playlist, totalRank, playlistSongs, totalPlaylistDuration);
+        return playlistRepository.save(playlist);
+
+    }
+
+
+
+    @Override
+    public Playlist generateDefaultRankNonUniqueArtistPlaylist(Playlist playlist, int travelDuration, List<GenreDto> genreDtoList){
         Set<Song> playlistSongs = new HashSet<>();
         int totalPlaylistDuration = 0;
         Long totalRank = 0L;
@@ -133,10 +197,7 @@ public class PlaylistServiceImpl implements PlaylistService {
             while (currentGenreDuration < totalGenreDuration) {
                 List<Song> songs = songRepository.getMeSingleSongByGenre(genre.getId());
 
-                if(songs.isEmpty()){
-                    throw new UnsupportedOperationException(String.format("The application does not support enough unique songs with genre " +
-                            "%s to satisfy your request !", genre.getName()));
-                }
+                PlaylistHelper.validateGenreAvailability(songs, genre);
 
                 playlistSongs.add(songs.get(0));
                 totalRank += songs.get(0).getRank();
@@ -148,6 +209,7 @@ public class PlaylistServiceImpl implements PlaylistService {
         PlaylistHelper.updatePlaylistDetails(playlist, totalRank, playlistSongs, totalPlaylistDuration);
         return playlistRepository.save(playlist);
     }
+
     @Override
     public Playlist update(User user, Playlist playlistToUpdate,String newName) {
         authorizationHelper.checkAuthorization(user, playlistToUpdate.getCreator(), "update playlist name");

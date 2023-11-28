@@ -56,4 +56,14 @@ public class PlaylistHelper {
         }
         return genres;
     }
+    public static void getSongArtist(List<Song> songs, List<Long> artistsId) {
+        Long artistId = songs.get(0).getArtist().getId();
+        artistsId.add(artistId);
+    }
+    public static void validateGenreAvailability(List<Song> songs, Genre genre) {
+        if(songs.isEmpty()){
+            throw new UnsupportedOperationException(String.format("The application does not support enough unique songs with genre " +
+                    "%s to satisfy your request !", genre.getName()));
+        }
+    }
 }

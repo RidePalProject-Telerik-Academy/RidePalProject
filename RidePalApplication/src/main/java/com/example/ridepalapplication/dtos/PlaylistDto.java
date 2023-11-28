@@ -11,6 +11,9 @@ public class PlaylistDto extends UpdatePlaylistDto {
 
     @NotNull(message = "Genre is required.")
     private List<GenreDto> genreDtoList;
+    private boolean topRank;
+
+    private boolean uniqueArtists;
 
     public PlaylistDto() {
     }
@@ -21,6 +24,13 @@ public class PlaylistDto extends UpdatePlaylistDto {
 
     public List<GenreDto> getGenreDtoList() {
         return genreDtoList;
+    }
+
+    public boolean topRank() {
+        return topRank;
+    }
+    public boolean uniqueArtists() {
+        return uniqueArtists;
     }
 
 }

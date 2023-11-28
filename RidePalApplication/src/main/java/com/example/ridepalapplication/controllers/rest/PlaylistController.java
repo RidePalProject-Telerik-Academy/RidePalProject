@@ -74,21 +74,25 @@ public class PlaylistController {
         }
     }
 
-    @PostMapping
-    public Playlist generatePlaylist(@RequestBody PlaylistDto playlistDto, Authentication authentication) throws ParseException {
+  @PostMapping
+  public Playlist generatePlaylist(@RequestBody PlaylistDto playlistDto, Authentication authentication) throws ParseException {
 
-        try {
-            User user = authenticationHelper.tryGetUser(authentication);
-            List<GenreDto> genreList = PlaylistHelper.verifyTotalPercentage(playlistDto);
-            Playlist playlist = playlistMapper.fromDto(playlistDto, user);
-            int travelDuration = bingController.calculateTravelTime(playlistDto.getLocationDto());
-            return playlistService.generatePlaylist(playlist,travelDuration,genreList);
-        } catch (AuthorizationException e) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
-        } catch (UnsupportedOperationException e) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
-        }
-    }
+      try {
+          User user = authenticationHelper.tryGetUser(authentication);
+          List<GenreDto> genreList = PlaylistHelper.verifyTotalPercentage(playlistDto);
+          Playlist playlist = playlistMapper.fromDto(playlistDto, user);
+          int travelDuration = bingController.calculateTravelTime(playlistDto.getLocationDto());
+
+          return choosePlaylistStrategy(playlistDto, playlist, travelDuration, genreList);
+
+      } catch (AuthorizationException e) {
+          throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+      } catch (UnsupportedOperationException e) {
+          throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
+      }
+  }
+
+
 
     @PutMapping("/{id}")
     public Playlist update(Authentication authentication, @PathVariable int id,
@@ -187,6 +191,21 @@ public class PlaylistController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
+    private Playlist choosePlaylistStrategy(PlaylistDto playlistDto, Playlist playlist, int travelDuration, List<GenreDto> genreList) {
+        if (playlistDto.topRank()) {
+            if (playlistDto.uniqueArtists()) {
+                return playlistService.generateTopRankSongsUniqueArtistsPlaylist(playlist, travelDuration, genreList);
+            } else {
+                return playlistService.generateTopRankSongsNonUniqueArtistPlaylist(playlist, travelDuration, genreList);
+            }
+        } else {
+            if (playlistDto.uniqueArtists()) {
+                return playlistService.generateTopRankSongsUniqueArtistsPlaylist(playlist, travelDuration, genreList);
+            } else {
+                return playlistService.generateDefaultRankNonUniqueArtistPlaylist(playlist, travelDuration, genreList);
+            }
         }
     }
 
