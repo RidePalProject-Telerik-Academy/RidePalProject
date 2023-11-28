@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:id="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../static/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
+    <title>Main</title>
+</head>
+<body id="main-body">
+<section class="header">
+    <nav>
+        <div id="logo">
+            <img src="../images/logo.gif" th:src="@{/images/logo.gif}" alt="logo">
+            <h1>RidePal</h1>
+        </div>
+        <ul>
+            <li><a href="playlists.html" th:href="@{/playlists}" th:text="#{navigation.playlists}">Home</a></li>
+            <li><a href="login.html" th:href="@{/login}" th:text="#{navigation.login}">Home</a></li>
+            <li id="sign-up-button"><a href="register.html" th:href="@{/register}" th:text="#{navigation.register}">Home</a></li>
+        </ul>
+    </nav>
+</section>
+
+
+<section class="footer">
+    <h5>About Us</h5>
+    <h5>Copyright &copy 2023 WeWhoAreNotAsOthers</h5>
+</section>
+</body>
+</html>
