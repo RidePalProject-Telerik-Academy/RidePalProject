@@ -14,7 +14,7 @@ public class HomeMvcController {
     }
 
     @GetMapping("/main")
-    public String main() {
+    public String mainPage() {
         return "main";
     }
 }
