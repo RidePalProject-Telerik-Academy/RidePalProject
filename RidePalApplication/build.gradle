@@ -29,12 +29,13 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
 
+
     implementation 'com.google.code.gson:gson:2.10.1'
     implementation 'com.google.guava:guava:31.1-jre'
     implementation 'org.jetbrains:annotations:24.0.0'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-
+    testImplementation 'org.awaitility:awaitility:3.1.2'
 }
 
 
