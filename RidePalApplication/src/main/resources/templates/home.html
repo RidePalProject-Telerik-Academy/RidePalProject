@@ -9,33 +9,43 @@
 <body id="home-body">
 <section class="header">
     <div id="welcome">
-        <strong>Welcome to</strong>
-        <h1>RidePal</h1>
+        <ul>
+            <li><h3>Welcome</h3></li>
+            <li><h3>to</h3></li>
+            <li><h3>RidePal</h3></li>
+        </ul>
         <strong style="margin-top: 0">your ultimate travel playlist generator</strong>
     </div>
 </section>
 
 <section class="first-steps">
-    <div class="step">
-        <h3>Step 1</h3>
-        <h2>Log In</h2>
-    </div>
-    <div class="step">
-        <h3>Step 2</h3>
-        <h2>Set your journey</h2>
-    </div>
-    <div class="step">
-        <h3>Step 3</h3>
-        <h2>Choose your music</h2>
-    </div>
-    <div class="step">
-        <h3>Step 4</h3>
-        <h2>Enjoy the ride!</h2>
+    <div class="steps-container">
+        <div class="step" id="step-1">
+            <h3>Step 1</h3>
+            <h2>Log In</h2>
+        </div>
+        <img id="arrow-1" src="../static/images/arrow.png" th:src="@{/images/arrow-white.png}">
+        <img id="arrow-left" src="../static/images/arrow-left.png" th:src="@{/images/arrow-white.png}">
+        <div class="step" id="step-2">
+            <h3>Step 2</h3>
+            <h2>Set your journey</h2>
+        </div>
+        <div class="step" id="step-3">
+            <h3>Step 3</h3>
+            <h2>Choose your music</h2>
+        </div>
+        <img src="../static/images/arrow.png" th:src="@{/images/arrow-white.png}">
+        <div class="step" id="step-4">
+            <h3>Step 4</h3>
+            <h2>Enjoy the ride!</h2>
+        </div>
     </div>
 </section>
 
 <section>
+    <div class="hero-btn-container">
     <button class="hero-btn" id="r-u-ready" onclick="location.href='/main'">Are You Ready?</button>
+    </div>
 </section>
 
 

@@ -2,213 +2,118 @@
     margin: 0;
     padding: 0;
     font-family: 'Trebuchet MS', sans-serif;
-    /*font-family: 'Poppins', sans-serif;*/
-    /*font-family: 'Gill Sans', 'Gill Sans MT', sans-serif;*/
-    /*font-family: Forte, sans-serif;*/
 }
+
 html {
     font-size: 62.5%;
 }
+
 body {
     font-size: 2.1rem;
+    color: #f8f9fa;
     min-height: 100vh;
     width: 100%;
-    /*background-position: center;*/
     background-size: cover;
-    position: relative;
-    /*background: #ED944D;*/
-    background: #fdfcfe center;
-}
-
-#home-body {
+    position: page;
     background-image: linear-gradient(rgba(4, 9, 30, 0.2), rgba(4, 9, 30, 0.2)), url(../images/vinyl.jpg);
-    background-size: cover;
 }
 
 .footer {
     text-align: center;
-    /*color: gainsboro;*/
-    color: black;
+    color: gainsboro;
     font-size: 1.5rem;
     margin: 0.5rem;
 }
-/*HOME PAGE STARTS HERE*/
+
+
 #welcome {
-    color: gainsboro;
-    display: grid;
-    top: 30%;
-    left: 50%;
+    text-align: left;
+    margin-top: 1em;
+    margin-bottom: 2em;
+    margin-left: 1em;
+}
 
+#welcome li {
+    font-size: 3.5em;
+    color: #f8f9fa;
+    list-style-type: none;
 }
-#welcome h1 {
-    margin-left: 10rem;
-    font-size: 15rem;
-    margin-top: 0;
-}
+
 #welcome strong {
-    margin-left: 10rem;
-    margin-top: 10rem;
-    font-size: 5rem;
+    margin-top: 1em;
+    margin-bottom: 2em;
+    color: #f8f9fa;
 }
 
-.first-steps{
-    color: gainsboro;
+.steps-container {
     display: grid;
-    column-gap: 5rem;
-    grid-auto-flow: column;
-    margin: 10rem;
-    margin-top: 15rem;
-}
-.first-steps h3 {
-    font-size: 1.5rem;
-}
-.first-steps h2 {
-    font-size: 4rem;
-}
-.hero-btn {
-    display: inline-block;
-    text-decoration: none;
-    color: gainsboro;
-    border: 0.2rem solid gainsboro;
-    border-radius: 1.0rem;
-    font-size: 1.5rem;
-    padding: 1.5rem 4rem;
-    margin-top: 2rem;
-    cursor: pointer;
-    background: transparent;
-    position: relative;
-    transition: 0.8s;
-}
-.hero-btn:hover {
-    border: 0.2rem solid gainsboro;
-    background: gainsboro;
-    color: black;
-}
-#r-u-ready {
-    font-size: 1.5em;
-    margin: 0 6% 5%;
-}
-.line {
-    height: 0.1rem;
-    background: gainsboro;
-    width: 100%;
+    grid-template-columns: repeat(2, minmax(1em, 2fr));
 }
 
-/*HOME PAGE ENDS HERE*/
-
-
-/*MAIN PAGE STARTS HERE*/
-nav {
-    display: flex;
-    flex-wrap: wrap;
-    padding: 1% 2%;
-    justify-content: space-between;
-    align-items: center;
-}
-#logo {
-    display: grid;
-    grid-auto-flow: column;
-    align-items: start;
-}
-
-nav img {
-    width: 4.5em;
-}
-#logo h1 {
-    color: black;
-    font-size: 2.2em;
-    margin-top: 0.3em;
-    margin-left: 0.1em;
-}
-
-nav {
-    flex: 1;
-    text-align: right;
-}
-
-nav ul li {
-    list-style: none;
-    display: inline-block;
-    padding: 8px 12px;
-    position: relative;
-}
-
-nav ul li a {
-    color: black;
-    text-decoration: none;
-    font-size: 1.1em;
-}
-
-nav ul li::after {
-    content: '';
-    width: 0%;
-    height: 0.1em;
-    background: black;
-    display: block;
+.steps-container img {
+    min-width: 4em;
+    max-height: 5em;
     margin: auto;
-    transition: 0.5s;
+    border-radius: 1em;
+    text-align: left;
+    padding: 0.5em;
 }
 
-nav ul li:hover::after {
-    width: 100%;
+#arrow-1 {
+    margin-top: 2em;
 }
-#sign-up-button{
-    border: 0.1em solid gainsboro;
-    padding: 0.5em 1.5em;
-    border-radius: 1.0rem;
-    background: #ed944d;
+#step-1{
+    margin-top: 1em;
+    margin-bottom: 1em;
 }
 
-#sign-up-button:hover{
-    border: 0.1em solid gainsboro;
-    background: black;
-    color: #fdfcfe;
-    transition: 1.5s;
-}
-#sign-up-button:hover a{
-    color: #ed944d;
-}
-#sign-up-button:hover::after {
-    width: 0%;
+#arrow-left {
+    transform: scaleX(-1);
 }
 
-.search {
-    --padding: 1.4rem;
-
-    width: max-content;
-    display: flex;
-    align-items: center;
-    padding: var(--padding);
-    margin: 1.5rem;
-    margin-left: 2rem;
-    border-radius: 1.4rem;
-    background: whitesmoke;
-    text-decoration: #ed944d;
-    transition: box-shadow 0.7s;
-}
-.search:hover {
-    box-shadow: #ed944d 0 0 0.5em;
-    border-style: none;
+.step {
+    border-radius: 1em;
+    text-align: left;
+    margin: 0.5em;
+    min-width: auto;
+    box-shadow: 0 0 2em 0 rgba(255, 0, 0, 0.8);
+    padding: 0.5em;
+    border-style: solid;
+    border-width: 0.1em;
 }
 
-.search:focus-within {
-    box-shadow: #ed944d 0 0 0.5em;
-    border-style: none;
+
+#step-2, #step-4 {
+    grid-column-start: 2;
 }
 
-.search-icon {
-    color: #ed944d;
+.step h2 {
+    text-align: left;
+    min-font-size: 0.3em;
+    font-size: 2em;
 }
 
-.search-input{;
-    font-size: 2.8rem;
-    color: #ed944d;
-    margin-left: var(--padding);
+.step h3 {
+    text-align: left;
+    min-font-size: 0.5em;
+    font-size: 0.8em;
+}
+
+.hero-btn-container {
+    text-align: center;
+}
+
+.hero-btn {
+    font: 200% sans-serif;
+    color: #f8f9fa;
+    border: 1px solid #f8f9fa;
+    padding: 1.2rem 3.4rem;
+    margin: 2em 0.5em;
+    /*margin-top: 2em;*/
+    /*margin-bottom: 2em;*/
     background: transparent;
-    border: none;
-    outline: none;
-    width: 100%;
-}
-.search-input::placeholder, .search-icon {
-    color: gainsboro;
+    position: static;
+    cursor: pointer;
+    border-radius: 0.5em;
+    box-shadow: 0 0 2em 0 rgba(255, 0, 0, 0.8);
 }
