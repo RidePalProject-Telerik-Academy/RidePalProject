@@ -9,7 +9,7 @@ public class GenreMapper {
     public GenreMapper() {
     }
     public Genre fromJsonToGenre(JSONObject jsonObject) {
-        String genreName = (String) jsonObject.get("playlist");
+        String genreName = (String) jsonObject.get("name");
         Long id = (Long) jsonObject.get("id");
         Genre genre = new Genre();
         genre.setId(id);

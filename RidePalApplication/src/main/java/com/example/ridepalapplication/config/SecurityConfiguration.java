@@ -1,49 +1,70 @@
 package com.example.ridepalapplication.config;
 
+import com.example.ridepalapplication.services.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.ProviderManager;
+import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration {
+    private final JwtAuthFilter jwtAuthFilter;
+    private final UserService userService;
+    @Autowired
+    public SecurityConfiguration(JwtAuthFilter jwtAuthFilter, UserService userService) {
+        this.jwtAuthFilter = jwtAuthFilter;
+        this.userService = userService;
+    }
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
     @Bean
-    public AuthenticationManager authManager(UserDetailsService userDetailsService) {
+    public AuthenticationProvider authProvider() {
         DaoAuthenticationProvider daoProvider = new DaoAuthenticationProvider();
-        daoProvider.setUserDetailsService(userDetailsService);
-        return new ProviderManager(daoProvider);
+        daoProvider.setUserDetailsService(userService);
+        daoProvider.setPasswordEncoder(passwordEncoder());
+        return daoProvider;
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        return http
-                .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(auth -> {
-                    auth.requestMatchers("/api/users").permitAll();
-                    auth.requestMatchers(HttpMethod.GET,"/api/playlists").permitAll();
-                    auth.requestMatchers("/api/admins").hasRole("ADMIN");
-                    auth.requestMatchers("/", "/login", "*css", "*js", "*img").permitAll();
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+        return config.getAuthenticationManager();
+    }
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception{
+        return httpSecurity.csrf(AbstractHttpConfigurer::disable)
+
+                .authorizeHttpRequests(auth-> {
+                    auth.requestMatchers("api/users/**").permitAll();
+                    auth.requestMatchers("/","/resources/**", "/static/**", "/css/**", "/js/**", "/images/**","/vendor/**","/fonts/**").permitAll();
+                    auth.requestMatchers(HttpMethod.GET,"/api/playlists/**").permitAll();
                     auth.anyRequest().authenticated();
+
                 })
-                .httpBasic(Customizer.withDefaults())
+                .sessionManagement(Customizer.withDefaults())
+                .authenticationProvider(authProvider())
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
+
+
 }
 

@@ -7,11 +7,15 @@ import com.example.ridepalapplication.exceptions.EntityDuplicateException;
 import com.example.ridepalapplication.exceptions.EntityNotFoundException;
 import com.example.ridepalapplication.helpers.AuthenticationHelper;
 import com.example.ridepalapplication.mappers.UserMapper;
+import com.example.ridepalapplication.models.AuthRequest;
 import com.example.ridepalapplication.models.User;
+import com.example.ridepalapplication.services.JwtService;
 import com.example.ridepalapplication.services.UserService;
 import jakarta.validation.Valid;
-import org.springframework.http.HttpHeaders;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
@@ -27,12 +31,17 @@ public class UserController {
     private final UserService userService;
     private final UserMapper userMapper;
     private final AuthenticationHelper authenticationHelper;
+    private final JwtService jwtService;
 
-    public UserController(UserService userService, UserMapper userMapper, AuthenticationHelper authenticationHelper) {
+    private final AuthenticationManager authenticationManager;
+    @Autowired
+    public UserController(UserService userService, UserMapper userMapper, AuthenticationHelper authenticationHelper, JwtService jwtService, AuthenticationManager authenticationManager) {
         this.userService = userService;
         this.userMapper = userMapper;
         this.authenticationHelper = authenticationHelper;
 
+        this.jwtService = jwtService;
+        this.authenticationManager = authenticationManager;
     }
 
     @GetMapping
@@ -86,6 +95,13 @@ public class UserController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
-
-
+    @PostMapping("/token")
+    public String authenticateAndGetToken(@RequestBody AuthRequest authRequest) {
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
+        if (authentication.isAuthenticated()) {
+            return jwtService.generateToken(authRequest.getUsername());
+        } else {
+            throw new UsernameNotFoundException("invalid user request !");
+        }
+    }
 }
