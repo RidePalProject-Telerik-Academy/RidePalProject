@@ -21,11 +21,9 @@ public class PlaylistDto extends UpdatePlaylistDto {
     public LocationDto getLocationDto() {
         return locationDto;
     }
-
     public List<GenreDto> getGenreDtoList() {
         return genreDtoList;
     }
-
     public boolean topRank() {
         return topRank;
     }
@@ -33,6 +31,27 @@ public class PlaylistDto extends UpdatePlaylistDto {
         return uniqueArtists;
     }
 
+    public void setLocationDto(LocationDto locationDto) {
+        this.locationDto = locationDto;
+    }
 
+    public void setGenreDtoList(List<GenreDto> genreDtoList) {
+        this.genreDtoList = genreDtoList;
+    }
 
+    public boolean isTopRank() {
+        return topRank;
+    }
+
+    public void setTopRank(boolean topRank) {
+        this.topRank = topRank;
+    }
+
+    public boolean isUniqueArtists() {
+        return uniqueArtists;
+    }
+
+    public void setUniqueArtists(boolean uniqueArtists) {
+        this.uniqueArtists = uniqueArtists;
+    }
 }
