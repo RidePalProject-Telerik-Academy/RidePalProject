@@ -1,20 +1,23 @@
 * {
     margin: 0;
     padding: 0;
-    font-family: 'Noto Sans', sans-serif;
+    font-family: 'Trebuchet MS', sans-serif;
 }
+
 html {
     font-size: 62.5%;
 }
+
 body {
     font-size: 2.1rem;
+    color: #f8f9fa;
     min-height: 100vh;
     width: 100%;
-    background-image: linear-gradient(rgba(4, 9, 30, 0.2), rgba(4, 9, 30, 0.2)), url(../images/vinyl.jpg);
-    background-position: center;
     background-size: cover;
-    position: relative;
+    position: page;
+    background-image: linear-gradient(rgba(4, 9, 30, 0.2), rgba(4, 9, 30, 0.2)), url(../images/vinyl.jpg);
 }
+
 .footer {
     text-align: center;
     color: gainsboro;
@@ -22,58 +25,95 @@ body {
     margin: 0.5rem;
 }
 
+
 #welcome {
-    color: gainsboro;
-    display: grid;
-    top: 30%;
-    left: 50%;
+    text-align: left;
+    margin-top: 1em;
+    margin-bottom: 2em;
+    margin-left: 1em;
+}
 
+#welcome li {
+    font-size: 3.5em;
+    color: #f8f9fa;
+    list-style-type: none;
 }
-#welcome h1 {
-    margin-left: 10rem;
-    font-size: 15rem;
-    margin-top: 0;
-}
+
 #welcome strong {
-    margin-left: 10rem;
-    margin-top: 10rem;
-    font-size: 5rem;
+    margin-top: 1em;
+    margin-bottom: 2em;
+    color: #f8f9fa;
 }
 
-.first-steps{
-    color: gainsboro;
+.steps-container {
     display: grid;
-    column-gap: 5rem;
-    grid-auto-flow: column;
-    margin: 10rem;
-    margin-top: 15rem;
+    grid-template-columns: repeat(2, minmax(1em, 2fr));
 }
-.first-steps h3 {
-    font-size: 1.5rem;
+
+.steps-container img {
+    min-width: 4em;
+    max-height: 5em;
+    margin: auto;
+    border-radius: 1em;
+    text-align: left;
+    padding: 0.5em;
 }
-.first-steps h2 {
-    font-size: 4rem;
+
+#arrow-1 {
+    margin-top: 2em;
 }
+#step-1{
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
+#arrow-left {
+    transform: scaleX(-1);
+}
+
+.step {
+    border-radius: 1em;
+    text-align: left;
+    margin: 0.5em;
+    min-width: auto;
+    box-shadow: 0 0 2em 0 rgba(255, 0, 0, 0.8);
+    padding: 0.5em;
+    border-style: solid;
+    border-width: 0.1em;
+}
+
+
+#step-2, #step-4 {
+    grid-column-start: 2;
+}
+
+.step h2 {
+    text-align: left;
+    min-font-size: 0.3em;
+    font-size: 2em;
+}
+
+.step h3 {
+    text-align: left;
+    min-font-size: 0.5em;
+    font-size: 0.8em;
+}
+
+.hero-btn-container {
+    text-align: center;
+}
+
 .hero-btn {
-    display: inline-block;
-    text-decoration: none;
-    color: gainsboro;
-    border: 0.2rem solid gainsboro;
-    border-radius: 1.0rem;
-    font-size: 1.5rem;
-    padding: 1.5rem 4rem;
-    margin-top: 2rem;
-    cursor: pointer;
+    font: 200% sans-serif;
+    color: #f8f9fa;
+    border: 1px solid #f8f9fa;
+    padding: 1.2rem 3.4rem;
+    margin: 2em 0.5em;
+    /*margin-top: 2em;*/
+    /*margin-bottom: 2em;*/
     background: transparent;
-    position: relative;
-    transition: 0.8s;
-}
-.hero-btn:hover {
-    border: 0.2rem solid gainsboro;
-    background: gainsboro;
-    color: black;
-}
-#r-u-ready {
-    font-size: 1.5em;
-    margin: 0 6% 5%;
+    position: static;
+    cursor: pointer;
+    border-radius: 0.5em;
+    box-shadow: 0 0 2em 0 rgba(255, 0, 0, 0.8);
 }
