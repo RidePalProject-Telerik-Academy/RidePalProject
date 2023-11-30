@@ -54,16 +54,18 @@ public class SecurityConfiguration {
 
                 .authorizeHttpRequests(auth-> {
                     auth.requestMatchers("api/users/**").permitAll();
-                    auth.requestMatchers("/","/resources/**", "/static/**", "/css/**", "/js/**", "/images/**","/vendor/**","/fonts/**").permitAll();
                     auth.requestMatchers(HttpMethod.GET,"/api/playlists/**").permitAll();
+                    auth.requestMatchers("/**", "/resources/**", "/static/**", "/css/**", "/js/**",
+                            "/images/**", "/vendor/**", "/fonts/**")
+                            .permitAll();
                     auth.anyRequest().authenticated();
 
                 })
                 .sessionManagement(Customizer.withDefaults())
                 .authenticationProvider(authProvider())
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                .formLogin(Customizer.withDefaults())
                 .build();
     }
-
 
 }

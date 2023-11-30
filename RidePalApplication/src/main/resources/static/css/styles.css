@@ -16,82 +16,105 @@ body {
     background-size: cover;
     position: page;
     background-image: linear-gradient(rgba(4, 9, 30, 0.2), rgba(4, 9, 30, 0.2)), url(../images/vinyl.jpg);
+    display: flex;
+    flex-direction: column;
 }
 
-.main-content {
-    padding: 3%;
-    text-align: center;
+nav{
+    display: inline-flex;
+    justify-content: space-between;
+    width: 100%;
 }
-
-.playlist-item {
-    display: inline-block;
-    margin: 20px;
-    padding: 20px;
-    border: 2px solid black;
-    border-radius: 10px;
-    text-align: left;
-    background-color: #fff;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease-in-out;
-
-    /* Hover effect */
-    &:hover {
-        transform: scale(1.05);
-    }
+nav ul{
+    list-style-type: none;
+    display: inline-flex;
+    justify-content: space-between;
+    margin: 2%;
 }
-
-.playlist-item h3,
-.playlist-item h4 {
-    color: black;
+nav ul li{
+    /*background: #ed944d;*/
+    margin: 0.1em;
+    border-style: solid;
+    border-width: 0.1em;
+    border-radius: 0.5em;
+    padding: 0.5em;
 }
-
-.playlist-item a {
-    display: inline-block;
-    padding: 8px 15px;
-    background-color: #ed944d;
-    color: black;
+nav li a{
+    color: #f8f9fa;
+    font-size: 4vmin;
+    text-align: right;
     text-decoration: none;
-    border-radius: 5px;
-    margin-top: 10px;
-    transition: background-color 0.3s ease-in-out;
-
-    /* Hover effect */
-    &:hover {
-        background-color: #ed944d;
-    }
 }
-
-#explore-button {
-    border: 0.1em solid gainsboro;
-    padding: 0.5em 1.5em;
-    border-radius: 1.0rem;
-    background: #ed944d;
-}
-
-#explore-button:hover {
-    border: 0.1em solid gainsboro;
+nav li:hover{
+    color: #f8f9fa;
     background: black;
+    transition: transform 0.3s ease-in-out;
+    transform: scale(1.1);
+}
+
+#logo{
+    color: #f8f9fa;
+    font-size: 10vmin;
+    text-align: left;
+    margin-left: 2%;
+}
+
+/*============================*/
+/*Search bar*/
+/*============================*/
+
+.search {
+    --padding: 1.4rem;
+    width: 48%;
+    gap: 1.6rem;
+
+    align-items: center;
+    padding: var(--padding);
+    margin-left: 2%;
+    margin-right: auto;
+    border-radius: 1.4rem;
+    background: whitesmoke;
+    text-decoration: #ed944d;
+    transition: box-shadow 0.7s;
+}
+.search:hover {
+    box-shadow: #ed944d 0 0 0.9em;
+    border-style: none;
+}
+
+.search:focus-within {
+    box-shadow: #ed944d 0 0 0.5em;
+    border-style: none;
+}
+
+.search-icon {
     color: #ed944d;
-    transition: 1.5s;
 }
 
-#explore-button:hover a {
+.search-input{;
+    font-size: 2rem;
     color: #ed944d;
+    margin-left: var(--padding);
+    background: transparent;
+    border: none;
+    outline: none;
+    width: 100%;
+}
+.search-input::placeholder, .search-icon {
+    color: gainsboro;
 }
 
-#explore-button:hover::after {
-    width: 0%;
-}
-
-
+/*=============================================*/
+/*SEARCHBAR ENDS*/
+/*=============================================*/
 
 .footer {
     text-align: center;
     color: gainsboro;
     font-size: 1.5rem;
     margin: 0.5rem;
+    margin-top: auto;
 }
-
 
 #welcome {
     text-align: left;
@@ -183,4 +206,58 @@ body {
     cursor: pointer;
     border-radius: 0.5em;
     box-shadow: 0 0 2em 0 rgba(255, 0, 0, 0.8);
+}
+
+/*HOME VIEW ENDS HERE*/
+
+/*PLAYLISTS VIEW STARTS HERE*/
+
+.section-title h2{
+    text-align: center;
+    justify-content: center;
+    margin-top: 10vmin;
+    font-size: 8vmin;
+}
+
+.main-content {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    margin-top: 5vmin;
+    margin-bottom: 5vmin;
+}
+
+.playlist-item {
+    width: 30vmin;
+    height: 50vmin;
+    margin: 0.2em;
+    gap: 0.2em;
+    border: 2px solid #f8f9fa;
+    border-radius: 1em;
+    text-align: left;
+    /*background-color: #fff;*/
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out;
+
+    /* Hover effect */
+    &:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+    }
+}
+
+.playlist-item h3 {
+    color: #f8f9fa;
+    font-size: 3.3vmin;
+    margin-left: 1.5vmin;
+}
+.playlist-item h4 {
+    color: #f8f9fa;
+    font-size: 2.5vmin;
+    margin-left: 1.5vmin;
+}
+
+.playlist-item img {
+    max-width: 100%;
+    height: auto;
 }

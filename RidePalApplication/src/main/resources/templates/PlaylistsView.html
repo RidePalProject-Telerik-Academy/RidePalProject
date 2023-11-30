@@ -11,36 +11,41 @@
 <section class="header">
     <nav>
         <div id="logo">
-            <img src="../images/logo-alt.gif" th:src="@{/images/logo-alt.gif}" alt="logo">
+            <!--            <img src="../images/logo-alt.gif" th:src="@{/images/logo-alt.gif}" alt="logo">-->
             <h1 style="font-family: Forte, sans-serif;">RidePal</h1>
-            <form action="#" id="search-form" th:action="@{/playlists}" method="get">
-                <input type="text" name="name" placeholder="Search..." class="search-input" th:object="${name}">
-                <a class="search-btn" type="submit"> </a>
-            </form>
         </div>
         <ul>
-            <li><a href="playlists.html" th:href="@{/playlists}" th:text="#{navigation.playlists}">Playlists</a></li>
+<!--            <li><a href="playlists.html" th:href="@{/playlists}" th:text="#{navigation.playlists}">Playlists</a></li>-->
             <li><a href="login.html" th:href="@{/login}" th:text="#{navigation.login}">Login</a></li>
-            <li><a href="login.html" th:href="@{/playlists/generate}" th:text="#{navigation.generate}">Generate</a></li>
-            <li id="sign-up-button"><a href="register.html" th:href="@{/users/register}"
-                                       th:text="#{navigation.register}">Signup</a></li>
+<!--            <li><a href="login.html" th:href="@{/playlists/generate}" th:text="#{navigation.generate}">Generate</a></li>-->
+            <li><a href="register.html" th:href="@{/users/register}" th:text="#{navigation.register}">SignUp</a></li>
         </ul>
     </nav>
+
+
+    <form class="search" action="#" id="search-form" th:action="@{/playlists}" method="get">
+        <input type="text" name="name" placeholder="Search..." class="search-input" th:object="${name}">
+        <a class="search-btn" type="submit"> </a>
+    </form>
+
 </section>
-<div class="line"></div>
+
+<div class="section-title">
+    <h2>Top Ranked Playlists</h2>
+</div>
 
 <!-- BODY WITH TOP 10 PLAYLISTS -->
 <section class="main-content">
-    <h2>Top 10 Playlists</h2>
     <div th:each="playlist : ${filteredPlaylists}">
-        <div class="playlist-item">
+        <div class="playlist-item" >
+            <a th:href="@{/playlists/{id}(id=${playlist.id})}">
+<!--            th:href="@{'/playlists/' + ${playlist.id}}"-->
+            <img src="../images/logo-alt.gif" th:src="@{/images/logo-alt.gif}" alt="Playlist">
             <h3 th:text="${playlist.name}"></h3>
             <h4 th:text="'Creator: ' + ${playlist.creator.getUsername()}"></h4>
             <h4 th:text="'Duration: ' + ${playlist.duration/60} + ' min'"></h4>
             <h4 th:text="'Rank: ' + ${playlist.rank}"></h4>
-            </span>
-            </h4>
-            <a id="explore-button" th:href="@{/playlists/{id}(id=${playlist.id})}">Explore</a>
+            </a>
         </div>
     </div>
 </section>
