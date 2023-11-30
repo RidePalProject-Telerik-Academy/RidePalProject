@@ -1,6 +1,7 @@
 package com.example.ridepalapplication.services;
 
 import com.example.ridepalapplication.dtos.GenreDto;
+import com.example.ridepalapplication.dtos.PlaylistDto;
 import com.example.ridepalapplication.models.Playlist;
 import com.example.ridepalapplication.models.Song;
 import com.example.ridepalapplication.models.Tag;
@@ -15,6 +16,7 @@ public interface PlaylistService {
 
     Optional<Playlist> getById(long id);
 
+    Playlist choosePlaylistStrategy(PlaylistDto playlistDto, Playlist playlist, int travelDuration, List<GenreDto> genreList);
     Playlist generateDefaultRankUniqueArtistsPlaylist(Playlist playlist, int travelDuration, List<GenreDto> genreDtoList);
 
     Playlist generateTopRankSongsNonUniqueArtistPlaylist(Playlist playlist, int travelDuration, List<GenreDto> genreDtoList);

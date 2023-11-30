@@ -83,7 +83,7 @@ public class PlaylistController {
           Playlist playlist = playlistMapper.fromDto(playlistDto, user);
           int travelDuration = bingController.calculateTravelTime(playlistDto.getLocationDto());
 
-          return choosePlaylistStrategy(playlistDto, playlist, travelDuration, genreList);
+          return playlistService.choosePlaylistStrategy(playlistDto, playlist, travelDuration, genreList);
 
       } catch (AuthorizationException e) {
           throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
@@ -191,21 +191,6 @@ public class PlaylistController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
-        }
-    }
-    private Playlist choosePlaylistStrategy(PlaylistDto playlistDto, Playlist playlist, int travelDuration, List<GenreDto> genreList) {
-        if (playlistDto.topRank()) {
-            if (playlistDto.uniqueArtists()) {
-                return playlistService.generateTopRankSongsUniqueArtistsPlaylist(playlist, travelDuration, genreList);
-            } else {
-                return playlistService.generateTopRankSongsNonUniqueArtistPlaylist(playlist, travelDuration, genreList);
-            }
-        } else {
-            if (playlistDto.uniqueArtists()) {
-                return playlistService.generateTopRankSongsUniqueArtistsPlaylist(playlist, travelDuration, genreList);
-            } else {
-                return playlistService.generateDefaultRankNonUniqueArtistPlaylist(playlist, travelDuration, genreList);
-            }
         }
     }
 

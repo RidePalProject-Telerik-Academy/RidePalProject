@@ -1,6 +1,7 @@
 package com.example.ridepalapplication.services;
 
 import com.example.ridepalapplication.dtos.GenreDto;
+import com.example.ridepalapplication.dtos.PlaylistDto;
 import com.example.ridepalapplication.exceptions.EntityDuplicateException;
 import com.example.ridepalapplication.exceptions.EntityNotFoundException;
 import com.example.ridepalapplication.helpers.AuthorizationHelper;
@@ -19,7 +20,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-
 
 
 @Service
@@ -51,7 +51,7 @@ public class PlaylistServiceImpl implements PlaylistService {
         Specification<Playlist> durationSpec = (root, query, criteriaBuilder) ->
                 criteriaBuilder.between(root.get("duration"), minDuration, maxDuration);
         Specification<Playlist> tagNameSpec;
-        if(!tagName.isEmpty()){
+        if (!tagName.isEmpty()) {
             tagNameSpec = (root, query, criteriaBuilder) -> {
 
                 Join<Playlist, Tag> tagJoin = root.join("tags", JoinType.INNER);
@@ -59,21 +59,37 @@ public class PlaylistServiceImpl implements PlaylistService {
 
 
             };
-            playlistSpecification= Specification.allOf(titleSpec, durationSpec, tagNameSpec);
-        }
-
-        else playlistSpecification = Specification.allOf(titleSpec,durationSpec);
+            playlistSpecification = Specification.allOf(titleSpec, durationSpec, tagNameSpec);
+        } else playlistSpecification = Specification.allOf(titleSpec, durationSpec);
 
         return playlistRepository.findAll(playlistSpecification, pageRequest
                         .withSort(Sort.Direction.DESC, "rank"))
                 .getContent();
     }
+
     @Override
     public Optional<Playlist> getById(long id) {
         Optional<Playlist> playlist = playlistRepository.findById(id);
         if (playlist.isEmpty()) {
             throw new EntityNotFoundException("Playlist", id);
         } else return playlist;
+    }
+
+    @Override
+    public Playlist choosePlaylistStrategy(PlaylistDto playlistDto, Playlist playlist, int travelDuration, List<GenreDto> genreList) {
+        if (playlistDto.topRank()) {
+            if (playlistDto.uniqueArtists()) {
+                return generateTopRankSongsUniqueArtistsPlaylist(playlist, travelDuration, genreList);
+            } else {
+                return generateTopRankSongsNonUniqueArtistPlaylist(playlist, travelDuration, genreList);
+            }
+        } else {
+            if (playlistDto.uniqueArtists()) {
+                return generateTopRankSongsUniqueArtistsPlaylist(playlist, travelDuration, genreList);
+            } else {
+                return generateDefaultRankNonUniqueArtistPlaylist(playlist, travelDuration, genreList);
+            }
+        }
     }
 
     @Override
@@ -87,7 +103,7 @@ public class PlaylistServiceImpl implements PlaylistService {
             int currentGenreDuration = 0;
             int totalGenreDuration = (travelDuration * getGenrePercentage) / 100;
 
-            Genre genre = PlaylistHelper.extractGenres(genreRepository,genreDto);
+            Genre genre = PlaylistHelper.extractGenres(genreRepository, genreDto);
 
             while (currentGenreDuration < totalGenreDuration) {
                 List<Song> songs;
@@ -112,8 +128,9 @@ public class PlaylistServiceImpl implements PlaylistService {
         PlaylistHelper.updatePlaylistDetails(playlist, totalRank, playlistSongs, totalPlaylistDuration);
         return playlistRepository.save(playlist);
     }
+
     @Override
-    public Playlist generateTopRankSongsNonUniqueArtistPlaylist(Playlist playlist, int travelDuration, List<GenreDto> genreDtoList){
+    public Playlist generateTopRankSongsNonUniqueArtistPlaylist(Playlist playlist, int travelDuration, List<GenreDto> genreDtoList) {
         Set<Song> playlistSongs = new HashSet<>();
         int totalPlaylistDuration = 0;
         Long totalRank = 0L;
@@ -122,7 +139,7 @@ public class PlaylistServiceImpl implements PlaylistService {
             int currentGenreDuration = 0;
             int totalGenreDuration = (travelDuration * getGenrePercentage) / 100;
 
-            Genre genre = PlaylistHelper.extractGenres(genreRepository,genreDto);
+            Genre genre = PlaylistHelper.extractGenres(genreRepository, genreDto);
 
             while (currentGenreDuration < totalGenreDuration) {
                 List<Song> songs = songRepository.getMeSingleTopSongByGenre(genre.getId());
@@ -141,7 +158,6 @@ public class PlaylistServiceImpl implements PlaylistService {
     }
 
 
-
     @Override
     public Playlist generateTopRankSongsUniqueArtistsPlaylist(Playlist playlist, int travelDuration, List<GenreDto> genreDtoList) {
         Set<Song> playlistSongs = new HashSet<>();
@@ -153,7 +169,7 @@ public class PlaylistServiceImpl implements PlaylistService {
             int currentGenreDuration = 0;
             int totalGenreDuration = (travelDuration * getGenrePercentage) / 100;
 
-            Genre genre = PlaylistHelper.extractGenres(genreRepository,genreDto);
+            Genre genre = PlaylistHelper.extractGenres(genreRepository, genreDto);
 
             while (currentGenreDuration < totalGenreDuration) {
                 List<Song> songs;
@@ -181,9 +197,8 @@ public class PlaylistServiceImpl implements PlaylistService {
     }
 
 
-
     @Override
-    public Playlist generateDefaultRankNonUniqueArtistPlaylist(Playlist playlist, int travelDuration, List<GenreDto> genreDtoList){
+    public Playlist generateDefaultRankNonUniqueArtistPlaylist(Playlist playlist, int travelDuration, List<GenreDto> genreDtoList) {
         Set<Song> playlistSongs = new HashSet<>();
         int totalPlaylistDuration = 0;
         Long totalRank = 0L;
@@ -192,7 +207,7 @@ public class PlaylistServiceImpl implements PlaylistService {
             int currentGenreDuration = 0;
             int totalGenreDuration = (travelDuration * getGenrePercentage) / 100;
 
-            Genre genre = PlaylistHelper.extractGenres(genreRepository,genreDto);
+            Genre genre = PlaylistHelper.extractGenres(genreRepository, genreDto);
 
             while (currentGenreDuration < totalGenreDuration) {
                 List<Song> songs = songRepository.getMeSingleSongByGenre(genre.getId());
@@ -211,7 +226,7 @@ public class PlaylistServiceImpl implements PlaylistService {
     }
 
     @Override
-    public Playlist update(User user, Playlist playlistToUpdate,String newName) {
+    public Playlist update(User user, Playlist playlistToUpdate, String newName) {
         authorizationHelper.checkAuthorization(user, playlistToUpdate.getCreator(), "update playlist name");
         playlistToUpdate.setName(newName);
         return playlistRepository.save(playlistToUpdate);
@@ -226,7 +241,7 @@ public class PlaylistServiceImpl implements PlaylistService {
         }
 
         PlaylistHelper.updatePlaylistDetails(playlistToUpdate, songToAdd, "add");
-      return  playlistRepository.save(playlistToUpdate);
+        return playlistRepository.save(playlistToUpdate);
     }
 
     @Override
@@ -260,7 +275,7 @@ public class PlaylistServiceImpl implements PlaylistService {
 
     @Override
     public void deleteTag(User user, Tag tag, Playlist playlistToUpdate) {
-       authorizationHelper.checkAuthorization(user, playlistToUpdate.getCreator(), "delete tags from other users' playlists");
+        authorizationHelper.checkAuthorization(user, playlistToUpdate.getCreator(), "delete tags from other users' playlists");
 
         Tag tagToDelete = tagRepository.findByName(tag.getName());
 
