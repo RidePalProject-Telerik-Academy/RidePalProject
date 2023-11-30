@@ -18,6 +18,73 @@ body {
     background-image: linear-gradient(rgba(4, 9, 30, 0.2), rgba(4, 9, 30, 0.2)), url(../images/vinyl.jpg);
 }
 
+.main-content {
+    padding: 3%;
+    text-align: center;
+}
+
+.playlist-item {
+    display: inline-block;
+    margin: 20px;
+    padding: 20px;
+    border: 2px solid black;
+    border-radius: 10px;
+    text-align: left;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out;
+
+    /* Hover effect */
+    &:hover {
+        transform: scale(1.05);
+    }
+}
+
+.playlist-item h3,
+.playlist-item h4 {
+    color: black;
+}
+
+.playlist-item a {
+    display: inline-block;
+    padding: 8px 15px;
+    background-color: #ed944d;
+    color: black;
+    text-decoration: none;
+    border-radius: 5px;
+    margin-top: 10px;
+    transition: background-color 0.3s ease-in-out;
+
+    /* Hover effect */
+    &:hover {
+        background-color: #ed944d;
+    }
+}
+
+#explore-button {
+    border: 0.1em solid gainsboro;
+    padding: 0.5em 1.5em;
+    border-radius: 1.0rem;
+    background: #ed944d;
+}
+
+#explore-button:hover {
+    border: 0.1em solid gainsboro;
+    background: black;
+    color: #ed944d;
+    transition: 1.5s;
+}
+
+#explore-button:hover a {
+    color: #ed944d;
+}
+
+#explore-button:hover::after {
+    width: 0%;
+}
+
+
+
 .footer {
     text-align: center;
     color: gainsboro;

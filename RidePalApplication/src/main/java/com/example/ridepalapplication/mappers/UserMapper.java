@@ -1,7 +1,9 @@
 package com.example.ridepalapplication.mappers;
 
+import com.example.ridepalapplication.dtos.RegisterDto;
 import com.example.ridepalapplication.dtos.UpdateUserDto;
 import com.example.ridepalapplication.dtos.UserDto;
+import com.example.ridepalapplication.exceptions.AuthorizationException;
 import com.example.ridepalapplication.models.Role;
 import com.example.ridepalapplication.models.User;
 import com.example.ridepalapplication.repositories.RoleRepository;
@@ -57,6 +59,19 @@ public class UserMapper {
                 rolesSet
         );
 
+    }
+
+    public User fromRegisterDtoToUser(RegisterDto registerDto){
+        if(!registerDto.getPassword().equals(registerDto.getConfirmPassword())){
+            throw new AuthorizationException("Passwords does not match please try again");
+        }
+        User user = new User();
+        user.setFirstName(registerDto.getFirstName());
+        user.setLastName(registerDto.getLastName());
+        user.setUsername(registerDto.getUsername());
+        user.setPassword(registerDto.getPassword());
+        user.setEmail(registerDto.getEmail());
+        return user;
     }
 
 }
