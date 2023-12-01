@@ -1,16 +1,11 @@
 package com.example.ridepalapplication.helpers;
-
-
+import com.example.ridepalapplication.exceptions.AuthorizationException;
 import com.example.ridepalapplication.models.User;
 import com.example.ridepalapplication.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
-import java.util.Objects;
 
 @Component
 public class AuthenticationHelper {
@@ -23,7 +18,13 @@ public class AuthenticationHelper {
     }
 
     public User tryGetUser(Authentication authentication){
-        String username = authentication.getName();
+        String username;
+        try {
+            username = authentication.getName();
+        }
+        catch (NullPointerException e){
+            throw new AuthorizationException("Invalid Authorization");
+        }
        return userService.getByUsername(username);
     }
 }
