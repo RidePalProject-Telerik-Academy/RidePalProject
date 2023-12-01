@@ -44,7 +44,7 @@ public class PlaylistMvcController {
     public String playlistPage(Model model, @RequestParam(required = false, defaultValue = "") String name) {
         List<Playlist> allPlaylists;
 
-        allPlaylists = playlistService.getAll(0, 10, name, 0, 2147483647, new ArrayList<>());
+        allPlaylists = playlistService.getAll(0, 9, name, 0, 2147483647, new ArrayList<>());
 
         model.addAttribute("name", name);
         model.addAttribute("filteredPlaylists", allPlaylists);

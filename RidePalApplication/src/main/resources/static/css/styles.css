@@ -20,6 +20,10 @@ body {
     flex-direction: column;
 }
 
+a {
+    text-decoration: none;
+}
+
 nav{
     display: inline-flex;
     justify-content: space-between;
