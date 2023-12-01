@@ -2,12 +2,18 @@ package com.example.ridepalapplication.dtos;
 
 import jakarta.validation.constraints.NotNull;
 
-public record LocationDto(@NotNull(message = "Start location is required.") String startLocation,
-                          @NotNull(message = "Start address is required.") String startAddress,
-                          @NotNull(message = "End location is required.") String endLocation,
-                          @NotNull(message = "End address is required.") String endAddress) {
+public class LocationDto {
 
-    public LocationDto {
+    @NotNull(message = "Start location is required.")
+    private String startLocation;
+    @NotNull(message = "Start address is required.")
+    private String startAddress;
+    @NotNull(message = "End location is required.")
+    private String endLocation;
+    @NotNull(message = "End address is required.")
+    private String endAddress;
+
+    public LocationDto() {
     }
 
     public String getStartLocation() {
@@ -26,4 +32,19 @@ public record LocationDto(@NotNull(message = "Start location is required.") Stri
         return endAddress.replaceAll(" ", "+");
     }
 
+    public void setStartLocation(String startLocation) {
+        this.startLocation = startLocation;
+    }
+
+    public void setStartAddress(String startAddress) {
+        this.startAddress = startAddress;
+    }
+
+    public void setEndLocation(String endLocation) {
+        this.endLocation = endLocation;
+    }
+
+    public void setEndAddress(String endAddress) {
+        this.endAddress = endAddress;
+    }
 }

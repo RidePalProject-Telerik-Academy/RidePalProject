@@ -1,12 +1,16 @@
 package com.example.ridepalapplication.controllers.mvc;
 
 import com.example.ridepalapplication.controllers.rest.BingController;
+import com.example.ridepalapplication.dtos.GenreDto;
+import com.example.ridepalapplication.dtos.MvcPlaylistDto;
 import com.example.ridepalapplication.dtos.PlaylistDto;
 import com.example.ridepalapplication.exceptions.EntityNotFoundException;
 import com.example.ridepalapplication.helpers.AuthenticationHelper;
 import com.example.ridepalapplication.mappers.PlaylistMapper;
+import com.example.ridepalapplication.models.Genre;
 import com.example.ridepalapplication.models.Playlist;
 import com.example.ridepalapplication.models.User;
+import com.example.ridepalapplication.repositories.GenreRepository;
 import com.example.ridepalapplication.services.PlaylistService;
 import jakarta.validation.Valid;
 import org.json.simple.parser.ParseException;
@@ -20,7 +24,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/playlists")
@@ -54,24 +57,31 @@ public class PlaylistMvcController {
 
     @GetMapping("/generate")
     public String generatePlaylistView(Model model) {
-        model.addAttribute("newPlaylist", new PlaylistDto());
+        GenreDto pop = new GenreDto("Pop", 0);
+        GenreDto rock = new GenreDto("Rock", 0);
+        GenreDto rap = new GenreDto("Rap/Hip Hop", 0);
+
+        List<GenreDto> genres = List.of(pop, rock, rap);
+        MvcPlaylistDto mvcPlaylistDto = new MvcPlaylistDto();
+        mvcPlaylistDto.setGenres(genres);
+        model.addAttribute("newPlaylist", mvcPlaylistDto);
         return "GenerateView";
     }
 
     @PostMapping("/generate")
-    public String generatePlaylist(@Valid @ModelAttribute("newPlaylist") PlaylistDto playlistDto,
-                                   Authentication authentication, Model model, BindingResult bindingResult) throws ParseException {
+    public String generatePlaylist(@Valid @ModelAttribute("newPlaylist") MvcPlaylistDto mvcPlaylistDto,
+                                   Authentication authentication, BindingResult bindingResult) throws ParseException {
         if (bindingResult.hasErrors()) {
             return "GenerateView";
         }
 
         try {
+            PlaylistDto playlistDto = playlistMapper.fromMvcPlaylistDto(mvcPlaylistDto);
             User user = authenticationHelper.tryGetUser(authentication);
             Playlist playlist = playlistMapper.fromDto(playlistDto, user);
             int duration = bingController.calculateTravelTime(playlistDto.getLocationDto());
-            Playlist generatedPlaylist = playlistService.choosePlaylistStrategy(playlistDto, playlist, duration, playlistDto.getGenreDtoList());
-            //TODO: if we save line 69 as a variable, we can return the ID in the SinglePlaylistView?
-            return "SinglePlaylistView";
+            playlist = playlistService.choosePlaylistStrategy(playlistDto, playlist, duration, playlistDto.getGenreDtoList());
+            return "redirect:/playlists/" + playlist.getId();
         } catch (EntityNotFoundException e) {
             return "redirect:/";
         }
@@ -80,7 +90,7 @@ public class PlaylistMvcController {
     @GetMapping("/{id}")
     public String singlePlaylistView(@PathVariable long id, Model model) {
         try {
-            Optional<Playlist> playlist = playlistService.getById(id);
+            Playlist playlist = playlistService.getById(id).orElseThrow();
             model.addAttribute("singlePlaylist", playlist);
             return "SinglePlaylistView";
         } catch (EntityNotFoundException e) {

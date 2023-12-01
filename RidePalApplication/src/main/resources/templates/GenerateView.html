@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Luxurious Playlist Form</title>
+
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #282828;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        form {
+            background-color: #333;
+            padding: 16px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            max-width: 300px; /* Adjust the max-width to your preference */
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 16px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        input {
+            width: calc(100% - 16px);
+            padding: 10px;
+            margin-bottom: 12px;
+            border: none;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .genre-fields {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .genre-fields input {
+            margin-bottom: 8px;
+        }
+
+        button {
+            background-color: #1db954;
+            color: #fff;
+            padding: 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #1ed760;
+        }
+    </style>
+
+</head>
+<body>
+
+<form th:action="@{/playlists/generate}" th:object="${newPlaylist}" method="post">
+    <!-- Input fields for MvcPlaylistDtoForm properties -->
+    <label for="name">Name:</label>
+    <input type="text" id="name" th:field="*{name}" required/>
+    <br>
+    <label for="startLocation">Start Location:</label>
+    <input type="text" id="startLocation" th:field="*{startLocation}" required/>
+    <br>
+    <label for="startLocation">Start Address:</label>
+    <input type="text" id="startAddress" th:field="*{startAddress}"/>
+    <br>
+    <label for="startLocation">End Location:</label>
+    <input type="text" id="endLocation" th:field="*{endLocation}" required/>
+    <br>
+    <label for="endAddress">End Address:</label>
+    <input type="text" id="endAddress" th:field="*{endAddress}" required/>
+    <br>
+    <label>Genres:</label>
+    <div class="genre-fields" th:each="genre, iterStat : *{genres}">
+        <input type="text" id="${'genreName' + iterStat.index}" th:field="*{genres[__${iterStat.index}__].name}"
+               placeholder="Genre Name" required readonly/>
+        <input type="number" id="${'genrePercentage' + iterStat.index}"
+               th:field="*{genres[__${iterStat.index}__].percentage}" placeholder="Percentage" required/>
+        <br/>
+    </div>
+
+    <label for="topRank">Top Rank:</label>
+    <input type="checkbox" id="topRank" th:field="*{topRank}"/>
+
+    <label for="uniqueArtists">Unique Artists:</label>
+    <input type="checkbox" id="uniqueArtists" th:field="*{uniqueArtists}"/>
+
+    <button type="submit">Submit</button>
+</form>
+
+</body>
+</html>
