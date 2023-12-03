@@ -44,10 +44,14 @@ public class PlaylistMvcController {
     }
 
     @GetMapping
-    public String playlistPage(Model model, @RequestParam(required = false, defaultValue = "") String name) {
+    public String playlistPage(Model model, @RequestParam(required = false, defaultValue = "") String name,
+                               @RequestParam(required = false, defaultValue = "0") Integer page,
+                               @RequestParam(required = false, defaultValue = "10") Integer pageSize,
+                               @RequestParam(required = false, defaultValue = "0") Integer minDuration,
+                               @RequestParam(required = false, defaultValue = "2147483647") Integer maxDuration) {
         List<Playlist> allPlaylists;
 
-        allPlaylists = playlistService.getAll(0, 9, name, 0, 2147483647, new ArrayList<>());
+        allPlaylists = playlistService.getAll(page, pageSize, name, minDuration, maxDuration, new ArrayList<>());
 
         model.addAttribute("name", name);
         model.addAttribute("filteredPlaylists", allPlaylists);
@@ -57,9 +61,12 @@ public class PlaylistMvcController {
 
     @GetMapping("/generate")
     public String generatePlaylistView(Model model) {
+        //take from DB map to GenreDto with loop
         GenreDto pop = new GenreDto("Pop", 0);
         GenreDto rock = new GenreDto("Rock", 0);
         GenreDto rap = new GenreDto("Rap/Hip Hop", 0);
+
+        // List<GenreDto> genreList = PlaylistHelper.verifyTotalPercentage(playlistDto);
 
         List<GenreDto> genres = List.of(pop, rock, rap);
         MvcPlaylistDto mvcPlaylistDto = new MvcPlaylistDto();

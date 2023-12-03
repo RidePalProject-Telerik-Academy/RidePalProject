@@ -1,8 +1,12 @@
 package com.example.ridepalapplication.models;
 
+import jakarta.validation.constraints.NotNull;
+
 public class AuthRequest {
 
+    @NotNull
     private String username;
+    @NotNull
     private String password;
 
     public AuthRequest() {
