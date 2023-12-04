@@ -9,6 +9,7 @@ import com.example.ridepalapplication.helpers.AuthenticationHelper;
 import com.example.ridepalapplication.mappers.PlaylistMapper;
 import com.example.ridepalapplication.models.Genre;
 import com.example.ridepalapplication.models.Playlist;
+import com.example.ridepalapplication.models.Song;
 import com.example.ridepalapplication.models.User;
 import com.example.ridepalapplication.repositories.GenreRepository;
 import com.example.ridepalapplication.services.PlaylistService;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Controller
 @RequestMapping("/playlists")
@@ -46,7 +48,7 @@ public class PlaylistMvcController {
     @GetMapping
     public String playlistPage(Model model, @RequestParam(required = false, defaultValue = "") String name,
                                @RequestParam(required = false, defaultValue = "0") Integer page,
-                               @RequestParam(required = false, defaultValue = "10") Integer pageSize,
+                               @RequestParam(required = false, defaultValue = "9") Integer pageSize,
                                @RequestParam(required = false, defaultValue = "0") Integer minDuration,
                                @RequestParam(required = false, defaultValue = "2147483647") Integer maxDuration) {
         List<Playlist> allPlaylists;
@@ -99,6 +101,7 @@ public class PlaylistMvcController {
         try {
             Playlist playlist = playlistService.getById(id).orElseThrow();
             model.addAttribute("singlePlaylist", playlist);
+            playlist.getSongs().forEach(song -> model.addAttribute(song.getTitle(), song));
             return "SinglePlaylistView";
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
@@ -106,7 +109,5 @@ public class PlaylistMvcController {
             return "ErrorView";
         }
     }
-
-
 }
 
