@@ -14,20 +14,29 @@
 
 </head>
 <body id="main-body">
+
+
+<!--NAVIGATION BAR-->
 <section class="header">
     <nav>
-        <div id="logo">
-            <!--            <img src="../images/logo-alt.gif" th:src="@{/images/logo-alt.gif}" alt="logo">-->
-            <h1 style="font-family: Forte, sans-serif;">RidePal</h1>
-        </div>
+        <a th:href="@{/playlists}">
+            <div id="logo">
+                <!--            <img src="../images/logo-alt.gif" th:src="@{/images/logo-alt.gif}" alt="logo">-->
+                <h1 style="font-family: Forte, sans-serif;">RidePal</h1>
+            </div>
+        </a>
         <ul>
-<!--            <li><a href="PlaylistsView.html" th:href="@{/playlists}" th:text="#{navigation.playlists}">Playlists</a>-->
-<!--            </li>-->
-            <li><a href="/login" th:href="@{/login}" th:text="#{navigation.login}">Login</a></li>
-<!--            <li><a href="GenerateView.html" th:href="@{/playlists/generate}"-->
-<!--                   th:text="#{navigation.generate}">Generate</a></li>-->
-            <li><a href="RegisterView.html" th:href="@{/users/register}" th:text="#{navigation.register}">SignUp</a>
+            <!--            <li><a href="PlaylistsView.html" th:href="@{/playlists}" th:text="#{navigation.playlists}">Explore</a>-->
+            <!--            </li>-->
+            <li th:unless="${isAuthenticated}"><a href="/login" th:href="@{/login}"
+                                                  th:text="#{navigation.login}">Login</a></li>
+            <!--            <li><a href="GenerateView.html" th:href="@{/playlists/generate}"-->
+            <!--                   th:text="#{navigation.generate}">Generate</a></li>-->
+            <li th:unless="${isAuthenticated}"><a href="RegisterView.html" th:href="@{/users/register}"
+                                                  th:text="#{navigation.register}">SignUp</a>
             </li>
+            <li th:if="${isAuthenticated}" class="nav-item"><a href="#" class="nav-link"
+                                                               th:href="@{/logout}">Logout</a></li>
         </ul>
     </nav>
 
@@ -36,14 +45,12 @@
             <input type="text" name="name" placeholder="Search..." class="search-input" th:object="${name}">
             <a class="search-btn" type="submit"> </a>
         </form>
-        <a class="utility-btn" id="generate-playlist" href="GenerateView.html" th:href="@{/playlists/generate}" th:text="#{navigation.generate}">Generate Playlist</a></li>
+        <a class="utility-btn" id="generate-playlist" th:href="${isAuthenticated ? '/playlists/generate' : '/login'}"
+           th:text="#{navigation.generate}">Generate Playlist</a>
     </div>
-
 </section>
+<!--ENDS NAVIGATION BAR-->
 
-<div class="section-title">
-    <h2>Top Ranked Playlists</h2>
-</div>
 <div class="range-slider-form">
     <form id="filterForm" action="/playlists" method="get" class="range-slider-form">
 
@@ -55,6 +62,10 @@
             <a type="button" onclick="convertAndSubmit()">Search</a>
         </div>
     </form>
+</div>
+
+<div class="section-title">
+    <h2>Top Ranked Playlists</h2>
 </div>
 
 <!-- BODY WITH TOP 10 PLAYLISTS -->
@@ -72,18 +83,20 @@
         </div>
     </div>
 </section>
-<a class="utility-btn" style="margin: 3%" href="GenerateView.html" th:href="@{/playlists/generate}">Load more...</a></li>
+<a class="utility-btn" style="margin: 3%" href="GenerateView.html" th:href="@{/playlists/generate}">Load
+    more...</a></li>
 
 
 <div class="section-title">
     <h2>Recently added</h2>
 </div>
 
-<!-- BODY WITH TOP 10 PLAYLISTS -->
+<!-- BODY WITH RECENT 10 PLAYLISTS -->
 <section class="main-content">
-    <div th:each="playlist : ${filteredPlaylists}">
+    <div th:each="playlist : ${filteredMostRecent}">
         <div class="playlist-item">
             <a th:href="@{/playlists/{id}(id=${playlist.id})}">
+                <!--            th:href="@{'/playlists/' + ${playlist.id}}"-->
                 <img src="../images/logo-alt.gif" th:src="@{/images/logo-alt.gif}" alt="Playlist">
                 <h3 th:text="${playlist.name}"></h3>
                 <h4 th:text="'Creator: ' + ${playlist.creator.getUsername()}"></h4>
@@ -93,6 +106,8 @@
         </div>
     </div>
 </section>
+<a class="utility-btn" style="margin: 3%" href="GenerateView.html" th:href="@{/playlists/generate}">Load
+    more...</a></li>
 <script>
     $(document).ready(function () {
         var durationSlider = $("#durationSlider").ionRangeSlider({
@@ -115,7 +130,7 @@
 </script>
 
 
-<a class="utility-btn" style="margin: 3%" href="GenerateView.html" th:href="@{/playlists/generate}">Load more...</a></li>
+<!--<a class="utility-btn" style="margin: 3%" href="GenerateView.html" th:href="@{/playlists/generate}">Load more...</a></li>-->
 
 
 <!-- FOOTER -->

@@ -1,14 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:id="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="UTF-8">
-    <title></title>
+    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../static/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"/>
+    <title>Main</title>
 
     <style>
         body {
             font-family: 'Arial', sans-serif;
             background-color: #282828;
-            color: #fff;
+            color: whitesmoke;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -17,7 +20,6 @@
         }
 
         form {
-            background-color: #333;
             padding: 16px;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
@@ -27,6 +29,10 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+        }
+
+        form:hover {
+            background-color: black;
         }
 
         label {
@@ -66,13 +72,14 @@
         .checkbox-group label {
             flex: 1;
         }
+
         .genre-fields {
             display: none;
         }
 
         button {
-            background-color: #1db954;
-            color: #fff;
+            background-color: #ed944d;
+            color: whitesmoke;
             padding: 10px;
             border: none;
             border-radius: 4px;
@@ -82,70 +89,114 @@
         }
 
         button:hover {
-            background-color: #1ed760;
+            background-color: black;
         }
     </style>
 </head>
-<body>
 
-<form th:action="@{/playlists/generate}" th:object="${newPlaylist}" method="post">
-    <label for="name">Name:</label>
-    <input type="text" id="name" th:field="*{name}" required/>
+<body id="main-body">
 
-    <label for="startLocation">Start Location:</label>
-    <input type="text" id="startLocation" th:field="*{startLocation}" required/>
+<!--NAVIGATION BAR-->
+<section class="header">
+    <nav>
+        <a th:href="@{/playlists}">
+            <div id="logo">
+                <!--            <img src="../images/logo-alt.gif" th:src="@{/images/logo-alt.gif}" alt="logo">-->
+                <h1 style="font-family: Forte, sans-serif;">RidePal</h1>
+            </div>
+        </a>
+        <ul>
+            <!--            <li><a href="PlaylistsView.html" th:href="@{/playlists}" th:text="#{navigation.playlists}">Explore</a>-->
+            <!--            </li>-->
+            <li th:unless="${isAuthenticated}"><a href="/login" th:href="@{/login}"
+                                                  th:text="#{navigation.login}">Login</a></li>
+            <!--            <li><a href="GenerateView.html" th:href="@{/playlists/generate}"-->
+            <!--                   th:text="#{navigation.generate}">Generate</a></li>-->
+            <li th:unless="${isAuthenticated}"><a href="RegisterView.html" th:href="@{/users/register}"
+                                                  th:text="#{navigation.register}">SignUp</a>
+            </li>
+            <li th:if="${isAuthenticated}" class="nav-item"><a href="#" class="nav-link"
+                                                               th:href="@{/logout}">Logout</a></li>
+        </ul>
+    </nav>
 
-    <label for="startAddress">Start Address:</label>
-    <input type="text" id="startAddress" th:field="*{startAddress}"/>
+<!--    <div id="search-line">-->
+<!--        <form class="search" action="#" id="search-form" th:action="@{/playlists}" method="get">-->
+<!--            <input type="text" name="name" placeholder="Search..." class="search-input" th:object="${name}">-->
+<!--            <a class="search-btn" type="submit"> </a>-->
+<!--        </form>-->
+        <!--        <a class="utility-btn" id="generate-playlist" th:href="${isAuthenticated ? '/playlists/generate' : '/login'}"-->
+        <!--           th:text="#{navigation.generate}">Generate Playlist</a>-->
+<!--    </div>-->
+</section>
+<!--ENDS NAVIGATION BAR-->
 
-    <label for="endLocation">End Location:</label>
-    <input type="text" id="endLocation" th:field="*{endLocation}" required/>
+<!--GENERATE PLAYLIST-->
+<section id="generator">
 
-    <label for="endAddress">End Address:</label>
-    <input type="text" id="endAddress" th:field="*{endAddress}" required/>
+    <form th:action="@{/playlists/generate}" th:object="${newPlaylist}" method="post">
+        <label for="name">Name:</label>
+        <input type="text" id="name" th:field="*{name}" required/>
+
+        <label for="startLocation">Start Location:</label>
+        <input type="text" id="startLocation" th:field="*{startLocation}" required/>
+
+        <label for="startAddress">Start Address:</label>
+        <input type="text" id="startAddress" th:field="*{startAddress}"/>
+
+        <label for="endLocation">End Location:</label>
+        <input type="text" id="endLocation" th:field="*{endLocation}" required/>
+
+        <label for="endAddress">End Address:</label>
+        <input type="text" id="endAddress" th:field="*{endAddress}" required/>
 
 
+        <button id="loadMoreButton">Choose genres</button>
 
-    <button id="loadMoreButton">Choose genres</button>
+        <div th:each="genre, iterStat : *{genres}" class="genre-fields">
+            <input type="text" th:id="${'genreName' + iterStat.index}" th:field="*{genres[__${iterStat.index}__].name}"
+                   placeholder="Genre Name" required readonly/>
+            <input type="number" th:id="${'genrePercentage' + iterStat.index}"
+                   th:field="*{genres[__${iterStat.index}__].percentage}" placeholder="Percentage" required/>
+        </div>
 
-    <div th:each="genre, iterStat : *{genres}" class="genre-fields">
-        <input type="text" th:id="${'genreName' + iterStat.index}" th:field="*{genres[__${iterStat.index}__].name}" placeholder="Genre Name" required readonly/>
-        <input type="number" th:id="${'genrePercentage' + iterStat.index}" th:field="*{genres[__${iterStat.index}__].percentage}" placeholder="Percentage" required/>
-    </div>
+        <script>
+            const loadMoreButton = document.getElementById('loadMoreButton');
+            const genreFields = document.querySelectorAll('.genre-fields');
+            let currentGenreIndex = 0;
 
-    <script>
-        const loadMoreButton = document.getElementById('loadMoreButton');
-        const genreFields = document.querySelectorAll('.genre-fields');
-        let currentGenreIndex = 0;
+            loadMoreButton.addEventListener('click', function () {
+                showGenre(currentGenreIndex);
+                currentGenreIndex++;
 
-        loadMoreButton.addEventListener('click', function() {
-            showGenre(currentGenreIndex);
-            currentGenreIndex++;
+                if (currentGenreIndex === genreFields.length) {
+                    currentGenreIndex = 0;
+                }
+            });
 
-            if (currentGenreIndex === genreFields.length) {
-                currentGenreIndex = 0;
+            function showGenre(index) {
+                genreFields[index].style.display = 'block';
             }
-        });
-
-        function showGenre(index) {
-            genreFields[index].style.display = 'block';
-        }
-    </script>
+        </script>
 
 
+        <div class="checkbox-group">
+            <label for="topRank">Top Rank:</label>
+            <input type="checkbox" id="topRank" th:field="*{topRank}"/>
 
+            <label for="uniqueArtists">Unique Artists:</label>
+            <input type="checkbox" id="uniqueArtists" th:field="*{uniqueArtists}"/>
+        </div>
 
+        <button type="submit">Submit</button>
+    </form>
 
-    <div class="checkbox-group">
-        <label for="topRank">Top Rank:</label>
-        <input type="checkbox" id="topRank" th:field="*{topRank}"/>
+</section>
 
-        <label for="uniqueArtists">Unique Artists:</label>
-        <input type="checkbox" id="uniqueArtists" th:field="*{uniqueArtists}"/>
-    </div>
-
-    <button type="submit">Submit</button>
-</form>
-
+<!-- FOOTER -->
+<section class="footer">
+    <h5>About Us</h5>
+    <h5>Copyright &copy 2023 WeWhoAreNotAsOthers</h5>
+</section>
 </body>
 </html>

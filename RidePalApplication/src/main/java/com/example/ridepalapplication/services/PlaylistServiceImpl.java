@@ -297,4 +297,9 @@ public class PlaylistServiceImpl implements PlaylistService {
 
         playlistRepository.deleteById(id);
     }
+
+    @Override
+    public List<Playlist> getMostRecent() {
+        return playlistRepository.getMostRecent();
+    }
 }

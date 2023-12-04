@@ -11,11 +11,15 @@ import com.example.ridepalapplication.mappers.PlaylistMapper;
 import com.example.ridepalapplication.models.Playlist;
 import com.example.ridepalapplication.models.User;
 import com.example.ridepalapplication.services.PlaylistService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -42,19 +46,26 @@ public class PlaylistMvcController {
         this.bingController = bingController;
     }
 
+    @ModelAttribute("isAuthenticated")
+    public boolean populateIsAuthenticated() {
+        return authenticationHelper.isAuthenticated();
+    }
+
     @GetMapping
     public String playlistPage(Model model, @RequestParam(required = false, defaultValue = "") String name,
                                @RequestParam(required = false, defaultValue = "0") Integer page,
                                @RequestParam(required = false, defaultValue = "9") Integer pageSize,
                                @RequestParam(required = false, defaultValue = "0") Integer minDuration,
                                @RequestParam(required = false, defaultValue = "2147483647") Integer maxDuration) {
-        List<Playlist> allPlaylists;
         model.addAttribute("minDuration", minDuration);
         model.addAttribute("maxDuration", maxDuration);
-        allPlaylists = playlistService.getAll(page, pageSize, name, minDuration, maxDuration, new ArrayList<>());
 
-        model.addAttribute("name", name);
+        List<Playlist> allPlaylists = playlistService.getAll(page, pageSize, name, minDuration, maxDuration, new ArrayList<>());
+        List<Playlist> recentPlaylists = playlistService.getMostRecent();
+
+        model.addAttribute("maxDuration", maxDuration);
         model.addAttribute("filteredPlaylists", allPlaylists);
+        model.addAttribute("filteredMostRecent", recentPlaylists);
 
         return "PlaylistsView";
     }
