@@ -6,12 +6,10 @@ import com.example.ridepalapplication.dtos.MvcPlaylistDto;
 import com.example.ridepalapplication.dtos.PlaylistDto;
 import com.example.ridepalapplication.exceptions.EntityNotFoundException;
 import com.example.ridepalapplication.helpers.AuthenticationHelper;
+import com.example.ridepalapplication.helpers.PlaylistHelper;
 import com.example.ridepalapplication.mappers.PlaylistMapper;
-import com.example.ridepalapplication.models.Genre;
 import com.example.ridepalapplication.models.Playlist;
-import com.example.ridepalapplication.models.Song;
 import com.example.ridepalapplication.models.User;
-import com.example.ridepalapplication.repositories.GenreRepository;
 import com.example.ridepalapplication.services.PlaylistService;
 import jakarta.validation.Valid;
 import org.json.simple.parser.ParseException;
@@ -25,7 +23,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Controller
 @RequestMapping("/playlists")
@@ -52,7 +49,8 @@ public class PlaylistMvcController {
                                @RequestParam(required = false, defaultValue = "0") Integer minDuration,
                                @RequestParam(required = false, defaultValue = "2147483647") Integer maxDuration) {
         List<Playlist> allPlaylists;
-
+        model.addAttribute("minDuration", minDuration);
+        model.addAttribute("maxDuration", maxDuration);
         allPlaylists = playlistService.getAll(page, pageSize, name, minDuration, maxDuration, new ArrayList<>());
 
         model.addAttribute("name", name);
@@ -63,12 +61,9 @@ public class PlaylistMvcController {
 
     @GetMapping("/generate")
     public String generatePlaylistView(Model model) {
-        //take from DB map to GenreDto with loop
         GenreDto pop = new GenreDto("Pop", 0);
         GenreDto rock = new GenreDto("Rock", 0);
         GenreDto rap = new GenreDto("Rap/Hip Hop", 0);
-
-        // List<GenreDto> genreList = PlaylistHelper.verifyTotalPercentage(playlistDto);
 
         List<GenreDto> genres = List.of(pop, rock, rap);
         MvcPlaylistDto mvcPlaylistDto = new MvcPlaylistDto();
@@ -85,6 +80,7 @@ public class PlaylistMvcController {
         }
 
         try {
+            PlaylistHelper.verifyTotalGenrePercentage(mvcPlaylistDto.getGenres());
             PlaylistDto playlistDto = playlistMapper.fromMvcPlaylistDto(mvcPlaylistDto);
             User user = authenticationHelper.tryGetUser(authentication);
             Playlist playlist = playlistMapper.fromDto(playlistDto, user);

@@ -79,7 +79,7 @@ public class PlaylistController {
 
       try {
           User user = authenticationHelper.tryGetUser(authentication);
-          List<GenreDto> genreList = PlaylistHelper.verifyTotalPercentage(playlistDto);
+          List<GenreDto> genreList = PlaylistHelper.verifyTotalGenrePercentage(playlistDto.getGenreDtoList());
           Playlist playlist = playlistMapper.fromDto(playlistDto, user);
           int travelDuration = bingController.calculateTravelTime(playlistDto.getLocationDto());
 

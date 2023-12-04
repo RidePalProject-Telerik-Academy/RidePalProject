@@ -365,4 +365,16 @@ nav li:hover{
     background: #1ed760;
     justify-content: center;
     margin-top: 5vmin;
-    margin-bottom: 5vmin;}
+    margin-bottom: 5vmin;
+}
+.range-slider-form {
+    text-align: left;
+    margin-top: -50px;
+    width: 50%;
+    align-self: normal;
+    padding-left: 10px;
+}
+
+.duration-slider {
+    width: 80%;
+}

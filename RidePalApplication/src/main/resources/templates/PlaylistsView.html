@@ -5,7 +5,13 @@
     <link href="../static/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
     <link rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"/>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ion-rangeslider@2.3.1/css/ion.rangeSlider.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/ion-rangeslider@2.3.1/js/ion.rangeSlider.min.js"></script>
+
     <title>Main</title>
+
+
 </head>
 <body id="main-body">
 <section class="header">
@@ -38,6 +44,18 @@
 <div class="section-title">
     <h2>Top Ranked Playlists</h2>
 </div>
+<div class="range-slider-form">
+    <form id="filterForm" action="/playlists" method="get" class="range-slider-form">
+
+        <label for="durationSlider">Duration:</label>
+        <input type="text" name="duration" id="durationSlider" class="duration-slider" />
+        <input type="hidden" id="minDuration" name="minDuration" value="0" />
+        <input type="hidden" id="maxDuration" name="maxDuration" value="1440" />
+        <div class="utility-btn">
+            <a type="button" onclick="convertAndSubmit()">Search</a>
+        </div>
+    </form>
+</div>
 
 <!-- BODY WITH TOP 10 PLAYLISTS -->
 <section class="main-content">
@@ -66,7 +84,6 @@
     <div th:each="playlist : ${filteredPlaylists}">
         <div class="playlist-item">
             <a th:href="@{/playlists/{id}(id=${playlist.id})}">
-                <!--            th:href="@{'/playlists/' + ${playlist.id}}"-->
                 <img src="../images/logo-alt.gif" th:src="@{/images/logo-alt.gif}" alt="Playlist">
                 <h3 th:text="${playlist.name}"></h3>
                 <h4 th:text="'Creator: ' + ${playlist.creator.getUsername()}"></h4>
@@ -76,6 +93,28 @@
         </div>
     </div>
 </section>
+<script>
+    $(document).ready(function () {
+        var durationSlider = $("#durationSlider").ionRangeSlider({
+            type: "double",
+            grid: true,
+            min: 0,
+            max: 1440,
+            step: 15,
+            from:  0,
+            to:  1440,
+            onChange: function (data) {
+                $("#minDuration").val(data.from * 60);
+                $("#maxDuration").val(data.to * 60);
+            }
+        }).data("ionRangeSlider");
+    });
+    function convertAndSubmit() {
+        $("#filterForm").submit();
+    }
+</script>
+
+
 <a class="utility-btn" style="margin: 3%" href="GenerateView.html" th:href="@{/playlists/generate}">Load more...</a></li>
 
 

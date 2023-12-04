@@ -1,7 +1,6 @@
 package com.example.ridepalapplication.helpers;
 
 import com.example.ridepalapplication.dtos.GenreDto;
-import com.example.ridepalapplication.dtos.PlaylistDto;
 import com.example.ridepalapplication.exceptions.EntityNotFoundException;
 import com.example.ridepalapplication.models.Genre;
 import com.example.ridepalapplication.models.Playlist;
@@ -44,17 +43,16 @@ public class PlaylistHelper {
         playlist.setDuration(totalPlaylistDuration);
         playlist.setSongs(playlistSongs);
     }
-    public static List<GenreDto> verifyTotalPercentage(PlaylistDto playlistDto) {
-        List<GenreDto> genres = playlistDto.getGenreDtoList();
+    public static List<GenreDto> verifyTotalGenrePercentage(List<GenreDto> genreDtoList) {
         int totalGenrePercentage = 0;
-        for (GenreDto genreDto : genres) {
+        for (GenreDto genreDto : genreDtoList) {
             totalGenrePercentage += genreDto.getPercentage();
 
         }
         if (totalGenrePercentage > 100) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Total genres percentage exceeded!");
         }
-        return genres;
+        return genreDtoList;
     }
     public static void getSongArtist(List<Song> songs, List<Long> artistsId) {
         Long artistId = songs.get(0).getArtist().getId();
