@@ -89,9 +89,9 @@
 
                 <div class="sliders">
                     <div class="slider-container" id="duration">
-                        <div class="current-time">00:00</div>
-                        <input type="range" min="1" max="100" value="0" class="seek-slider" onchange="seekTo()">
-                        <div class="total-duration">00:00</div>
+                        <div class="current-time">0:00</div>
+                        <input type="range" min="0" max="100" value="0" class="seek-slider" onchange="seekTo()">
+                        <div class="total-duration">0:00</div>
                     </div>
 
                     <div class="slider-container" id="volume">
@@ -101,12 +101,11 @@
                     </div>
                 </div>
 
-
                 <div class="buttons">
                     <div class="prev-track" onclick="prevTrack()">
                         <i class="fa fa-step-backward fa" aria-hidden="true"></i>
                     </div>
-                    <div class="playpause-track" onclick="playpauseTrack()">
+                    <div class="playpause-track" onclick="togglePlayPause()">
                         <i class="fa fa-play-circle fa-2x" aria-hidden="true"></i>
                     </div>
                     <div class="next-track" onclick="nextTrack()">
@@ -117,18 +116,113 @@
         </div>
 
         <script>
-            function playpauseTrack() {
-                var button = document.querySelector('.playpause-track');
+            const songsArray = [];
+            const audioPlayer = new Audio();
+            let isPlaying = false;
+            let currentSliderValue = 0;
+
+
+            function togglePlayPause() {
+                const button = document.querySelector('.playpause-track');
                 button.classList.toggle("clicked");
 
-                button.querySelector('i').classList.toggle("fa-play-circle");
-                button.querySelector('i').classList.toggle("fa-pause-circle");
+                if (isPlaying) {
+                    button.innerHTML = '<i class="fa fa-play-circle fa-2x"></i>';
+                    audioPlayer.pause();
+                    isPlaying = false;
 
-                setTimeout(function() {
+                } else {
+                    button.innerHTML = '<i class="fa fa-pause-circle fa-2x"></i>';
+                    if (audioPlayer.src === '') {
+                        startMusic(songsArray).play();
+                    } else {
+                        audioPlayer.play();
+                        isPlaying = true;
+
+                    }
+                }
+                setTimeout(function () {
                     button.classList.toggle("clicked");
                 }, 500);
             }
-            </script>
+
+
+            function startMusic(songsArray) {
+                let currentSongIndex = 0;
+                function playCurrentSong() {
+                    const currentSong = songsArray[currentSongIndex];
+                    audioPlayer.src = currentSong.previewUrl;
+                    audioPlayer.play().catch(error => {
+                        console.error('Error playing audio:', error);
+                    });
+                    isPlaying = true;
+                    currentSliderValue = 0
+                    updateDuration(songsArray[currentSongIndex].title,
+                        songsArray[currentSongIndex].artist.name);
+
+                    console.log("Playing:", currentSong.title);
+                }
+
+                function playNextSong() {
+                    currentSongIndex = (currentSongIndex + 1) % songsArray.length;
+                    playCurrentSong();
+                }
+
+                function playPrevSong() {
+                    currentSongIndex = (currentSongIndex - 1 + songsArray.length) % songsArray.length;
+                    playCurrentSong();
+                }
+
+                function updateDuration(title, artist) {
+                    const durationElement = document.querySelector('.total-duration');
+                    const currentTimeElement = document.querySelector('.current-time');
+                    const seekSlider = document.querySelector('.seek-slider');
+                    const trackTitleElement = document.querySelector('.track-name');
+                    const trackArtistElement = document.querySelector('.track-artist');
+
+
+                    trackTitleElement.textContent = title;
+                    trackArtistElement.textContent = artist;
+
+                    audioPlayer.addEventListener('loadedmetadata', function () {
+                        const durationInSeconds = Math.round(audioPlayer.duration);
+                        const minutes = Math.floor(durationInSeconds / 60);
+                        const seconds = durationInSeconds % 60;
+                        durationElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+                    });
+
+                    audioPlayer.addEventListener('timeupdate', function () {
+                        const currentTimeInSeconds = Math.round(audioPlayer.currentTime);
+                        const durationInSeconds = Math.round(audioPlayer.duration);
+                        const minutes = Math.floor(currentTimeInSeconds / 60);
+                        const seconds = currentTimeInSeconds % 60;
+                        currentTimeElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+
+                        const targetValue = (currentTimeInSeconds / durationInSeconds) * 100;
+                        currentSliderValue += 0.1 * (targetValue - currentSliderValue);
+                        seekSlider.value = currentSliderValue;
+                    });
+                }
+
+                audioPlayer.addEventListener('ended', playNextSong);
+
+                return {
+                    play: playCurrentSong,
+                    next: playNextSong,
+                    prev: playPrevSong
+                };
+            }
+
+            const player = startMusic(songsArray);
+
+            function prevTrack() {
+                player.prev();
+            }
+
+            function nextTrack() {
+                player.next();
+            }
+        </script>
         <script>
             function fetchPlaylistById(playlistId) {
                 fetch(`/api/playlists/${playlistId}`, {
@@ -144,25 +238,21 @@
                         return response.json();
                     })
                     .then(data => {
-
                         console.log("Data received:", data);
-
 
                         if (data && data.songs) {
                             const songs = data.songs;
-                            let songTitle
-                            let songPreviewUrl
-                            let songArtist
-                            for (let i = 0; i < songs.length; i++) {
-                               songTitle = songs.map(song => song.title)
-                               songPreviewUrl = songs.map(song => song.previewUrl)
-                                songArtist = songs.map(song =>song.artist.name)
-                            }
+                            const playlist = songs.map(song => ({
+                                title: song.title,
+                                previewUrl: song.previewUrl,
+                                artist: song.artist.name,
+                            }));
 
-                            console.log("Songs in the playlist:", songs);
-                            console.log("Songs titles:",songTitle)
-                            console.log("Songs mp3Urls:",songPreviewUrl)
-                            console.log("Songs artists:",songArtist)
+                            songs.forEach(song => songsArray.push(song));
+
+                            console.log("Playlist:", playlist);
+                            console.log("array:", songsArray);
+
                         } else {
                             console.error("Unexpected JSON structure. Missing 'songs' property.");
                         }
@@ -171,11 +261,8 @@
                         console.error('Error fetching playlist:', error);
                     });
             }
-
-
-
-
         </script>
+
         <script th:inline="javascript">
             var playlistId = /*[[${singlePlaylist.id}]]*/ 0;
             fetchPlaylistById(playlistId);
