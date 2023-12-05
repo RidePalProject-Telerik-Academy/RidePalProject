@@ -68,6 +68,11 @@ public class PlaylistServiceImpl implements PlaylistService {
     }
 
     @Override
+    public List<Playlist> getUserPlaylists(Long id) {
+        return playlistRepository.findPlaylistByCreatorId(id);
+    }
+
+    @Override
     public Optional<Playlist> getById(long id) {
         Optional<Playlist> playlist = playlistRepository.findById(id);
         if (playlist.isEmpty()) {
