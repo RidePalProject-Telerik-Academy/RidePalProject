@@ -1,5 +1,5 @@
     <!DOCTYPE html>
-    <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:id="http://www.w3.org/1999/xhtml">
+    <html lang="en" xmlns:th="http://www.thymeleaf.org">
     <head>
         <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
         <link href="../static/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
@@ -83,8 +83,8 @@
         <div class="player">
             <div class="wrapper">
                 <div class="details">
-                    <div class="track-artist">Track Artist</div>
-                    <div class="track-name">Track Name</div>
+                    <div class="track-artist"></div>
+                    <div class="track-name"></div>
                 </div>
 
                 <div class="sliders">
@@ -96,7 +96,7 @@
 
                     <div class="slider-container" id="volume">
                         <i class="fa fa-volume-down"></i>
-                        <input type="range" min="1" max="100" value="99" class="volume-slider" onchange="setVolume()">
+                        <input type="range" min="1" max="100" value="99" class="volume-slider" oninput="setVolume()">
                         <i class="fa fa-volume-up"></i>
                     </div>
                 </div>
@@ -120,8 +120,6 @@
             const audioPlayer = new Audio();
             let isPlaying = false;
             let currentSliderValue = 0;
-
-
             function togglePlayPause() {
                 const button = document.querySelector('.playpause-track');
                 button.classList.toggle("clicked");
@@ -145,8 +143,10 @@
                     button.classList.toggle("clicked");
                 }, 500);
             }
-
-
+            function setVolume() {
+                const volumeSlider = document.querySelector('.volume-slider');
+                audioPlayer.volume = volumeSlider.value / 100;
+            }
             function startMusic(songsArray) {
                 let currentSongIndex = 0;
                 function playCurrentSong() {
@@ -162,17 +162,14 @@
 
                     console.log("Playing:", currentSong.title);
                 }
-
                 function playNextSong() {
                     currentSongIndex = (currentSongIndex + 1) % songsArray.length;
                     playCurrentSong();
                 }
-
                 function playPrevSong() {
                     currentSongIndex = (currentSongIndex - 1 + songsArray.length) % songsArray.length;
                     playCurrentSong();
                 }
-
                 function updateDuration(title, artist) {
                     const durationElement = document.querySelector('.total-duration');
                     const currentTimeElement = document.querySelector('.current-time');
@@ -199,7 +196,7 @@
                         currentTimeElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
 
                         const targetValue = (currentTimeInSeconds / durationInSeconds) * 100;
-                        currentSliderValue += 0.1 * (targetValue - currentSliderValue);
+                        currentSliderValue += 0.4 * (targetValue - currentSliderValue);
                         seekSlider.value = currentSliderValue;
                     });
                 }
@@ -269,7 +266,6 @@
         </script>
     </section>
 
-
     <!-- FOOTER -->
     <section class="footer">
         <h5>About Us</h5>
@@ -277,3 +273,39 @@
     </section>
     </body>
     </html>
+
+
+ <!--   let isDragging = false;
+    function seekTo() {
+    const seekSlider = document.querySelector('.seek-slider');
+    const seekValue = seekSlider.value;
+
+    // Check if audioPlayer.duration is finite before calculating currentTime
+    if (isFinite(audioPlayer.duration)) {
+    audioPlayer.currentTime = (seekValue / 100) * audioPlayer.duration;
+    }
+    }
+    function updateSeekSlider() {
+    const seekSlider = document.querySelector('.seek-slider');
+    const currentTimeInSeconds = Math.round(audioPlayer.currentTime);
+    const durationInSeconds = Math.round(audioPlayer.duration);
+    const targetValue = (currentTimeInSeconds / durationInSeconds) * 100;
+
+    seekSlider.value = targetValue;
+    }
+
+    // Update the seek slider continuously during playback
+    audioPlayer.addEventListener('timeupdate', updateSeekSlider);
+
+    // Add event listeners for mouse down and up on the seek slider
+    const seekSlider = document.querySelector('.seek-slider');
+    seekSlider.addEventListener('mousedown', function () {
+    isDragging = true;
+    });
+
+    document.addEventListener('mouseup', function () {
+    if (isDragging) {
+    isDragging = false;
+    seekTo(); // Update seek when dragging is finished
+    }
+    });-->
