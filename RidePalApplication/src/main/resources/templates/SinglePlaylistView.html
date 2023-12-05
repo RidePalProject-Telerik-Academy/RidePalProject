@@ -5,7 +5,11 @@
     <link href="../static/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
     <link rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"/>
-    <title>Main</title>
+    <script src="script.js"></script>
+    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>Playlist</title>
 </head>
 
 <body id="main-body">
@@ -71,12 +75,60 @@
         </div>
     </div>
 </section>
-<a class="utility-btn" style="margin: 5vmin" href="GenerateView.html" th:href="@{/playlists/generate}">Load more...</a></li>
+<a class="utility-btn" style="margin: 5vmin" href="GenerateView.html" th:href="@{/playlists/generate}">Load
+    more...</a></li>
+
 
 <section>
-    <div class="test-section">
-        Test section
+    <div class="player">
+        <div class="wrapper">
+            <div class="details">
+                <div class="track-artist">Track Artist</div>
+                <div class="track-name">Track Name</div>
+            </div>
+
+            <div class="sliders">
+                <div class="slider-container" id="duration">
+                    <div class="current-time">00:00</div>
+                    <input type="range" min="1" max="100" value="0" class="seek-slider" onchange="seekTo()">
+                    <div class="total-duration">00:00</div>
+                </div>
+
+                <div class="slider-container" id="volume">
+                    <i class="fa fa-volume-down"></i>
+                    <input type="range" min="1" max="100" value="99" class="volume-slider" onchange="setVolume()">
+                    <i class="fa fa-volume-up"></i>
+                </div>
+            </div>
+
+
+            <div class="buttons">
+                <div class="prev-track" onclick="prevTrack()">
+                    <i class="fa fa-step-backward fa" aria-hidden="true"></i>
+                </div>
+                <div class="playpause-track" onclick="playpauseTrack()">
+                    <i class="fa fa-play-circle fa-2x" aria-hidden="true"></i>
+                </div>
+                <div class="next-track" onclick="nextTrack()">
+                    <i class="fa fa-step-forward fa" aria-hidden="true"></i>
+                </div>
+            </div>
+        </div>
     </div>
+
+    <script>
+        function playpauseTrack() {
+            var button = document.querySelector('.playpause-track');
+            button.classList.toggle("clicked");
+
+            button.querySelector('i').classList.toggle("fa-play-circle");
+            button.querySelector('i').classList.toggle("fa-pause-circle");
+
+            setTimeout(function() {
+                button.classList.toggle("clicked");
+            }, 500);
+        }
+    </script>
 </section>
 
 
@@ -87,4 +139,3 @@
 </section>
 </body>
 </html>
-
