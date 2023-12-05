@@ -65,7 +65,7 @@
         <div class="song-item">
             <h3 th:text="${song.title}"></h3>
             <h4 th:text="'Artist: ' + ${song.artist.name}"></h4>
-            <h4 th:text="'Duration: ' + ${song.duration/60} + ' min'"></h4>
+            <h4 th:text="'Duration: ' + ${song.duration/60} + ':'+ ${T(java.lang.String).format('%02d',song.duration%60)} + ' min'"></h4>
             <h4 th:text="'Rank: ' + ${song.rank}"></h4>
             <h4 th:text="'Album: ' + ${song.album.name}"></h4>
         </div>
@@ -87,3 +87,4 @@
 </section>
 </body>
 </html>
+

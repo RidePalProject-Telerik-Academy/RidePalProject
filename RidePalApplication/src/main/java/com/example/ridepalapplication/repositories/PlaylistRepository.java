@@ -14,7 +14,7 @@ import java.util.*;
 public interface PlaylistRepository extends JpaRepository<Playlist, Long>, JpaSpecificationExecutor<Playlist> {
     List<Playlist> findAllByCreator(User user);
 
-    @Query(nativeQuery = true, value = "SELECT * FROM playlists ORDER BY id DESC LIMIT 10")
+    @Query(nativeQuery = true, value = "SELECT * FROM playlists ORDER BY id DESC LIMIT 9")
     List<Playlist> getMostRecent();
 
 }

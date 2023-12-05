@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:id="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" >
 <head>
     <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="../static/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
@@ -8,6 +8,7 @@
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ion-rangeslider@2.3.1/css/ion.rangeSlider.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/ion-rangeslider@2.3.1/js/ion.rangeSlider.min.js"></script>
+    <script src="/js/scripts.js"></script>
 
     <title>Main</title>
 
@@ -21,17 +22,13 @@
     <nav>
         <a th:href="@{/playlists}">
             <div id="logo">
-                <!--            <img src="../images/logo-alt.gif" th:src="@{/images/logo-alt.gif}" alt="logo">-->
                 <h1 style="font-family: Forte, sans-serif;">RidePal</h1>
             </div>
         </a>
         <ul>
-            <!--            <li><a href="PlaylistsView.html" th:href="@{/playlists}" th:text="#{navigation.playlists}">Explore</a>-->
-            <!--            </li>-->
             <li th:unless="${isAuthenticated}"><a href="/login" th:href="@{/login}"
                                                   th:text="#{navigation.login}">Login</a></li>
-            <!--            <li><a href="GenerateView.html" th:href="@{/playlists/generate}"-->
-            <!--                   th:text="#{navigation.generate}">Generate</a></li>-->
+
             <li th:unless="${isAuthenticated}"><a href="RegisterView.html" th:href="@{/users/register}"
                                                   th:text="#{navigation.register}">SignUp</a>
             </li>
@@ -54,10 +51,10 @@
 <div class="range-slider-form">
     <form id="filterForm" action="/playlists" method="get" class="range-slider-form">
 
-        <label for="durationSlider">Duration:</label>
+        <label for="durationSlider">Minutes Range:</label>
         <input type="text" name="duration" id="durationSlider" class="duration-slider" />
         <input type="hidden" id="minDuration" name="minDuration" value="0" />
-        <input type="hidden" id="maxDuration" name="maxDuration" value="1440" />
+        <input type="hidden" id="maxDuration" name="maxDuration" value="600" />
         <div class="utility-btn">
             <a type="button" onclick="convertAndSubmit()">Search</a>
         </div>
@@ -68,7 +65,7 @@
     <h2>Top Ranked Playlists</h2>
 </div>
 
-<!-- BODY WITH TOP 10 PLAYLISTS -->
+<!-- BODY WITH TOP PLAYLISTS ORDERED BY RANK STARTS HERE -->
 <section class="main-content">
     <div th:each="playlist : ${filteredPlaylists}">
         <div class="playlist-item">
@@ -83,15 +80,19 @@
         </div>
     </div>
 </section>
-<a class="utility-btn" style="margin: 3%" href="GenerateView.html" th:href="@{/playlists/generate}">Load
-    more...</a></li>
+<!-- BODY WITH TOP PLAYLISTS ORDERED BY RANK ENDS HERE HERE -->
 
+<script th:inline="javascript">
+    var currentPage = /*[[${page}]]*/ 0;
+</script>
+
+<a class="utility-btn" style="margin: 3%" href="#" onclick="incrementPage()">Load more...</a>
 
 <div class="section-title">
     <h2>Recently added</h2>
 </div>
 
-<!-- BODY WITH RECENT 10 PLAYLISTS -->
+<!-- TOP 10 MOST RECENT PLAYLISTS STARTS HERE -->
 <section class="main-content">
     <div th:each="playlist : ${filteredMostRecent}">
         <div class="playlist-item">
@@ -106,32 +107,7 @@
         </div>
     </div>
 </section>
-<a class="utility-btn" style="margin: 3%" href="GenerateView.html" th:href="@{/playlists/generate}">Load
-    more...</a></li>
-<script>
-    $(document).ready(function () {
-        var durationSlider = $("#durationSlider").ionRangeSlider({
-            type: "double",
-            grid: true,
-            min: 0,
-            max: 1440,
-            step: 15,
-            from:  0,
-            to:  1440,
-            onChange: function (data) {
-                $("#minDuration").val(data.from * 60);
-                $("#maxDuration").val(data.to * 60);
-            }
-        }).data("ionRangeSlider");
-    });
-    function convertAndSubmit() {
-        $("#filterForm").submit();
-    }
-</script>
-
-
-<!--<a class="utility-btn" style="margin: 3%" href="GenerateView.html" th:href="@{/playlists/generate}">Load more...</a></li>-->
-
+<!-- TOP 10 MOST RECENT PLAYLISTS STARTS END HERE -->
 
 <!-- FOOTER -->
 <section class="footer">
