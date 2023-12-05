@@ -177,27 +177,33 @@
                     const trackTitleElement = document.querySelector('.track-name');
                     const trackArtistElement = document.querySelector('.track-artist');
 
-
                     trackTitleElement.textContent = title;
                     trackArtistElement.textContent = artist;
 
                     audioPlayer.addEventListener('loadedmetadata', function () {
-                        const durationInSeconds = Math.round(audioPlayer.duration);
-                        const minutes = Math.floor(durationInSeconds / 60);
-                        const seconds = durationInSeconds % 60;
-                        durationElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+                        if (isFinite(audioPlayer.duration)) {
+                            const durationInSeconds = Math.round(audioPlayer.duration);
+                            const minutes = Math.floor(durationInSeconds / 60);
+                            const seconds = durationInSeconds % 60;
+                            durationElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+                        }
                     });
 
                     audioPlayer.addEventListener('timeupdate', function () {
                         const currentTimeInSeconds = Math.round(audioPlayer.currentTime);
                         const durationInSeconds = Math.round(audioPlayer.duration);
-                        const minutes = Math.floor(currentTimeInSeconds / 60);
-                        const seconds = currentTimeInSeconds % 60;
-                        currentTimeElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
 
-                        const targetValue = (currentTimeInSeconds / durationInSeconds) * 100;
-                        currentSliderValue += 0.4 * (targetValue - currentSliderValue);
-                        seekSlider.value = currentSliderValue;
+                        if (isFinite(durationInSeconds)) {
+                            const minutes = Math.floor(currentTimeInSeconds / 60);
+                            const seconds = currentTimeInSeconds % 60;
+                            currentTimeElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+
+                            seekSlider.value = (currentTimeInSeconds / durationInSeconds) * 100;
+
+                            if (currentTimeInSeconds >= durationInSeconds - 1) {
+                                player.next();
+                            }
+                        }
                     });
                 }
 
