@@ -1,14 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:id="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../static/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"/>
+    <title>Main</title>
 
     <style>
         body {
             font-family: 'Arial', sans-serif;
             background-color: #282828;
-            color: #fff;
+            color: whitesmoke;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -17,18 +20,19 @@
         }
 
         form {
-            background-color: #333;
             padding: 16px;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-            max-width: 300px; /* Adjust the max-width to your preference */
+            max-width: 500px;
             width: 100%;
             box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
-        h1 {
-            text-align: center;
-            margin-bottom: 16px;
+        form:hover {
+            background-color: black;
         }
 
         label {
@@ -37,42 +41,71 @@
             font-weight: bold;
         }
 
-        input {
+        input, .genre-fields input {
             width: calc(100% - 16px);
-            padding: 10px;
+            padding: 8px;
             margin-bottom: 12px;
             border: none;
             border-radius: 4px;
             box-sizing: border-box;
+            display: inline-block;
         }
 
         .genre-fields {
             display: flex;
             flex-direction: column;
+            align-items: flex-start;
+            width: 100%;
         }
 
         .genre-fields input {
+            width: calc(100% - 16px);
             margin-bottom: 8px;
         }
 
+        .checkbox-group {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+        }
+
+        .checkbox-group label {
+            flex: 1;
+        }
+
+        .genre-fields {
+            display: none;
+        }
+
         button {
-            background-color: #1db954;
-            color: #fff;
-            padding: 12px;
+            background-color: #ed944d;
+            color: whitesmoke;
+            padding: 10px;
             border: none;
             border-radius: 4px;
             cursor: pointer;
-            font-size: 16px;
+            font-size: 14px;
             width: 100%;
         }
 
         button:hover {
-            background-color: #1ed760;
+            background-color: black;
         }
     </style>
 </head>
-<body>
 
+<body id="main-body">
+
+<section class="header">
+    <nav>
+        <a th:href="@{/playlists}">
+            <div id="logo">
+                <h1 style="font-family: Forte, sans-serif;">RidePal</h1>
+            </div>
+        </a>
+    </nav>
+
+</section>
 
 <div class="registration-body">
     <div class="registration-container">
@@ -96,7 +129,7 @@
                 <label class="error" th:errors="*{email}">Name error placeholder</label>
                 <div class="input-box">
                     <span class="user-details"></span>
-                    <input  type="text" th:field="*{username}" placeholder="Enter your Username" required>
+                    <input type="text" th:field="*{username}" placeholder="Enter your Username" required>
                 </div>
                 <label class="error" th:errors="*{username}">Name error placeholder</label>
                 <div class="input-box">
@@ -116,6 +149,7 @@
                 </div>
             </div>
         </form>
+        <p>Already have an account? <a th:href="@{/login}">Login here!</a></p>
     </div>
 </div>
 

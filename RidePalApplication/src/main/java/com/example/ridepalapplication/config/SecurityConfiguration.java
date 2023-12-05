@@ -24,6 +24,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfiguration {
     private final JwtAuthFilter jwtAuthFilter;
     private final UserService userService;
+
     @Autowired
     public SecurityConfiguration(JwtAuthFilter jwtAuthFilter, UserService userService) {
         this.jwtAuthFilter = jwtAuthFilter;
@@ -49,18 +50,29 @@ public class SecurityConfiguration {
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception{
+    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity.csrf(AbstractHttpConfigurer::disable)
 
-                .authorizeHttpRequests(auth-> {
+                .authorizeHttpRequests(auth -> {
                     auth.requestMatchers("api/users/**").permitAll();
-                    auth.requestMatchers(HttpMethod.GET,"/api/playlists/**").permitAll();
+                    auth.requestMatchers(HttpMethod.GET, "/api/playlists/**").permitAll();
                     auth.requestMatchers("/**", "/resources/**", "/static/**", "/css/**", "/js/**",
-                            "/images/**", "/vendor/**", "/fonts/**")
+                                    "/images/**", "/vendor/**", "/fonts/**")
                             .permitAll();
+
                     auth.anyRequest().authenticated();
 
                 })
+
+                .formLogin(formLogin -> {
+                    formLogin
+                            .loginPage("/login")
+                            .defaultSuccessUrl("/playlists")
+                            .permitAll();
+                })
+
+                .logout((logout) -> logout.logoutSuccessUrl("/"))
+
                 .sessionManagement(Customizer.withDefaults())
                 .authenticationProvider(authProvider())
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)

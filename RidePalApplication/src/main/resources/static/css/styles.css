@@ -24,18 +24,20 @@ a {
     text-decoration: none;
 }
 
-nav{
+nav {
     display: inline-flex;
     justify-content: space-between;
     width: 100%;
 }
-nav ul{
+
+nav ul {
     list-style-type: none;
     display: inline-flex;
     justify-content: space-between;
     margin: 2%;
 }
-nav ul li{
+
+nav ul li {
     /*background: #ed944d;*/
     margin: 0.1em;
     border-style: solid;
@@ -43,25 +45,28 @@ nav ul li{
     border-radius: 0.5em;
     padding: 0.5em;
 }
-nav li a{
+
+nav li a {
     color: #f8f9fa;
     font-size: 4vmin;
     text-align: right;
     text-decoration: none;
 }
-nav li:hover{
+
+nav li:hover {
     color: #f8f9fa;
     background: black;
     transition: transform 0.3s ease-in-out;
     transform: scale(1.1);
 }
 
-#search-line{
+#search-line {
     display: inline-flex;
     justify-content: space-between;
     width: 100%;
 }
-.utility-btn{
+
+.utility-btn {
     width: fit-content;
     border-style: solid;
     border-width: 0.1em;
@@ -70,7 +75,8 @@ nav li:hover{
     color: #f8f9fa;
     font-size: 4vmin;
     margin-right: 2%;
-    &:hover{
+
+    &:hover {
         color: #f8f9fa;
         background: black;
         transition: transform 0.3s ease-in-out;
@@ -78,7 +84,7 @@ nav li:hover{
     }
 }
 
-#logo{
+#logo {
     color: #f8f9fa;
     font-size: 10vmin;
     text-align: left;
@@ -103,6 +109,7 @@ nav li:hover{
     text-decoration: #ed944d;
     transition: box-shadow 0.7s;
 }
+
 .search:hover {
     box-shadow: #ed944d 0 0 0.9em;
     border-style: none;
@@ -117,7 +124,7 @@ nav li:hover{
     color: #ed944d;
 }
 
-.search-input{;
+.search-input {;
     font-size: 5vmin;
     color: #ed944d;
     margin-left: var(--padding);
@@ -126,6 +133,7 @@ nav li:hover{
     outline: none;
     width: 100%;
 }
+
 .search-input::placeholder, .search-icon {
     color: gainsboro;
 }
@@ -181,7 +189,8 @@ nav li:hover{
 #arrow-1 {
     margin-top: 2em;
 }
-#step-1{
+
+#step-1 {
     margin-top: 1em;
     margin-bottom: 1em;
 }
@@ -233,7 +242,8 @@ nav li:hover{
     cursor: pointer;
     border-radius: 0.5em;
     box-shadow: 0 0 2em 0 rgba(255, 0, 0, 0.8);
-    &:hover{
+
+    &:hover {
         color: #f8f9fa;
         background: black;
         transition: transform 0.3s ease-in-out;
@@ -245,7 +255,7 @@ nav li:hover{
 
 /*PLAYLISTS VIEW STARTS HERE*/
 
-.section-title h2{
+.section-title h2 {
     text-align: center;
     justify-content: center;
     margin-top: 10vmin;
@@ -273,6 +283,7 @@ nav li:hover{
     transition: transform 0.3s ease-in-out;
 
     /* Hover effect */
+
     &:hover {
         transform: scale(1.05);
         box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
@@ -284,6 +295,7 @@ nav li:hover{
     font-size: 3.3vmin;
     margin-left: 1.5vmin;
 }
+
 .playlist-item h4 {
     color: #f8f9fa;
     font-size: 2.5vmin;
@@ -305,6 +317,7 @@ nav li:hover{
     margin-left: 2rem;
     font-size: 10vmin;
 }
+
 .song-item {
     margin-left: 5vmin;
     margin-bottom: 2vmin;
@@ -313,6 +326,7 @@ nav li:hover{
     font-size: 4vmin;
     border-style: solid;
     border-radius: 1rem;
+
     &:hover {
         transform: scale(1.05);
         box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
@@ -320,6 +334,7 @@ nav li:hover{
         background: black;
     }
 }
+
 .song-item:focus {
     transform: scale(1.05);
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
@@ -333,26 +348,32 @@ nav li:hover{
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
 .song-item h4 {
     color: gainsboro;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
-.playlist-details{
+
+.playlist-details {
     display: inline-flex;
 }
-.playlist-details img{
+
+.playlist-details img {
     height: 40vmin;
 }
-.playlist-details ul{
+
+.playlist-details ul {
     list-style: none;
     text-align: left;
 }
-.playlist-details h2{
+
+.playlist-details h2 {
     margin-left: 0;
 }
-#playlist-details-info{
+
+#playlist-details-info {
     display: flex;
     flex-flow: column wrap;
     justify-content: space-between;
@@ -375,6 +396,7 @@ nav li:hover{
     margin-bottom: 5vmin;
     width: 100%;
 }
+
 .wrapper {
     background-color: black;
     padding: 2vmin;
@@ -383,26 +405,31 @@ nav li:hover{
     width: 97%;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
 }
+
 .details {
     display: flex;
     align-items: center;
     flex-direction: row;
     justify-content: space-between;
 }
-.track-name{
+
+.track-name {
     color: #f8f9fa;
     font-size: 3.3vmin;
 }
-.track-artist{
+
+.track-artist {
     color: gainsboro;
     font-size: 3.3vmin;
 }
+
 .buttons {
     display: flex;
     align-items: center;
     flex-direction: row;
     justify-content: center;
 }
+
 .playpause-track, .next-track, .prev-track {
     padding: 2vmin;
     border-radius: 1vmin;
@@ -411,15 +438,19 @@ nav li:hover{
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
     cursor: pointer;
 }
+
 .prev-track, .next-track {
     font-size: 4vmin;
 }
+
 .playpause-track {
     font-size: 4.5vmin;
 }
-.clicked{
+
+.clicked {
     color: #ca433e;
 }
+
 .sliders {
     display: flex;
     align-items: center;
@@ -427,19 +458,23 @@ nav li:hover{
     justify-content: left;
     margin-top: 1vmin;
 }
-.slider-container{
+
+.slider-container {
     display: flex;
     align-items: center;
     justify-content: center;
 }
-#duration{
+
+#duration {
     flex: 3;
     margin: 2vmin;
 }
-#volume{
+
+#volume {
     flex: 1;
     margin: 2vmin;
 }
+
 .seek-slider, .volume-slider {
     -webkit-appearance: none;
     -moz-appearance: none;
@@ -450,9 +485,19 @@ nav li:hover{
     background: #f8f9fa;
     border-radius: 0.5rem;
 }
+
 .seek-slider, .volume-slider {
     margin: 1.5vmin;
 }
+
+.range-slider-form {
+    text-align: left;
+    margin-top: 10px;
+    width: 50%;
+    align-self: normal;
+    padding-left: 10px;
+}
+
 .seek-slider::-webkit-slider-thumb, .volume-slider::-webkit-slider-thumb {
     -webkit-appearance: none;
     -moz-appearance: none;
@@ -463,15 +508,18 @@ nav li:hover{
     cursor: pointer;
     border-radius: 50%;
 }
+
 i.fa-volume-down, i.fa-volume-up {
     cursor: pointer;
 }
-.track-artist, .track-name{
+
+.track-artist, .track-name {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     margin: 1vmin 1vmin 0 1vmin;
 }
+
 /*========================================================================================*/
 /*!!!END PLAYER!!!*/
 /*======================================================================================*/
