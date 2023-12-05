@@ -156,7 +156,7 @@
                         console.error('Error playing audio:', error);
                     });
                     isPlaying = true;
-                    currentSliderValue = 0
+                    currentSliderValue = 0;
                     updateDuration(songsArray[currentSongIndex].title,
                         songsArray[currentSongIndex].artist.name);
 
@@ -189,6 +189,7 @@
                         const minutes = Math.floor(durationInSeconds / 60);
                         const seconds = durationInSeconds % 60;
                         durationElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+                        currentSliderValue = 0;
                     });
 
                     audioPlayer.addEventListener('timeupdate', function () {
@@ -261,6 +262,19 @@
                         console.error('Error fetching playlist:', error);
                     });
             }
+            // volume slider
+            let vol = document.querySelector('.volume-slider');
+            vol.oninput = function () {
+                audioPlayer.volume = vol.value / 100;
+            }
+
+            // seek slider
+            let seekSlider = document.querySelector('.seek-slider');
+            seekSlider.oninput = function () {
+                audioPlayer.currentTime = (audioPlayer.duration * seekSlider.value) / 100;
+                audioPlayer.play();
+            }
+
         </script>
 
         <script th:inline="javascript">
