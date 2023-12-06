@@ -20,39 +20,7 @@
 
 </head>
 <body id="main-body">
-<!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:id="http://www.w3.org/1999/xhtml">
-<head>
-    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="../static/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
-    <link rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"/>
-    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ion-rangeslider@2.3.1/css/ion.rangeSlider.min.css" />
-
-    <script src="https://cdn.jsdelivr.net/npm/ion-rangeslider@2.3.1/js/ion.rangeSlider.min.js"></script>
-    <script src="/js/scripts.js"></script>
-
-    <title>Main</title>
-
-
-</head>
-<body id="main-body">
-
-<div class="error-container">
-    <h1 class="error-title">Woops! Something went wrong.</h1>
-    <h2 class="label-error" th:text="${statusCode}">HTTP Status Code</h2>
-    <h3 class="error" th:text="${error}">Error placeholder</h3>
-</div>
-
-<a class="utility-btn-err" style="margin: 5vmin" href="HomeView.html" th:href="@{/}">Go Back</a></li>
-
-</body>
-</html>
 <div class="error-container">
     <h1 class="error-title">Woops! Something went wrong.</h1>
     <h2 class="label-error" th:text="${statusCode}">HTTP Status Code</h2>

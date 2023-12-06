@@ -163,7 +163,7 @@ public class PlaylistMvcController {
     @PostMapping("/{id}/tags")
     public String createTag(@PathVariable long id,
                             @Valid @ModelAttribute("newTag") TagDto tagDto,
-                            Authentication authentication) {
+                            Authentication authentication, Model model) {
 
         try {
             User user = authenticationHelper.tryGetUser(authentication);
@@ -173,8 +173,8 @@ public class PlaylistMvcController {
             playlistService.createTag(user, tag, playlist);
             return "redirect:/playlists/" + id;
         } catch (EntityDuplicateException e) {
+            model.addAttribute("error", e.getMessage());
             return "ErrorView";
-            //TODO: fix error
         }
     }
 
