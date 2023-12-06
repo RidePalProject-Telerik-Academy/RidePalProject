@@ -87,8 +87,7 @@ nav li:hover {
 #logo {
     color: #f8f9fa;
     font-size: 10vmin;
-    /*text-align: left;*/
-    margin-left: 5%;
+    margin-left: 5vmin;
 }
 
 #generate-playlist{
@@ -106,7 +105,7 @@ nav li:hover {
 
     align-items: center;
     padding: var(--padding);
-    margin-left: 2%;
+    margin-left: 5vmin;
     margin-right: auto;
     border-radius: 1.4rem;
     background: whitesmoke;
@@ -330,9 +329,10 @@ nav li:hover {
 
 .song-list h2 {
     margin-top: 2vmin;
-    margin-bottom: 2vmin;
-    margin-left: 2rem;
+    margin-right: 2vmin;
+    margin-left: 5vmin;
     font-size: 10vmin;
+    overflow-wrap: break-word;
 }
 
 .song-item {
@@ -379,6 +379,8 @@ nav li:hover {
 }
 
 .playlist-details ul {
+    margin-top: 4vmin;
+    margin-right: 2vmin;
     list-style: none;
     text-align: left;
 }
@@ -552,21 +554,21 @@ i.fa-volume-down, i.fa-volume-up {
 /*======================================================================================*/
 
 .tag-bubble {
-    display: inline-block;
+    /*display: inline-block;*/
     background-color: rgba(52, 152, 219, 0.5);
     color: #ffffff;
-    padding: 5px 10px;
-    border-radius: 20px;
-    margin-right: 5px;
+    padding: 0.5rem 1rem;
+    border-radius: 2rem;
+    display: inline-flex;
+    overflow-wrap: break-word;
 }
-
 
 .delete-tag-btn {
     background-color: #e74c3c;
     color: whitesmoke;
     border: none;
-    padding: 5px 10px;
-    font-size: 14px;
+    padding: 0.2rem 0.5rem;
+    font-size: 1.5rem;
     cursor: pointer;
     border-radius: 5px;
     transition: background-color 0.3s ease;

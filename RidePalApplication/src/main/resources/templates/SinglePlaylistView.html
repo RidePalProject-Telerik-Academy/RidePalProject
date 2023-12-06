@@ -1,16 +1,16 @@
-    <!DOCTYPE html>
-    <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:id="http://www.w3.org/1999/xhtml">
-    <head>
-        <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
-        <link href="../static/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
-        <link rel="stylesheet"
-              href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"/>
-        <script src="/js/scripts.js"></script>
-        <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-        <title>Playlist</title>
-    </head>
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:id="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../static/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"/>
+    <script src="/js/scripts.js"></script>
+    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>Playlist</title>
+</head>
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
@@ -50,17 +50,12 @@
     <nav>
         <a th:href="@{/playlists}">
             <div id="logo">
-                <!--            <img src="../images/logo-alt.gif" th:src="@{/images/logo-alt.gif}" alt="logo">-->
                 <h1 style="font-family: Forte, sans-serif;">RidePal</h1>
             </div>
         </a>
         <ul>
-            <!--            <li><a href="PlaylistsView.html" th:href="@{/playlists}" th:text="#{navigation.playlists}">Explore</a>-->
-            <!--            </li>-->
             <li th:unless="${isAuthenticated}"><a href="/login" th:href="@{/login}"
                                                   th:text="#{navigation.login}">Login</a></li>
-            <!--            <li><a href="GenerateView.html" th:href="@{/playlists/generate}"-->
-            <!--                   th:text="#{navigation.generate}">Generate</a></li>-->
             <li th:unless="${isAuthenticated}"><a href="RegisterView.html" th:href="@{/users/register}"
                                                   th:text="#{navigation.register}">SignUp</a>
             </li>
@@ -82,35 +77,28 @@
 
 
 <section class="song-list">
+    <h2 th:text="${singlePlaylist.name}"></h2>
     <div class="playlist-details">
         <img id="singlePlaylistImage" alt="Playlist Image" class="cropped-image">
         <ul>
-            <li><h2 th:text="${singlePlaylist.name}"></h2></li>
             <li>
                 <ul id="playlist-details-info">
                     <li><h4 th:text="'Creator: ' + ${singlePlaylist.creator.getUsername()}"></h4></li>
                     <li><h4 th:text="'Duration: ' + ${singlePlaylist.duration/60} + ' min'"></h4></li>
                     <li><h4 th:text="'Rank: ' + ${singlePlaylist.rank}"></h4>
                     <li><h4 th:text="'Number of songs: ' + ${singlePlaylist.getSongs().size()}"></h4>
-                        <!--                    <li><h4 th:if="${not #lists.isEmpty(tags)}">Tags:<span th:each="tag : ${tags}"-->
-                        <!--                                                                           th:text="${tag.getName()}"-->
-                        <!--                                                                           class="tag-bubble"></span></h4></li>-->
-                        <!--                </ul>-->
-                        <!--            </li>-->
-
                         <!--VIEW TAGS-->
                     <li th:if="${not #lists.isEmpty(tags)}">
-                        <h4>Tags:</h4>
+                        <!--                        <h4>Tags:</h4>-->
                         <span th:each="tag : ${tags}" class="tag-bubble">
                         <span th:text="'&#35;' + ${tag.getName()}"></span>
-
                             <!--DELETE TAGS-->
-        <form th:if="${user.username.equals(username)}"
+                         <form th:if="${user.username.equals(username)}"
               th:action="@{/playlists/{id}/tag(id=${singlePlaylist.getId()})}" method="post">
             <input type="hidden" name="tagName" th:value="${tag.getName()}"/>
             <button type="submit" class="delete-tag-btn">X</button>
         </form>
-    </span>
+                        </span>
                     </li>
 
                     <!--ADD TAGS-->
@@ -157,200 +145,202 @@
                     <div class="total-duration">0:00</div>
                 </div>
 
-                    <div class="slider-container" id="volume">
-                        <i class="fa fa-volume-down"></i>
-                        <input type="range" min="1" max="100" value="99" class="volume-slider" onchange="setVolume()">
-                        <i class="fa fa-volume-up"></i>
-                    </div>
+                <div class="slider-container" id="volume">
+                    <i class="fa fa-volume-down"></i>
+                    <input type="range" min="1" max="100" value="99" class="volume-slider" onchange="setVolume()">
+                    <i class="fa fa-volume-up"></i>
                 </div>
+            </div>
 
-                <div class="buttons">
-                    <div class="prev-track" onclick="prevTrack()">
-                        <i class="fa fa-step-backward fa" aria-hidden="true"></i>
-                    </div>
-                    <div class="playpause-track" onclick="togglePlayPause()">
-                        <i class="fa fa-play-circle fa-2x" aria-hidden="true"></i>
-                    </div>
-                    <div class="next-track" onclick="nextTrack()">
-                        <i class="fa fa-step-forward fa" aria-hidden="true"></i>
-                    </div>
+            <div class="buttons">
+                <div class="prev-track" onclick="prevTrack()">
+                    <i class="fa fa-step-backward fa" aria-hidden="true"></i>
+                </div>
+                <div class="playpause-track" onclick="togglePlayPause()">
+                    <i class="fa fa-play-circle fa-2x" aria-hidden="true"></i>
+                </div>
+                <div class="next-track" onclick="nextTrack()">
+                    <i class="fa fa-step-forward fa" aria-hidden="true"></i>
                 </div>
             </div>
         </div>
+    </div>
 
-        <script>
-            const songsArray = [];
-            const audioPlayer = new Audio();
-            let isPlaying = false;
-            let currentSliderValue = 0;
+    <script>
+        const songsArray = [];
+        const audioPlayer = new Audio();
+        let isPlaying = false;
+        let currentSliderValue = 0;
 
 
-            function togglePlayPause() {
-                const button = document.querySelector('.playpause-track');
-                button.classList.toggle("clicked");
+        function togglePlayPause() {
+            const button = document.querySelector('.playpause-track');
+            button.classList.toggle("clicked");
 
-                if (isPlaying) {
-                    button.innerHTML = '<i class="fa fa-play-circle fa-2x"></i>';
-                    audioPlayer.pause();
-                    isPlaying = false;
+            if (isPlaying) {
+                button.innerHTML = '<i class="fa fa-play-circle fa-2x"></i>';
+                audioPlayer.pause();
+                isPlaying = false;
 
+            } else {
+                button.innerHTML = '<i class="fa fa-pause-circle fa-2x"></i>';
+                if (audioPlayer.src === '') {
+                    startMusic(songsArray).play();
                 } else {
-                    button.innerHTML = '<i class="fa fa-pause-circle fa-2x"></i>';
-                    if (audioPlayer.src === '') {
-                        startMusic(songsArray).play();
-                    } else {
-                        audioPlayer.play();
-                        isPlaying = true;
-
-                    }
-                }
-                setTimeout(function () {
-                    button.classList.toggle("clicked");
-                }, 500);
-            }
-
-
-            function startMusic(songsArray) {
-                let currentSongIndex = 0;
-                function playCurrentSong() {
-                    const currentSong = songsArray[currentSongIndex];
-                    audioPlayer.src = currentSong.previewUrl;
-                    audioPlayer.play().catch(error => {
-                        console.error('Error playing audio:', error);
-                    });
+                    audioPlayer.play();
                     isPlaying = true;
+
+                }
+            }
+            setTimeout(function () {
+                button.classList.toggle("clicked");
+            }, 500);
+        }
+
+
+        function startMusic(songsArray) {
+            let currentSongIndex = 0;
+
+            function playCurrentSong() {
+                const currentSong = songsArray[currentSongIndex];
+                audioPlayer.src = currentSong.previewUrl;
+                audioPlayer.play().catch(error => {
+                    console.error('Error playing audio:', error);
+                });
+                isPlaying = true;
+                currentSliderValue = 0;
+                updateDuration(songsArray[currentSongIndex].title,
+                    songsArray[currentSongIndex].artist.name);
+
+                console.log("Playing:", currentSong.title);
+            }
+
+            function playNextSong() {
+                currentSongIndex = (currentSongIndex + 1) % songsArray.length;
+                playCurrentSong();
+            }
+
+            function playPrevSong() {
+                currentSongIndex = (currentSongIndex - 1 + songsArray.length) % songsArray.length;
+                playCurrentSong();
+            }
+
+            function updateDuration(title, artist) {
+                const durationElement = document.querySelector('.total-duration');
+                const currentTimeElement = document.querySelector('.current-time');
+                const seekSlider = document.querySelector('.seek-slider');
+                const trackTitleElement = document.querySelector('.track-name');
+                const trackArtistElement = document.querySelector('.track-artist');
+
+
+                trackTitleElement.textContent = title;
+                trackArtistElement.textContent = artist;
+
+                audioPlayer.addEventListener('loadedmetadata', function () {
+                    const durationInSeconds = Math.round(audioPlayer.duration);
+                    const minutes = Math.floor(durationInSeconds / 60);
+                    const seconds = durationInSeconds % 60;
+                    durationElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
                     currentSliderValue = 0;
-                    updateDuration(songsArray[currentSongIndex].title,
-                        songsArray[currentSongIndex].artist.name);
+                });
 
-                    console.log("Playing:", currentSong.title);
-                }
+                audioPlayer.addEventListener('timeupdate', function () {
+                    const currentTimeInSeconds = Math.round(audioPlayer.currentTime);
+                    const durationInSeconds = Math.round(audioPlayer.duration);
+                    const minutes = Math.floor(currentTimeInSeconds / 60);
+                    const seconds = currentTimeInSeconds % 60;
+                    currentTimeElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
 
-                function playNextSong() {
-                    currentSongIndex = (currentSongIndex + 1) % songsArray.length;
-                    playCurrentSong();
-                }
-
-                function playPrevSong() {
-                    currentSongIndex = (currentSongIndex - 1 + songsArray.length) % songsArray.length;
-                    playCurrentSong();
-                }
-
-                function updateDuration(title, artist) {
-                    const durationElement = document.querySelector('.total-duration');
-                    const currentTimeElement = document.querySelector('.current-time');
-                    const seekSlider = document.querySelector('.seek-slider');
-                    const trackTitleElement = document.querySelector('.track-name');
-                    const trackArtistElement = document.querySelector('.track-artist');
-
-
-                    trackTitleElement.textContent = title;
-                    trackArtistElement.textContent = artist;
-
-                    audioPlayer.addEventListener('loadedmetadata', function () {
-                        const durationInSeconds = Math.round(audioPlayer.duration);
-                        const minutes = Math.floor(durationInSeconds / 60);
-                        const seconds = durationInSeconds % 60;
-                        durationElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-                        currentSliderValue = 0;
-                    });
-
-                    audioPlayer.addEventListener('timeupdate', function () {
-                        const currentTimeInSeconds = Math.round(audioPlayer.currentTime);
-                        const durationInSeconds = Math.round(audioPlayer.duration);
-                        const minutes = Math.floor(currentTimeInSeconds / 60);
-                        const seconds = currentTimeInSeconds % 60;
-                        currentTimeElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-
-                        const targetValue = (currentTimeInSeconds / durationInSeconds) * 100;
-                        currentSliderValue += 0.1 * (targetValue - currentSliderValue);
-                        seekSlider.value = currentSliderValue;
-                    });
-                }
-
-                audioPlayer.addEventListener('ended', playNextSong);
-
-                return {
-                    play: playCurrentSong,
-                    next: playNextSong,
-                    prev: playPrevSong
-                };
+                    const targetValue = (currentTimeInSeconds / durationInSeconds) * 100;
+                    currentSliderValue += 0.1 * (targetValue - currentSliderValue);
+                    seekSlider.value = currentSliderValue;
+                });
             }
 
-            const player = startMusic(songsArray);
+            audioPlayer.addEventListener('ended', playNextSong);
 
-            function prevTrack() {
-                player.prev();
-            }
+            return {
+                play: playCurrentSong,
+                next: playNextSong,
+                prev: playPrevSong
+            };
+        }
 
-            function nextTrack() {
-                player.next();
-            }
-        </script>
-        <script>
-            function fetchPlaylistById(playlistId) {
-                fetch(`/api/playlists/${playlistId}`, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
+        const player = startMusic(songsArray);
+
+        function prevTrack() {
+            player.prev();
+        }
+
+        function nextTrack() {
+            player.next();
+        }
+    </script>
+    <script>
+        function fetchPlaylistById(playlistId) {
+            fetch(`/api/playlists/${playlistId}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    return response.json();
                 })
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error(`HTTP error! Status: ${response.status}`);
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        console.log("Data received:", data);
+                .then(data => {
+                    console.log("Data received:", data);
 
-                        if (data && data.songs) {
-                            const songs = data.songs;
-                            const playlist = songs.map(song => ({
-                                title: song.title,
-                                previewUrl: song.previewUrl,
-                                artist: song.artist.name,
-                            }));
+                    if (data && data.songs) {
+                        const songs = data.songs;
+                        const playlist = songs.map(song => ({
+                            title: song.title,
+                            previewUrl: song.previewUrl,
+                            artist: song.artist.name,
+                        }));
 
-                            songs.forEach(song => songsArray.push(song));
+                        songs.forEach(song => songsArray.push(song));
 
-                            console.log("Playlist:", playlist);
-                            console.log("array:", songsArray);
+                        console.log("Playlist:", playlist);
+                        console.log("array:", songsArray);
 
-                        } else {
-                            console.error("Unexpected JSON structure. Missing 'songs' property.");
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error fetching playlist:', error);
-                    });
-            }
-            // volume slider
-            let vol = document.querySelector('.volume-slider');
-            vol.oninput = function () {
-                audioPlayer.volume = vol.value / 100;
-            }
+                    } else {
+                        console.error("Unexpected JSON structure. Missing 'songs' property.");
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching playlist:', error);
+                });
+        }
 
-            // seek slider
-            let seekSlider = document.querySelector('.seek-slider');
-            seekSlider.oninput = function () {
-                audioPlayer.currentTime = (audioPlayer.duration * seekSlider.value) / 100;
-                audioPlayer.play();
-            }
+        // volume slider
+        let vol = document.querySelector('.volume-slider');
+        vol.oninput = function () {
+            audioPlayer.volume = vol.value / 100;
+        }
 
-        </script>
+        // seek slider
+        let seekSlider = document.querySelector('.seek-slider');
+        seekSlider.oninput = function () {
+            audioPlayer.currentTime = (audioPlayer.duration * seekSlider.value) / 100;
+            audioPlayer.play();
+        }
 
-        <script th:inline="javascript">
-            var playlistId = /*[[${singlePlaylist.id}]]*/ 0;
-            fetchPlaylistById(playlistId);
-        </script>
-    </section>
+    </script>
+
+    <script th:inline="javascript">
+        var playlistId = /*[[${singlePlaylist.id}]]*/ 0;
+        fetchPlaylistById(playlistId);
+    </script>
+</section>
 
 
-    <!-- FOOTER -->
-    <section class="footer" style="margin-bottom: 32vmin">
-        <h5>About Us</h5>
-        <h5>Copyright &copy 2023 WeWhoAreNotAsOthers</h5>
-    </section>
-    </body>
-    </html>
+<!-- FOOTER -->
+<section class="footer" style="margin-bottom: 32vmin">
+    <h5>About Us</h5>
+    <h5>Copyright &copy 2023 WeWhoAreNotAsOthers</h5>
+</section>
+</body>
+</html>
