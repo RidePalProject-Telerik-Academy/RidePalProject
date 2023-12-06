@@ -11,88 +11,151 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <title>Playlist</title>
     </head>
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../static/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"/>
+    <script src="/js/scripts.js"></script>
+    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>Playlist</title>
+</head>
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:id="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../static/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"/>
+    <script src="/js/scripts.js"></script>
+    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-    <body id="main-body">
-
-    <!--NAVIGATION BAR-->
-    <section class="header">
-        <nav>
-            <a th:href="@{/playlists}">
-                <div id="logo">
-                    <!--            <img src="../images/logo-alt.gif" th:src="@{/images/logo-alt.gif}" alt="logo">-->
-                    <h1 style="font-family: Forte, sans-serif;">RidePal</h1>
-                </div>
-            </a>
-            <ul>
-                <!--            <li><a href="PlaylistsView.html" th:href="@{/playlists}" th:text="#{navigation.playlists}">Explore</a>-->
-                <!--            </li>-->
-                <li th:unless="${isAuthenticated}"><a href="/login" th:href="@{/login}"
-                                                      th:text="#{navigation.login}">Login</a></li>
-                <!--            <li><a href="GenerateView.html" th:href="@{/playlists/generate}"-->
-                <!--                   th:text="#{navigation.generate}">Generate</a></li>-->
-                <li th:unless="${isAuthenticated}"><a href="RegisterView.html" th:href="@{/users/register}"
-                                                      th:text="#{navigation.register}">SignUp</a>
-                </li>
-                <li th:if="${isAuthenticated}" class="nav-item"><a href="#" class="nav-link"
-                                                                   th:href="@{/logout}">Logout</a></li>
-            </ul>
-        </nav>
-
-        <div id="search-line">
-            <form class="search" action="#" id="search-form" th:action="@{/playlists}" method="get">
-                <input type="text" name="name" placeholder="Search..." class="search-input" th:object="${name}">
-                <a class="search-btn" type="submit"> </a>
-            </form>
-            <a class="utility-btn" id="generate-playlist" th:href="${isAuthenticated ? '/playlists/generate' : '/login'}"
-               th:text="#{navigation.generate}">Generate Playlist</a>
-        </div>
-    </section>
-    <!--ENDS NAVIGATION BAR-->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="/js/scripts.js"></script>
 
 
-    <section class="song-list">
-        <div class="playlist-details">
-            <img src="../images/logo.gif">
-            <ul>
-                <li><h2 th:text="${singlePlaylist.name}"></h2></li>
-                <li>
-                    <ul id="playlist-details-info">
-                        <li><h4 th:text="'Creator: ' + ${singlePlaylist.creator.getUsername()}"></h4></li>
-                        <li><h4 th:text="'Duration: ' + ${singlePlaylist.duration/60} + ' min'"></h4></li>
-                        <li><h4 th:text="'Rank: ' + ${singlePlaylist.rank}"></h4>
-                        <li><h4 th:text="'Number of songs: ' + ${singlePlaylist.getSongs().size()}"></h4>
-                    </ul>
-                </li>
-            </ul>
-        </div>
-        <div th:each="song : ${singlePlaylist.songs}">
-            <div class="song-item">
-                <h3 th:text="${song.title}"></h3>
-                <h4 th:text="'Artist: ' + ${song.artist.name}"></h4>
-                <h4 th:text="'Duration: ' + ${song.duration/60} + ':'+ ${T(java.lang.String).format('%02d',song.duration%60)} + ' min'"></h4>
-                <h4 th:text="'Rank: ' + ${song.rank}"></h4>
-                <h4 th:text="'Album: ' + ${song.album.name}"></h4>
+    <title>Playlist</title>
+</head>
+
+<body id="main-body">
+
+<!--NAVIGATION BAR-->
+<section class="header">
+    <nav>
+        <a th:href="@{/playlists}">
+            <div id="logo">
+                <!--            <img src="../images/logo-alt.gif" th:src="@{/images/logo-alt.gif}" alt="logo">-->
+                <h1 style="font-family: Forte, sans-serif;">RidePal</h1>
             </div>
+        </a>
+        <ul>
+            <!--            <li><a href="PlaylistsView.html" th:href="@{/playlists}" th:text="#{navigation.playlists}">Explore</a>-->
+            <!--            </li>-->
+            <li th:unless="${isAuthenticated}"><a href="/login" th:href="@{/login}"
+                                                  th:text="#{navigation.login}">Login</a></li>
+            <!--            <li><a href="GenerateView.html" th:href="@{/playlists/generate}"-->
+            <!--                   th:text="#{navigation.generate}">Generate</a></li>-->
+            <li th:unless="${isAuthenticated}"><a href="RegisterView.html" th:href="@{/users/register}"
+                                                  th:text="#{navigation.register}">SignUp</a>
+            </li>
+            <li th:if="${isAuthenticated}" class="nav-item"><a href="#" class="nav-link"
+                                                               th:href="@{/logout}">Logout</a></li>
+        </ul>
+    </nav>
+
+    <div id="search-line">
+        <form class="search" action="#" id="search-form" th:action="@{/playlists}" method="get">
+            <input type="text" name="name" placeholder="Search..." class="search-input" th:object="${name}">
+            <a class="search-btn" type="submit"> </a>
+        </form>
+        <a class="utility-btn" id="generate-playlist" th:href="${isAuthenticated ? '/playlists/generate' : '/login'}"
+           th:text="#{navigation.generate}">Generate Playlist</a>
+    </div>
+</section>
+<!--ENDS NAVIGATION BAR-->
+
+
+<section class="song-list">
+    <div class="playlist-details">
+        <img id="singlePlaylistImage" alt="Playlist Image" class="cropped-image">
+        <ul>
+            <li><h2 th:text="${singlePlaylist.name}"></h2></li>
+            <li>
+                <ul id="playlist-details-info">
+                    <li><h4 th:text="'Creator: ' + ${singlePlaylist.creator.getUsername()}"></h4></li>
+                    <li><h4 th:text="'Duration: ' + ${singlePlaylist.duration/60} + ' min'"></h4></li>
+                    <li><h4 th:text="'Rank: ' + ${singlePlaylist.rank}"></h4>
+                    <li><h4 th:text="'Number of songs: ' + ${singlePlaylist.getSongs().size()}"></h4>
+                        <!--                    <li><h4 th:if="${not #lists.isEmpty(tags)}">Tags:<span th:each="tag : ${tags}"-->
+                        <!--                                                                           th:text="${tag.getName()}"-->
+                        <!--                                                                           class="tag-bubble"></span></h4></li>-->
+                        <!--                </ul>-->
+                        <!--            </li>-->
+
+                        <!--VIEW TAGS-->
+                    <li th:if="${not #lists.isEmpty(tags)}">
+                        <h4>Tags:</h4>
+                        <span th:each="tag : ${tags}" class="tag-bubble">
+                        <span th:text="'&#35;' + ${tag.getName()}"></span>
+
+                            <!--DELETE TAGS-->
+        <form th:if="${user.username.equals(username)}"
+              th:action="@{/playlists/{id}/tag(id=${singlePlaylist.getId()})}" method="post">
+            <input type="hidden" name="tagName" th:value="${tag.getName()}"/>
+            <button type="submit" class="delete-tag-btn">X</button>
+        </form>
+    </span>
+                    </li>
+
+                    <!--ADD TAGS-->
+                    <li th:if="${user.username.equals(username)}">
+                        <!--                        <h4>Add Tag:</h4>-->
+                        <form action="#" th:action="@{/playlists/{id}/tags(id=${singlePlaylist.getId()})}" method="post"
+                              id="addTagForm" class="add-tag-form">
+                            <input type="text" th:field="*{newTag.tagName}" placeholder="Add tag" required>
+                            <button type="submit">Add</button>
+                        </form>
+                    </li>
+
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div th:each="song : ${singlePlaylist.songs}">
+        <div class="song-item">
+            <h3 th:text="${song.title}"></h3>
+            <h4 th:text="'Artist: ' + ${song.artist.name}"></h4>
+            <h4 th:text="'Duration: ' + ${song.duration/60} + ':'+ ${T(java.lang.String).format('%02d',song.duration%60)} + ' min'"></h4>
+            <h4 th:text="'Rank: ' + ${song.rank}"></h4>
+            <h4 th:text="'Album: ' + ${song.album.name}"></h4>
         </div>
-    </section>
-    <a class="utility-btn" style="margin: 5vmin" href="GenerateView.html" th:href="@{/playlists/generate}">Load
-        more...</a></li>
+    </div>
+</section>
+<a class="utility-btn" style="margin: 5vmin" href="GenerateView.html" th:href="@{/playlists/generate}">Load
+    more...</a></li>
 
 
-    <section>
-        <div class="player">
-            <div class="wrapper">
-                <div class="details">
-                    <div class="track-artist">Track Artist</div>
-                    <div class="track-name">Track Name</div>
+<section>
+    <div class="player">
+        <div class="wrapper">
+            <div class="details">
+                <div class="track-artist"></div>
+                <div class="track-name"></div>
+            </div>
+
+            <div class="sliders">
+                <div class="slider-container" id="duration">
+                    <div class="current-time">0:00</div>
+                    <input type="range" min="0" max="100" value="0" class="seek-slider" onchange="seekTo()">
+                    <div class="total-duration">0:00</div>
                 </div>
-
-                <div class="sliders">
-                    <div class="slider-container" id="duration">
-                        <div class="current-time">0:00</div>
-                        <input type="range" min="0" max="100" value="0" class="seek-slider" onchange="seekTo()">
-                        <div class="total-duration">0:00</div>
-                    </div>
 
                     <div class="slider-container" id="volume">
                         <i class="fa fa-volume-down"></i>

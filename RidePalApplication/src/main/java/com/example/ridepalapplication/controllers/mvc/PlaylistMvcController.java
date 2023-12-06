@@ -4,22 +4,23 @@ import com.example.ridepalapplication.controllers.rest.BingController;
 import com.example.ridepalapplication.dtos.GenreDto;
 import com.example.ridepalapplication.dtos.MvcPlaylistDto;
 import com.example.ridepalapplication.dtos.PlaylistDto;
+import com.example.ridepalapplication.dtos.TagDto;
+import com.example.ridepalapplication.exceptions.EntityDuplicateException;
 import com.example.ridepalapplication.exceptions.EntityNotFoundException;
 import com.example.ridepalapplication.helpers.AuthenticationHelper;
 import com.example.ridepalapplication.helpers.PlaylistHelper;
 import com.example.ridepalapplication.mappers.PlaylistMapper;
+import com.example.ridepalapplication.mappers.TagMapper;
 import com.example.ridepalapplication.models.Playlist;
+import com.example.ridepalapplication.models.Tag;
 import com.example.ridepalapplication.models.User;
 import com.example.ridepalapplication.services.PlaylistService;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -35,14 +36,16 @@ public class PlaylistMvcController {
     private final PlaylistService playlistService;
     private final AuthenticationHelper authenticationHelper;
     private final PlaylistMapper playlistMapper;
+    private final TagMapper tagMapper;
     private final BingController bingController;
 
     @Autowired
     public PlaylistMvcController(PlaylistService playlistService, AuthenticationHelper authenticationHelper,
-                                 PlaylistMapper playlistMapper, BingController bingController) {
+                                 PlaylistMapper playlistMapper, TagMapper tagMapper, BingController bingController) {
         this.playlistService = playlistService;
         this.authenticationHelper = authenticationHelper;
         this.playlistMapper = playlistMapper;
+        this.tagMapper = tagMapper;
         this.bingController = bingController;
     }
 
@@ -59,7 +62,7 @@ public class PlaylistMvcController {
                                @RequestParam(required = false, defaultValue = "2147483647") Integer maxDuration) {
         model.addAttribute("minDuration", minDuration);
         model.addAttribute("maxDuration", maxDuration);
-        model.addAttribute("page",page);
+        model.addAttribute("page", page);
         model.addAttribute("maxDuration", maxDuration);
         List<Playlist> allPlaylists = playlistService.getAll(page, pageSize, name, minDuration, maxDuration, new ArrayList<>());
         List<Playlist> recentPlaylists = playlistService.getMostRecent();
@@ -102,12 +105,51 @@ public class PlaylistMvcController {
         }
     }
 
+//    @GetMapping("/{id}")
+//    public String singlePlaylistView(@PathVariable long id,
+//                                     Model model,
+//                                     Authentication authentication) {
+//        String username;
+//        try {
+//            username = authentication.getName();
+//        } catch (NullPointerException e) {
+//            username = "";
+//        }
+//        try {
+//            Playlist playlist = playlistService.getById(id).orElseThrow();
+//            model.addAttribute("singlePlaylist", playlist);
+//            model.addAttribute("tags", playlist.getTags());
+//            model.addAttribute("newTag", new TagDto());
+//
+//            if (authentication != null) {
+//                model.addAttribute("username", username);
+//                model.addAttribute("user", playlist.getCreator());
+//            }
+//            return "SinglePlaylistView";
+//        } catch (EntityNotFoundException e) {
+//            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+//            model.addAttribute("error", e.getMessage());
+//            return "ErrorView";
+//        }
+//    }
+
     @GetMapping("/{id}")
-    public String singlePlaylistView(@PathVariable long id, Model model) {
-        try {
+    public String singlePlaylistView(@PathVariable long id, Model model,Authentication authentication) {
+        String username;
+        try{
+            username = authentication.getName();
+        }
+        catch (NullPointerException e){
+            username = "";
+        }
+        try{
             Playlist playlist = playlistService.getById(id).orElseThrow();
             model.addAttribute("singlePlaylist", playlist);
             playlist.getSongs().forEach(song -> model.addAttribute(song.getTitle(), song));
+            model.addAttribute("user",playlist.getCreator());
+            model.addAttribute("username",username);
+            model.addAttribute("newTag", new TagDto());
+            model.addAttribute("tags", playlist.getTags());
             return "SinglePlaylistView";
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
@@ -115,5 +157,42 @@ public class PlaylistMvcController {
             return "ErrorView";
         }
     }
+
+    @PostMapping("/{id}/tags")
+    public String createTag(@PathVariable long id,
+                            @Valid @ModelAttribute("newTag") TagDto tagDto,
+                            Authentication authentication) {
+
+        try {
+            User user = authenticationHelper.tryGetUser(authentication);
+            Playlist playlist = playlistService.getById(id).orElseThrow();
+
+            Tag tag = tagMapper.fromDto(tagDto);
+            playlistService.createTag(user, tag, playlist);
+            return "redirect:/playlists/" + id;
+        } catch (EntityDuplicateException e) {
+            return "ErrorView";
+            //TODO: fix error
+        }
+    }
+
+    @PostMapping("/{id}/tag")
+    public String deleteTag(@PathVariable long id,
+                            @Valid @ModelAttribute("newTag") TagDto tagDto,
+                            Authentication authentication) {
+
+        try {
+            User user = authenticationHelper.tryGetUser(authentication);
+            Playlist playlist = playlistService.getById(id).orElseThrow();
+
+            Tag tag = tagMapper.fromDto(tagDto);
+            playlistService.deleteTag(user, tag, playlist);
+            return "redirect:/playlists/" + id;
+        } catch (EntityDuplicateException e) {
+            return "ErrorView";
+            //TODO: fix error
+        }
+    }
+
 }
 
