@@ -55,6 +55,7 @@ public class UserMvcController {
             return "ErrorView";
         }
     }
+
     @ModelAttribute("isAuthenticated")
     public boolean populateIsAuthenticated() {
         return authenticationHelper.isAuthenticated();

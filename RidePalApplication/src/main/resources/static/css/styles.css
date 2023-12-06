@@ -282,8 +282,6 @@ nav li:hover {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease-in-out;
 
-    /* Hover effect */
-
     &:hover {
         transform: scale(1.05);
         box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
@@ -303,8 +301,10 @@ nav li:hover {
 }
 
 .playlist-item img {
-    max-width: 100%;
-    height: auto;
+    width: 90%;
+    height: 50%;
+    object-fit: cover;
+    border-radius: 10px;
 }
 
 /*PLAYLISTS VIEW ENDS HERE*/
@@ -360,9 +360,9 @@ nav li:hover {
     display: inline-flex;
 }
 
-.playlist-details img {
-    height: 40vmin;
-}
+/*.playlist-details img {*/
+/*    height: 40vmin;*/
+/*}*/
 
 .playlist-details ul {
     list-style: none;
@@ -523,3 +523,90 @@ i.fa-volume-down, i.fa-volume-up {
 /*========================================================================================*/
 /*!!!END PLAYER!!!*/
 /*======================================================================================*/
+
+.cropped-image {
+    width: 40vmin;
+    height: 40vmin;
+    object-fit: cover;
+    border-radius: 15px;
+    margin: 5vmin;
+}
+
+
+/*========================================================================================*/
+/*!!!TAGS!!!*/
+/*======================================================================================*/
+
+.tag-bubble {
+    display: inline-block;
+    background-color: rgba(52, 152, 219, 0.5);
+    color: #ffffff;
+    padding: 5px 10px;
+    border-radius: 20px;
+    margin-right: 5px;
+}
+
+
+.delete-tag-btn {
+    background-color: #e74c3c;
+    color: whitesmoke;
+    border: none;
+    padding: 5px 10px;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.delete-tag-btn:hover {
+    background-color: #c0392b;
+}
+
+.delete-tag-form {
+    display: inline-block;
+    margin-left: 5px;
+}
+
+.add-tag-form {
+    display: inline-flex;
+    align-items: center;
+    background-color: rgba(52, 152, 219, 0.5);
+    border-radius: 20px;
+    margin-left: 5px;
+}
+
+.add-tag-form input[type="text"]::placeholder {
+    color: whitesmoke;
+}
+
+.add-tag-form input[type="text"] {
+    border: none;
+    background-color: transparent;
+    color: #ffffff;
+    padding: 5px 10px;
+    margin: 0;
+    width: 100%;
+    font-size: 14px;
+    font-family: inherit;
+}
+
+.add-tag-form button {
+    background-color: #3498db;
+    color: #ffffff;
+    border: none;
+    padding: 5px 10px;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 20px;
+    transition: background-color 0.3s ease;
+}
+
+.add-tag-form button:hover {
+    background-color: #2980b9;
+}
+
+/*========================================================================================*/
+/*!!!END TAGS!!!*/
+/*======================================================================================*/
+
+

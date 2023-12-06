@@ -8,8 +8,10 @@
     <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ion-rangeslider@2.3.1/css/ion.rangeSlider.min.css" />
+
     <script src="https://cdn.jsdelivr.net/npm/ion-rangeslider@2.3.1/js/ion.rangeSlider.min.js"></script>
     <script src="/js/scripts.js"></script>
 
@@ -77,7 +79,7 @@
         <div class="playlist-item">
             <a th:href="@{/playlists/{id}(id=${playlist.id})}">
                 <!--            th:href="@{'/playlists/' + ${playlist.id}}"-->
-                <img src="../images/logo-alt.gif" th:src="@{/images/logo-alt.gif}" alt="Playlist">
+                <img class="playlist-item img playlistImage" alt="Playlist Image">
                 <h3 th:text="${playlist.name}"></h3>
                 <h4 th:text="'Creator: ' + ${playlist.creator.getUsername()}"></h4>
                 <h4 th:text="'Duration: ' + ${playlist.duration/60} + ' min'"></h4>
@@ -86,7 +88,7 @@
         </div>
     </div>
 </section>
-<!-- BODY WITH TOP PLAYLISTS ORDERED BY RANK ENDS HERE HERE -->
+<!-- BODY WITH TOP PLAYLISTS ORDERED BY RANK ENDS HERE -->
 
 <script th:inline="javascript">
     var currentPage = /*[[${page}]]*/ 0;
@@ -104,7 +106,7 @@
         <div class="playlist-item">
             <a th:href="@{/playlists/{id}(id=${playlist.id})}">
                 <!--            th:href="@{'/playlists/' + ${playlist.id}}"-->
-                <img src="../images/logo-alt.gif" th:src="@{/images/logo-alt.gif}" alt="Playlist">
+                <img class="playlist-item img playlistImage" alt="Playlist Image">
                 <h3 th:text="${playlist.name}"></h3>
                 <h4 th:text="'Creator: ' + ${playlist.creator.getUsername()}"></h4>
                 <h4 th:text="'Duration: ' + ${playlist.duration/60} + ' min'"></h4>
@@ -158,5 +160,7 @@
     <h5>About Us</h5>
     <h5>Copyright &copy 2023 WeWhoAreNotAsOthers</h5>
 </section>
+
+
 </body>
 </html>
