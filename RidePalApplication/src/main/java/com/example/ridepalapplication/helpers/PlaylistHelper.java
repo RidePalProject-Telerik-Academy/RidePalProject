@@ -22,7 +22,8 @@ public class PlaylistHelper {
         }
         return genre;
     }
-    public  static void updatePlaylistDetails(Playlist playlistToUpdate, Song song, String action) {
+
+    public static void updatePlaylistDetails(Playlist playlistToUpdate, Song song, String action) {
         int temp = Math.toIntExact(song.getDuration());
         long totalPlaylistRank = playlistToUpdate.getSongs().size() * playlistToUpdate.getRank();
 
@@ -31,35 +32,45 @@ public class PlaylistHelper {
             playlistToUpdate.addSong(song);
             playlistToUpdate.setDuration(playlistToUpdate.getDuration() + temp);
         } else {
-            totalPlaylistRank -= song.getRank();
-            playlistToUpdate.removeSong(song);
-            playlistToUpdate.setDuration(playlistToUpdate.getDuration() - temp);
+            if (playlistToUpdate.getSongs().size() == 1) {
+                playlistToUpdate.getSongs().remove(song);
+                playlistToUpdate.setDuration(0);
+                playlistToUpdate.setRank(0L);
+                return;
+            } else {
+                totalPlaylistRank -= song.getRank();
+                playlistToUpdate.removeSong(song);
+                playlistToUpdate.setDuration(playlistToUpdate.getDuration() - temp);
+            }
         }
-        playlistToUpdate.setRank(totalPlaylistRank / playlistToUpdate.getSongs().size());
-
+        playlistToUpdate.setRank(Math.absExact(totalPlaylistRank) / playlistToUpdate.getSongs().size());
     }
+
     public static void updatePlaylistDetails(Playlist playlist, Long totalRank, Set<Song> playlistSongs, int totalPlaylistDuration) {
         playlist.setRank(totalRank / playlistSongs.size());
         playlist.setDuration(totalPlaylistDuration);
         playlist.setSongs(playlistSongs);
     }
+
     public static List<GenreDto> verifyTotalGenrePercentage(List<GenreDto> genreDtoList) {
         int totalGenrePercentage = 0;
         for (GenreDto genreDto : genreDtoList) {
             totalGenrePercentage += genreDto.getPercentage();
 
         }
-        if (totalGenrePercentage > 100) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Total genres percentage exceeded!");
+        if (totalGenrePercentage != 100) {
+            throw new IllegalArgumentException("Invalid genres percentage!");
         }
         return genreDtoList;
     }
+
     public static void getSongArtist(List<Song> songs, List<Long> artistsId) {
         Long artistId = songs.get(0).getArtist().getId();
         artistsId.add(artistId);
     }
+
     public static void validateGenreAvailability(List<Song> songs, Genre genre) {
-        if(songs.isEmpty()){
+        if (songs.isEmpty()) {
             throw new UnsupportedOperationException(String.format("The application does not support enough unique songs with genre " +
                     "%s to satisfy your request !", genre.getName()));
         }

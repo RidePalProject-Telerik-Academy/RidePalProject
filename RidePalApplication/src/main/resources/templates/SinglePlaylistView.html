@@ -105,10 +105,10 @@
                         <span th:text="'&#35;' + ${tag.getName()}"></span>
 
                             <!--DELETE TAGS-->
-        <form th:if="${user.username.equals(username)}"
+        <form class = "delete-form" th:if="${user.username.equals(username)}"
               th:action="@{/playlists/{id}/tag(id=${singlePlaylist.getId()})}" method="post">
             <input type="hidden" name="tagName" th:value="${tag.getName()}"/>
-            <button type="submit" class="delete-tag-btn">X</button>
+            <button type="submit" class="delete-element-btn">X</button>
         </form>
     </span>
                     </li>
@@ -136,10 +136,17 @@
             <h4 th:text="'Rank: ' + ${song.rank}"></h4>
             <h4 th:text="'Album: ' + ${song.album.name}"></h4>
         </div>
+
+        <form class = "delete-form" th:if="${user.username.equals(username)}"
+              th:action="@{'/playlists/'+${singlePlaylist.getId()}+'/songs/'+${song.getId()}}" method="post">
+            <input type="hidden" name="tagName" th:value="${song.getId()}"/>
+            <button type="submit" class="delete-element-btn">X</button>
+        </form>
+        </span>
+
     </div>
 </section>
-<a class="utility-btn" style="margin: 5vmin" href="GenerateView.html" th:href="@{/playlists/generate}">Load
-    more...</a></li>
+<a class="utility-btn" style="margin: 5vmin" href="GenerateView.html" th:href="@{/playlists/generate}">Add song</a></li>
 
 
 <section>
