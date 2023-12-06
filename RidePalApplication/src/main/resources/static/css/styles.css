@@ -87,8 +87,12 @@ nav li:hover {
 #logo {
     color: #f8f9fa;
     font-size: 10vmin;
-    text-align: left;
+    /*text-align: left;*/
     margin-left: 5%;
+}
+
+#generate-playlist{
+    padding: 0.5em;
 }
 
 /*============================*/
@@ -106,27 +110,27 @@ nav li:hover {
     margin-right: auto;
     border-radius: 1.4rem;
     background: whitesmoke;
-    text-decoration: #ed944d;
+    text-decoration: #ca433e;
     transition: box-shadow 0.7s;
 }
 
 .search:hover {
-    box-shadow: #ed944d 0 0 0.9em;
+    box-shadow: #ca433e 0 0 0.9em;
     border-style: none;
 }
 
 .search:focus-within {
-    box-shadow: #ed944d 0 0 0.5em;
+    box-shadow: #ca433e 0 0 0.5em;
     border-style: none;
 }
 
 .search-icon {
-    color: #ed944d;
+    color: #ca433e;
 }
 
 .search-input {;
     font-size: 5vmin;
-    color: #ed944d;
+    color: #ca433e;
     margin-left: var(--padding);
     background: transparent;
     border: none;
@@ -148,7 +152,7 @@ nav li:hover {
     font-size: 1.5rem;
     margin: 0.5rem;
     margin-top: auto;
-    margin-bottom: 32vmin;
+    margin-bottom: 1vmin;
 }
 
 /*HOME VIEW STARTS HERE*/
@@ -281,6 +285,9 @@ nav li:hover {
     /*background-color: #fff;*/
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease-in-out;
+    /*white-space: nowrap;*/
+    /*overflow: hidden;*/
+    /*text-overflow: ellipsis;*/
 
     &:hover {
         transform: scale(1.05);
@@ -292,19 +299,29 @@ nav li:hover {
     color: #f8f9fa;
     font-size: 3.3vmin;
     margin-left: 1.5vmin;
+    margin-bottom: 1vmin;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .playlist-item h4 {
     color: #f8f9fa;
     font-size: 2.5vmin;
     margin-left: 1.5vmin;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .playlist-item img {
-    width: 90%;
-    height: 50%;
+    width: 85%;
+    height: 60%;
+    align-items: center;
+    padding: 1vmin;
+    margin: 1vmin;
     object-fit: cover;
-    border-radius: 10px;
+    border: none;
 }
 
 /*PLAYLISTS VIEW ENDS HERE*/
@@ -358,11 +375,8 @@ nav li:hover {
 
 .playlist-details {
     display: inline-flex;
+    margin: 2%;
 }
-
-/*.playlist-details img {*/
-/*    height: 40vmin;*/
-/*}*/
 
 .playlist-details ul {
     list-style: none;
@@ -375,10 +389,10 @@ nav li:hover {
 
 #playlist-details-info {
     display: flex;
-    flex-flow: column wrap;
+    flex-flow: column;
     justify-content: space-between;
     margin-left: 0;
-    font-size: 5vmin;
+    font-size: 4vmin;
 }
 
 /*==========================================================================*/
@@ -609,17 +623,3 @@ i.fa-volume-down, i.fa-volume-up {
 /*!!!END TAGS!!!*/
 /*======================================================================================*/
 
-
-
-
-
-.registration-body{
-    text-align: center;
-    margin-bottom: 5%;
-    color: #f8f9fa;
-    font-size: 5vmin;
-    cursor: pointer;
-    & :hover{
-        background: none;
-    }
-}
