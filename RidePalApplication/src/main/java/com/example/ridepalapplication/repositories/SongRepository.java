@@ -17,12 +17,11 @@ public interface SongRepository extends JpaRepository<Song,Long> , JpaSpecificat
 
     @Query(nativeQuery = true,value = "SELECT songs.* FROM songs JOIN albums ON songs.album_id = albums.id WHERE albums.genre_id = :id ORDER BY RAND() LIMIT 1;")
     List<Song> getMeSingleSongByGenre(@Param("id") Long id);
-    @Query(nativeQuery = true,value = "SELECT songs.* FROM songs JOIN albums ON songs.album_id = albums.id WHERE albums.genre_id = :id ORDER BY songs.`rank`DESC ,RAND() LIMIT 1;")
+    @Query(nativeQuery = true,value = "SELECT songs.* FROM songs JOIN albums ON songs.album_id = albums.id WHERE albums.genre_id = :id ORDER BY RAND(), songs.`rank`DESC LIMIT 1;")
     List<Song> getMeSingleTopSongByGenre(@Param("id") Long id);
-
     @Query(nativeQuery = true,value = "SELECT songs.* FROM songs JOIN albums ON songs.album_id = albums.id WHERE albums.genre_id = :id and songs.artist_id not in :artistId ORDER BY RAND() LIMIT 1;")
     List<Song> getMeSingleSongByGenreAndUniqueArtist(@Param("id") Long id, @Param("artistId") List<Long> artistId);
-    @Query(nativeQuery = true,value = "SELECT songs.* FROM songs JOIN albums ON songs.album_id = albums.id WHERE albums.genre_id = :id and songs.artist_id not in :artistId ORDER BY songs.`rank` DESC ,RAND() LIMIT 1;")
+    @Query(nativeQuery = true,value = "SELECT songs.* FROM songs JOIN albums ON songs.album_id = albums.id WHERE albums.genre_id = :id and songs.artist_id not in :artistId ORDER BY RAND(), songs.`rank` DESC LIMIT 1;")
     List<Song> getMeSingleTopSongByGenreAndUniqueArtist(@Param("id") Long id, @Param("artistId") List<Long> artistId);
 
     List<Song> findByTitleAndArtistName(String name, String artist);

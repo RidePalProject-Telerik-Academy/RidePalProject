@@ -253,11 +253,12 @@ public class PlaylistServiceImpl implements PlaylistService {
     public Playlist deleteSong(User user, Song songToDelete, Playlist playlistToUpdate) {
         authorizationHelper.checkAuthorization(user, playlistToUpdate.getCreator(), "update playlist songs");
 
-        if (playlistToUpdate.getSongs().contains(songToDelete)) {
-            throw new EntityDuplicateException("Song", "title", songToDelete.getTitle(), "in the playlist");
+        if (!playlistToUpdate.getSongs().contains(songToDelete)) {
+            throw new EntityNotFoundException("Song", "title", songToDelete.getTitle());
         }
 
         PlaylistHelper.updatePlaylistDetails(playlistToUpdate, songToDelete, "delete");
+        playlistRepository.save(playlistToUpdate);
         return playlistToUpdate;
     }
 

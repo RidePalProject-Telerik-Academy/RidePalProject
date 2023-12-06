@@ -6,7 +6,6 @@ public class GenreDto {
 
     String name;
     int percentage;
-
     public GenreDto() {
     }
 

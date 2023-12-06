@@ -150,34 +150,38 @@
         <label for="endAddress">End Address:</label>
         <input type="text" id="endAddress" th:field="*{endAddress}" required/>
 
+<!--            <div th:each="genre : ${genres}">-->
+<!--                        <h3 th:text="*{name}"></h3>-->
+<!--                <input type="number" id="percentage" th:field="*{}"/>-->
+<!--            </div>-->
 
-        <button id="loadMoreButton">Choose genres</button>
+<!--        <button id="loadMoreButton">Choose genres</button>-->
 
-        <div th:each="genre, iterStat : *{genres}" class="genre-fields">
+        <div th:each="genre, iterStat : *{genres}">
             <input type="text" th:id="${'genreName' + iterStat.index}" th:field="*{genres[__${iterStat.index}__].name}"
                    placeholder="Genre Name" required readonly/>
             <input type="number" th:id="${'genrePercentage' + iterStat.index}"
                    th:field="*{genres[__${iterStat.index}__].percentage}" placeholder="Percentage" required/>
         </div>
 
-        <script>
-            const loadMoreButton = document.getElementById('loadMoreButton');
-            const genreFields = document.querySelectorAll('.genre-fields');
-            let currentGenreIndex = 0;
+<!--        <script>-->
+<!--            const loadMoreButton = document.getElementById('loadMoreButton');-->
+<!--            const genreFields = document.querySelectorAll('.genre-fields');-->
+<!--            let currentGenreIndex = 0;-->
 
-            loadMoreButton.addEventListener('click', function () {
-                showGenre(currentGenreIndex);
-                currentGenreIndex++;
+<!--            loadMoreButton.addEventListener('click', function () {-->
+<!--                showGenre(currentGenreIndex);-->
+<!--                currentGenreIndex++;-->
 
-                if (currentGenreIndex === genreFields.length) {
-                    currentGenreIndex = 0;
-                }
-            });
+<!--                if (currentGenreIndex === genreFields.length) {-->
+<!--                    currentGenreIndex = 0;-->
+<!--                }-->
+<!--            });-->
 
-            function showGenre(index) {
-                genreFields[index].style.display = 'block';
-            }
-        </script>
+<!--            function showGenre(index) {-->
+<!--                genreFields[index].style.display = 'block';-->
+<!--            }-->
+<!--        </script>-->
 
 
         <div class="checkbox-group">

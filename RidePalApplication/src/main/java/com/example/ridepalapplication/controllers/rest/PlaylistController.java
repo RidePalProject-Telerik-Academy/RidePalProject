@@ -87,7 +87,7 @@ public class PlaylistController {
 
       } catch (AuthorizationException e) {
           throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
-      } catch (UnsupportedOperationException e) {
+      } catch (UnsupportedOperationException | IllegalArgumentException e) {
           throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
       }
   }
