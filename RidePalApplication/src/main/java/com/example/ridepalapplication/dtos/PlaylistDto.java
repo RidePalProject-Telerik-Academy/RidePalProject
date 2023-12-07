@@ -6,7 +6,7 @@ import java.util.List;
 
 public class PlaylistDto extends UpdatePlaylistDto {
 
-    @NotNull(message  = "Location is required.")
+    @NotNull(message = "Location is required.")
     private LocationDto locationDto;
 
     @NotNull(message = "Genre is required.")
