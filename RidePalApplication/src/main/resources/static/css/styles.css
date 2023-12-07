@@ -87,8 +87,7 @@ nav li:hover {
 #logo {
     color: #f8f9fa;
     font-size: 10vmin;
-    /*text-align: left;*/
-    margin-left: 5%;
+    margin-left: 5vmin;
 }
 
 #generate-playlist{
@@ -106,7 +105,7 @@ nav li:hover {
 
     align-items: center;
     padding: var(--padding);
-    margin-left: 2%;
+    margin-left: 5vmin;
     margin-right: auto;
     border-radius: 1.4rem;
     background: whitesmoke;
@@ -330,12 +329,13 @@ nav li:hover {
 
 .song-list h2 {
     margin-top: 2vmin;
-    margin-bottom: 2vmin;
-    margin-left: 2rem;
+    margin-right: 2vmin;
+    margin-left: 5vmin;
     font-size: 10vmin;
+    overflow-wrap: break-word;
 }
 
-.song-item {
+.song-item{
     margin-left: 5vmin;
     margin-bottom: 2vmin;
     margin-right: 5vmin;
@@ -379,6 +379,8 @@ nav li:hover {
 }
 
 .playlist-details ul {
+    margin-top: 4vmin;
+    margin-right: 2vmin;
     list-style: none;
     text-align: left;
 }
@@ -552,32 +554,30 @@ i.fa-volume-down, i.fa-volume-up {
 /*======================================================================================*/
 
 .tag-bubble {
-    display: inline-block;
+    /*display: inline-block;*/
     background-color: rgba(52, 152, 219, 0.5);
     color: #ffffff;
-    padding: 5px 10px;
-    border-radius: 20px;
-    margin: 1%;
-    margin-right: 5px;
-    align-items: center;
+    padding: 0.5rem 1rem;
+    border-radius: 2rem;
+    display: inline-flex;
+    overflow-wrap: break-word;
 }
-
 
 .delete-element-btn {
     background-color: #e74c3c;
     color: whitesmoke;
     border: none;
-    padding: 5px 10px;
-    font-size: 14px;
+    padding: 0.2rem 0.5rem;
+    font-size: 1.5rem;
     cursor: pointer;
     border-radius: 5px;
     transition: background-color 0.3s ease;
     display: inline-flex;
 }
 
-.delete-element-btn:hover {
-    background-color: #c0392b;
-}
+/*.delete-element-btn:hover {*/
+/*    background-color: #c0392b;*/
+/*}*/
 
 .delete-form {
     display: inline-flex;
@@ -587,10 +587,8 @@ i.fa-volume-down, i.fa-volume-up {
 .add-tag-form {
     display: inline-flex;
     align-items: center;
-    background-color: rgba(52, 152, 219, 0.5);
-    border-radius: 20px;
-    margin: 2%;
-    margin-left: 5px;
+    /*background-color: rgba(52, 152, 219, 0.5);*/
+
 }
 
 .add-tag-form input[type="text"]::placeholder {
@@ -598,30 +596,30 @@ i.fa-volume-down, i.fa-volume-up {
 }
 
 .add-tag-form input[type="text"] {
-    border: none;
+    border: solid 2px #3498db;
     background-color: transparent;
     color: #ffffff;
-    padding: 5px 10px;
+    /*padding: 5px 10px;*/
     margin: 0;
     width: 100%;
     font-size: 5vmin;
-    font-family: inherit;
 }
 
 .add-tag-form button {
-    background-color: #3498db;
+    background-color: transparent;
     color: #ffffff;
-    border: none;
+    border: solid 1px black;
     padding: 5px 10px;
     font-size: 14px;
     cursor: pointer;
-    border-radius: 20px;
+    border-radius: 10px;
+    margin-left: 1rem;
     transition: background-color 0.3s ease;
 }
 
-.add-tag-form button:hover {
-    background-color: #2980b9;
-}
+/*.add-tag-form button:hover {*/
+/*    background-color: #2980b9;*/
+/*}*/
 
 /*========================================================================================*/
 /*!!!END TAGS!!!*/
