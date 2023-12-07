@@ -335,7 +335,7 @@ nav li:hover {
     overflow-wrap: break-word;
 }
 
-.song-item {
+.song-item{
     margin-left: 5vmin;
     margin-bottom: 2vmin;
     margin-right: 5vmin;
@@ -575,9 +575,9 @@ i.fa-volume-down, i.fa-volume-up {
     display: inline-flex;
 }
 
-.delete-element-btn:hover {
-    background-color: #c0392b;
-}
+/*.delete-element-btn:hover {*/
+/*    background-color: #c0392b;*/
+/*}*/
 
 .delete-form {
     display: inline-flex;
@@ -587,10 +587,8 @@ i.fa-volume-down, i.fa-volume-up {
 .add-tag-form {
     display: inline-flex;
     align-items: center;
-    background-color: rgba(52, 152, 219, 0.5);
-    border-radius: 20px;
-    margin: 2%;
-    margin-left: 5px;
+    /*background-color: rgba(52, 152, 219, 0.5);*/
+
 }
 
 .add-tag-form input[type="text"]::placeholder {
@@ -598,30 +596,30 @@ i.fa-volume-down, i.fa-volume-up {
 }
 
 .add-tag-form input[type="text"] {
-    border: none;
+    border: solid 2px #3498db;
     background-color: transparent;
     color: #ffffff;
-    padding: 5px 10px;
+    /*padding: 5px 10px;*/
     margin: 0;
     width: 100%;
     font-size: 5vmin;
-    font-family: inherit;
 }
 
 .add-tag-form button {
-    background-color: #3498db;
+    background-color: transparent;
     color: #ffffff;
-    border: none;
+    border: solid 1px black;
     padding: 5px 10px;
     font-size: 14px;
     cursor: pointer;
-    border-radius: 20px;
+    border-radius: 10px;
+    margin-left: 1rem;
     transition: background-color 0.3s ease;
 }
 
-.add-tag-form button:hover {
-    background-color: #2980b9;
-}
+/*.add-tag-form button:hover {*/
+/*    background-color: #2980b9;*/
+/*}*/
 
 /*========================================================================================*/
 /*!!!END TAGS!!!*/

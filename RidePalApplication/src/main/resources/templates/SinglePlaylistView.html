@@ -87,20 +87,7 @@
                     <li><h4 th:text="'Duration: ' + ${singlePlaylist.duration/60} + ' min'"></h4></li>
                     <li><h4 th:text="'Rank: ' + ${singlePlaylist.rank}"></h4>
                     <li><h4 th:text="'Number of songs: ' + ${singlePlaylist.getSongs().size()}"></h4>
-                        <!--VIEW TAGS-->
-                    <li th:if="${not #lists.isEmpty(tags)}">
-                        <!--                        <h4>Tags:</h4>-->
-                        <span th:each="tag : ${tags}" class="tag-bubble">
-                        <span th:text="'&#35;' + ${tag.getName()}"></span>
-                            <!--DELETE TAGS-->
-                         <form th:if="${user.username.equals(username)}"
-        <form class = "delete-form" th:if="${user.username.equals(username)}"
-              th:action="@{/playlists/{id}/tag(id=${singlePlaylist.getId()})}" method="post">
-            <input type="hidden" name="tagName" th:value="${tag.getName()}"/>
-            <button type="submit" class="delete-element-btn">X</button>
-        </form>
-                        </span>
-                    </li>
+
 
                     <!--ADD TAGS-->
                     <li th:if="${user.username.equals(username)}">
@@ -112,26 +99,44 @@
                         </form>
                     </li>
 
+                    <!--VIEW TAGS-->
+                    <li th:if="${not #lists.isEmpty(tags)}">
+                        <span th:each="tag : ${tags}" class="tag-bubble">
+                        <span th:text="'&#35;' + ${tag.getName()}"></span>
+                            <!--DELETE TAGS-->
+                            <form th:if="${user.username.equals(username)}"></form>
+        <form class = "delete-form" th:if="${user.username.equals(username)}"
+              th:action="@{/playlists/{id}/tag(id=${singlePlaylist.getId()})}" method="post">
+            <input type="hidden" name="tagName" th:value="${tag.getName()}"/>
+            <button type="submit" class="delete-element-btn">X</button>
+        </form>
+                        </span>
+                    </li>
+
                 </ul>
             </li>
         </ul>
     </div>
 
     <div th:each="song : ${singlePlaylist.songs}">
+        <div style="text-align: right; margin-right: 2vmin">
+            <form class = "delete-form" th:if="${user.username.equals(username)}"
+                  th:action="@{'/playlists/'+${singlePlaylist.getId()}+'/songs/'+${song.getId()}}" method="post">
+                <input type="hidden" name="tagName" th:value="${song.getId()}"/>
+                <button type="submit" class="delete-element-btn">X</button>
+            </form>
+        </div>
         <div class="song-item">
+
+            <div>
             <h3 th:text="${song.title}"></h3>
             <h4 th:text="'Artist: ' + ${song.artist.name}"></h4>
             <h4 th:text="'Duration: ' + ${song.duration/60} + ':'+ ${T(java.lang.String).format('%02d',song.duration%60)} + ' min'"></h4>
             <h4 th:text="'Rank: ' + ${song.rank}"></h4>
             <h4 th:text="'Album: ' + ${song.album.name}"></h4>
+            </div>
         </div>
 
-        <form class = "delete-form" th:if="${user.username.equals(username)}"
-              th:action="@{'/playlists/'+${singlePlaylist.getId()}+'/songs/'+${song.getId()}}" method="post">
-            <input type="hidden" name="tagName" th:value="${song.getId()}"/>
-            <button type="submit" class="delete-element-btn">X</button>
-        </form>
-        </span>
 
     </div>
 </section>
