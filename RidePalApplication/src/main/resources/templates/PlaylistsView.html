@@ -38,10 +38,10 @@
                                                   th:text="#{navigation.register}">SignUp</a>
             </li>
             <li th:if="${isAuthenticated}" class="nav-item"><a href="#" class="nav-link"
+                                                               th:href="@{/users/myProfile}">MyProfile</a></li>
+            <li th:if="${isAuthenticated}" class="nav-item"><a href="#" class="nav-link"
                                                                th:href="@{/logout}">Logout</a></li>
 
-            <li th:if="${isAuthenticated}" class="nav-item"><a href="#" class="nav-link"
-                                                               th:href="@{/users/myProfile}">MyProfile</a></li>
         </ul>
     </nav>
 

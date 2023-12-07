@@ -1,6 +1,7 @@
 package com.example.ridepalapplication.controllers.mvc;
 
 import com.example.ridepalapplication.dtos.RegisterDto;
+import com.example.ridepalapplication.dtos.UpdateUserDto;
 import com.example.ridepalapplication.exceptions.AuthorizationException;
 import com.example.ridepalapplication.exceptions.EntityDuplicateException;
 import com.example.ridepalapplication.helpers.AuthenticationHelper;
@@ -10,6 +11,7 @@ import com.example.ridepalapplication.models.User;
 import com.example.ridepalapplication.services.PlaylistService;
 import com.example.ridepalapplication.services.UserService;
 import jakarta.validation.Valid;
+import org.hibernate.sql.Update;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
@@ -45,6 +47,7 @@ public class UserMvcController {
             List<Playlist> userPlaylists = playlistService.getUserPlaylists(user.getId());
             model.addAttribute("userPlaylists",userPlaylists);
             model.addAttribute("user",user);
+            model.addAttribute("userToUpdate", new UpdateUserDto());
 
            return "MyProfileView";
         }catch (AuthorizationException e){
@@ -60,6 +63,12 @@ public class UserMvcController {
     public boolean populateIsAuthenticated() {
         return authenticationHelper.isAuthenticated();
     }
+
+    @ModelAttribute("isAdmin")
+    public boolean populateIsAdmin(Authentication authentication) {
+        return authenticationHelper.isAdmin(authentication);
+    }
+
 
     @GetMapping("/register")
     public String getRegisterView(Model model) {
@@ -80,6 +89,28 @@ public class UserMvcController {
             bindingResult.rejectValue("username", "username_error", e.getMessage());
             bindingResult.rejectValue("email", "email_error", e.getMessage());
             return "RegisterView";
+        }
+    }
+
+    @PostMapping ("/update")
+    public String updateUser(@Valid @ModelAttribute("userToUpdate") UpdateUserDto updateUserDto,
+                             Authentication authentication,
+                             BindingResult bindingResult) {
+
+        if (bindingResult.hasErrors()) {
+            return "ErrorView";
+        }
+
+        User loggedUser = authenticationHelper.tryGetUser(authentication);
+
+        try {
+            User userToUpdate = userMapper.fromDto(loggedUser.getId(), updateUserDto);
+            userService.updateUser(loggedUser, userToUpdate);
+            return "redirect:/users/myProfile";
+        } catch (EntityDuplicateException e) {
+            bindingResult.rejectValue("username", "username_error", e.getMessage());
+            bindingResult.rejectValue("email", "email_error", e.getMessage());
+            return "ErrorView";
         }
     }
 
