@@ -60,7 +60,10 @@
                                                   th:text="#{navigation.register}">SignUp</a>
             </li>
             <li th:if="${isAuthenticated}" class="nav-item"><a href="#" class="nav-link"
+                                                               th:href="@{/users/myProfile}">MyProfile</a></li>
+            <li th:if="${isAuthenticated}" class="nav-item"><a href="#" class="nav-link"
                                                                th:href="@{/logout}">Logout</a></li>
+
         </ul>
     </nav>
 
@@ -80,7 +83,10 @@
     <h2 th:text="${singlePlaylist.name}"></h2>
     <div class="playlist-details">
         <img id="singlePlaylistImage" alt="Playlist Image" class="cropped-image">
+
         <ul>
+                <li><h2 th:text="${singlePlaylist.name}"></h2></li>
+
             <li>
                 <ul id="playlist-details-info">
                     <li><h4 th:text="'Creator: ' + ${singlePlaylist.creator.getUsername()}"></h4></li>

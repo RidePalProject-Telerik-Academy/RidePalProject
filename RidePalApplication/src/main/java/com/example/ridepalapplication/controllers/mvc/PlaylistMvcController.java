@@ -2,6 +2,7 @@ package com.example.ridepalapplication.controllers.mvc;
 
 import com.example.ridepalapplication.controllers.rest.BingController;
 import com.example.ridepalapplication.dtos.*;
+import com.example.ridepalapplication.exceptions.AuthorizationException;
 import com.example.ridepalapplication.exceptions.EntityDuplicateException;
 import com.example.ridepalapplication.exceptions.EntityNotFoundException;
 import com.example.ridepalapplication.helpers.AuthenticationHelper;
@@ -53,6 +54,8 @@ public class PlaylistMvcController {
     public boolean populateIsAuthenticated() {
         return authenticationHelper.isAuthenticated();
     }
+
+
 
     @GetMapping
     public String playlistPage(Model model, @RequestParam(required = false, defaultValue = "") String name,
@@ -107,34 +110,6 @@ public class PlaylistMvcController {
         }
     }
 
-//    @GetMapping("/{id}")
-//    public String singlePlaylistView(@PathVariable long id,
-//                                     Model model,
-//                                     Authentication authentication) {
-//        String username;
-//        try {
-//            username = authentication.getName();
-//        } catch (NullPointerException e) {
-//            username = "";
-//        }
-//        try {
-//            Playlist playlist = playlistService.getById(id).orElseThrow();
-//            model.addAttribute("singlePlaylist", playlist);
-//            model.addAttribute("tags", playlist.getTags());
-//            model.addAttribute("newTag", new TagDto());
-//
-//            if (authentication != null) {
-//                model.addAttribute("username", username);
-//                model.addAttribute("user", playlist.getCreator());
-//            }
-//            return "SinglePlaylistView";
-//        } catch (EntityNotFoundException e) {
-//            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
-//            model.addAttribute("error", e.getMessage());
-//            return "ErrorView";
-//        }
-//    }
-
     @GetMapping("/{id}")
     public String singlePlaylistView(@PathVariable long id, Model model,Authentication authentication) {
         String username;
@@ -152,12 +127,46 @@ public class PlaylistMvcController {
             model.addAttribute("username",username);
             model.addAttribute("newTag", new TagDto());
             model.addAttribute("tags", playlist.getTags());
+            model.addAttribute("updatePlaylistDto", new UpdatePlaylistDto());
             return "SinglePlaylistView";
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
             return "ErrorView";
         }
+    }
+
+    @PostMapping("/{id}/update")
+    public String updatePlaylist(@PathVariable long id,
+                                 Authentication authentication,
+                                 @Valid @ModelAttribute("updatePlaylistDto") UpdatePlaylistDto updatePlaylistDto,
+                                  BindingResult bindingResult, Model model) {
+
+        if (bindingResult.hasErrors()) {
+            return "ErrorView";
+        }
+
+        try {
+            User user = authenticationHelper.tryGetUser(authentication);
+            Playlist playlist = playlistService.getById(id).orElseThrow();
+            playlistService.update(user, playlist, updatePlaylistDto.getName());
+            return "redirect:/playlists/" + id;
+        } catch (AuthorizationException e) {
+            model.addAttribute("error", e.getMessage());
+            bindingResult.rejectValue("name", "name_error", e.getMessage());
+            return "ErrorView";
+        }
+
+    }
+
+    @GetMapping("/{id}/delete")
+    public String deletePlaylist(@PathVariable long id,
+                             Authentication authentication) {
+
+        User user = authenticationHelper.tryGetUser(authentication);
+        playlistService.delete(user, id);
+
+        return "redirect:/users/myProfile";
     }
 
     @PostMapping("/{id}/tags")
