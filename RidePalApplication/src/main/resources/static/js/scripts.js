@@ -42,10 +42,17 @@ function convertAndSubmit() {
     $("#filterForm").submit();
 }
 
-function incrementPage() {
-    currentPage++;
+function incrementPage(pageSize) {
+    if(currentPage++ < pageSize) {
+        window.location.href = '/playlists?page=' + currentPage;
+    }
+}
 
-    window.location.href = '/playlists?page=' + currentPage;
+function decrementPage() {
+    if(currentPage > 0) {
+        currentPage--;
+        window.location.href = '/playlists?page=' + currentPage;
+    }
 }
 
 $(document).ready(function() {

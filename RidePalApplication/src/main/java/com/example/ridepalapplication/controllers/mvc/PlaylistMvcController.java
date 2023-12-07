@@ -67,9 +67,13 @@ public class PlaylistMvcController {
         model.addAttribute("maxDuration", maxDuration);
         model.addAttribute("page", page);
         model.addAttribute("maxDuration", maxDuration);
-        List<Playlist> allPlaylists = playlistService.getAll(page, pageSize, name, minDuration, maxDuration, new ArrayList<>());
+
+        int pages = (playlistService.getAll().size())/pageSize;
+        model.addAttribute("pageSize", pages);
+
+        List<Playlist> filteredList = playlistService.getAll(page, pageSize, name, minDuration, maxDuration, new ArrayList<>());
         List<Playlist> recentPlaylists = playlistService.getMostRecent();
-        model.addAttribute("filteredPlaylists", allPlaylists);
+        model.addAttribute("filteredPlaylists", filteredList);
         model.addAttribute("filteredMostRecent", recentPlaylists);
 
         return "PlaylistsView";

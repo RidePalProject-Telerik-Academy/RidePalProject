@@ -13,6 +13,7 @@ import java.util.Optional;
 public interface PlaylistService {
 
     List<Playlist> getAll(Integer page,Integer pageSize,String name, Integer minDuration, Integer maxDuration,List<String> tagName);
+    List<Playlist> getAll();
     List<Playlist> getUserPlaylists(Long id);
 
     Optional<Playlist> getById(long id);

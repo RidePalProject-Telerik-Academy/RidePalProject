@@ -91,6 +91,7 @@
         <ul>
                 <li><h2 th:text="${singlePlaylist.name}"></h2></li>
 
+
             <li>
             <form th:if="${user.username.equals(username)}"
                     th:action="@{/playlists/{id}/update(id=${singlePlaylist.id})}" th:method="post" th:object="${updatePlaylistDto}">
@@ -107,11 +108,6 @@
                         <li><h4 th:text="'Duration: ' + ${singlePlaylist.duration/60} + ' min'"></h4></li>
                         <li><h4 th:text="'Rank: ' + ${singlePlaylist.rank}"></h4>
                         <li><h4 th:text="'Number of songs: ' + ${singlePlaylist.getSongs().size()}"></h4>
-                            <!--                    <li><h4 th:if="${not #lists.isEmpty(tags)}">Tags:<span th:each="tag : ${tags}"-->
-                            <!--                                                                           th:text="${tag.getName()}"-->
-                            <!--                                                                           class="tag-bubble"></span></h4></li>-->
-                            <!--                </ul>-->
-                            <!--            </li>-->
 
                             <!--VIEW TAGS-->
                         <li th:if="${not #lists.isEmpty(tags)}">
@@ -144,13 +140,15 @@
             </ul>
     </div>
 
-    <div th:each="song : ${singlePlaylist.songs}">
+    <div th:each="song, state : ${singlePlaylist.songs}">
         <div class="song-item">
             <h3 th:text="${song.title}"></h3>
             <h4 th:text="'Artist: ' + ${song.artist.name}"></h4>
             <h4 th:text="'Duration: ' + ${song.duration/60} + ':'+ ${T(java.lang.String).format('%02d',song.duration%60)} + ' min'"></h4>
             <h4 th:text="'Rank: ' + ${song.rank}"></h4>
             <h4 th:text="'Album: ' + ${song.album.name}"></h4>
+            <h4 id="index" th:text="'Index: ' + ${state.index}"></h4>
+            <button type="button" onclick=playCurrentSong()>Play</button>
         </div>
 
         <form class="delete-form" th:if="${user.username.equals(username)}"
@@ -234,8 +232,12 @@
         }
 
 
-        function startMusic(songsArray) {
-            let currentSongIndex = 0;
+        function startMusic(songsArray, index) {
+            let currentSongIndex;
+            if (index) {
+                currentSongIndex = index;
+            }
+            currentSongIndex = 0;
 
             function playCurrentSong() {
                 const currentSong = songsArray[currentSongIndex];
@@ -286,7 +288,6 @@
                     const minutes = Math.floor(currentTimeInSeconds / 60);
                     const seconds = currentTimeInSeconds % 60;
                     currentTimeElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-
                     const targetValue = (currentTimeInSeconds / durationInSeconds) * 100;
                     currentSliderValue += 0.1 * (targetValue - currentSliderValue);
                     seekSlider.value = currentSliderValue;
@@ -360,9 +361,15 @@
         // seek slider
         let seekSlider = document.querySelector('.seek-slider');
         seekSlider.oninput = function () {
+            audioPlayer.pause();
             audioPlayer.currentTime = (audioPlayer.duration * seekSlider.value) / 100;
-            audioPlayer.play();
+            setTimeout(() => audioPlayer.play(), 500);
         }
+
+function playCurrentSong() {
+            var index = document.getElementById("index").value;
+            startMusic(songsArray, index);
+}
 
     </script>
 
