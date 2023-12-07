@@ -63,14 +63,20 @@ public class PlaylistMvcController {
                                @RequestParam(required = false, defaultValue = "9") Integer pageSize,
                                @RequestParam(required = false, defaultValue = "0") Integer minDuration,
                                @RequestParam(required = false, defaultValue = "2147483647") Integer maxDuration) {
+
+        List<Playlist> filteredList = playlistService.getAll(page, pageSize, name, minDuration, maxDuration, new ArrayList<>());
+        List<Playlist> recentPlaylists = playlistService.getMostRecent();
+        model.addAttribute("filteredPlaylists", filteredList);
+        model.addAttribute("filteredMostRecent", recentPlaylists);
         model.addAttribute("minDuration", minDuration);
         model.addAttribute("maxDuration", maxDuration);
         model.addAttribute("page", page);
         model.addAttribute("maxDuration", maxDuration);
-        List<Playlist> allPlaylists = playlistService.getAll(page, pageSize, name, minDuration, maxDuration, new ArrayList<>());
-        List<Playlist> recentPlaylists = playlistService.getMostRecent();
-        model.addAttribute("filteredPlaylists", allPlaylists);
-        model.addAttribute("filteredMostRecent", recentPlaylists);
+        int pages = (playlistService.getAll().size())/pageSize;
+        model.addAttribute("pageSize", pages);
+
+
+        model.addAttribute("filteredPlaylists", filteredList);
 
         return "PlaylistsView";
     }

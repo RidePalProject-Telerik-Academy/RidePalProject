@@ -308,4 +308,9 @@ public class PlaylistServiceImpl implements PlaylistService {
     public List<Playlist> getMostRecent() {
         return playlistRepository.getMostRecent();
     }
+
+    @Override
+    public List<Playlist> getAll() {
+        return playlistRepository.findAll();
+    }
 }

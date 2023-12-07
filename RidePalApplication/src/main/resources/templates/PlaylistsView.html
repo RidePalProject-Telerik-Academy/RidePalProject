@@ -91,10 +91,12 @@
 <!-- BODY WITH TOP PLAYLISTS ORDERED BY RANK ENDS HERE -->
 
 <script th:inline="javascript">
+    var pageSize = /*[[${pageSize}]]*/ 0;
     var currentPage = /*[[${page}]]*/ 0;
 </script>
 
-<a class="utility-btn" style="margin: 3%" href="#" onclick="incrementPage()">Load more...</a>
+<a th:if="${pageSize > page}" class="utility-btn" style="margin: 3%" href="#" onclick="incrementPage(pageSize)">Load more...</a>
+<a th:if="${page > 0}" class="utility-btn" style="margin: 3%" href="#" onclick="decrementPage()">Load previous...</a>
 
 <div class="section-title">
     <h2>Recently added</h2>

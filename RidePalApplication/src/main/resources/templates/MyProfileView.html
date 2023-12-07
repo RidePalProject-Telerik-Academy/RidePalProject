@@ -34,7 +34,7 @@
                                                                th:href="@{/logout}">Logout</a></li>
 
             <li th:if="${isAdmin}" class="nav-item"><a href="#" class="nav-link"
-                                                               th:href="@{/admins}">Admin Portal</a></li>
+                                                       th:href="@{/admins}">Admin Portal</a></li>
         </ul>
     </nav>
 
@@ -84,30 +84,32 @@
                     <button type="submit">UPDATE</button>
                 </div>
             </div>
-            <!--END UPDATE USER-->
+        </form>
+    </div>
+</div>
+<!--END UPDATE USER-->
 
-            <h3>Your Playlists</h3>
-            <section class="main-content">
-                <div th:each="playlist : ${userPlaylists}">
-                    <div class="playlist-item">
-                        <a th:href="@{/playlists/{id}(id=${playlist.id})}">
-                            <img class="playlist-item img playlistImage" alt="Playlist Image">
-                            <h3 th:text="${playlist.name}"></h3>
-                            <h4 th:text="'Creator: ' + ${playlist.creator.getUsername()}"></h4>
-                            <h4 th:text="'Duration: ' + ${playlist.duration/60} + ' min'"></h4>
-                            <h4 th:text="'Rank: ' + ${playlist.rank}"></h4>
-                        </a>
-                    </div>
-                </div>
-            </section>
+<h3 th:text="${user.username} + '\'s Playlists'">User's Playlists</h3>
+<section class="main-content">
+    <div th:each="playlist : ${userPlaylists}">
+        <div class="playlist-item">
+            <a th:href="@{/playlists/{id}(id=${playlist.id})}">
+                <img class="playlist-item img playlistImage" alt="Playlist Image">
+                <h3 th:text="${playlist.name}"></h3>
+                <h4 th:text="'Creator: ' + ${playlist.creator.getUsername()}"></h4>
+                <h4 th:text="'Duration: ' + ${playlist.duration/60} + ' min'"></h4>
+                <h4 th:text="'Rank: ' + ${playlist.rank}"></h4>
+            </a>
+        </div>
+    </div>
+</section>
 
 
-            <!-- FOOTER -->
-            <section class="footer">
-                <h5>About Us</h5>
-                <h5>Copyright &copy 2023 WeWhoAreNotAsOthers</h5>
-            </section>
-
+<!-- FOOTER -->
+<section class="footer">
+    <h5>About Us</h5>
+    <h5>Copyright &copy 2023 WeWhoAreNotAsOthers</h5>
+</section>
 
 </body>
 </html>

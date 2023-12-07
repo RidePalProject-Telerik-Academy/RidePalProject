@@ -39,4 +39,5 @@ public interface PlaylistService {
     void delete(User user, long id);
 
     List<Playlist> getMostRecent();
+    List<Playlist> getAll();
 }
