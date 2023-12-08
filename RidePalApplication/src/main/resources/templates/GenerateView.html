@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:id="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="../static/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
@@ -8,88 +8,79 @@
     <title>Main</title>
 
     <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #282828;
-            color: whitesmoke;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-        }
-
         form {
-            padding: 16px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-            max-width: 500px;
-            width: 100%;
-            box-sizing: border-box;
             display: flex;
             flex-direction: column;
-            align-items: center;
+            padding: 2vmin;
+            border-radius: 2rem;
+            margin: 5vmin;
+            margin-top: 10%;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            max-width:90%;
+        }
+        form h2 {
+            margin-bottom: 2vmin;
+            margin-top: 2vmin;
+            font-size: 6vmin;
         }
 
-        form:hover {
-            background-color: black;
+        form div {
+            display: inline-flex;
+            justify-content: space-between;
+            font-size: 5vmin;
         }
 
-        label {
-            display: block;
-            margin-bottom: 8px;
+        #generate-playlist-title{
+            margin-bottom: 1rem;
+            margin-top: 1rem;
             font-weight: bold;
+            width: 100%;
+            justify-content: center;
+            text-align: center;
         }
+
+        #name {
+            width: 100%;
+            padding: 2vmin;
+            margin-bottom: 12px;
+            border: none;
+            border-radius: 2vmin;
+            font-size: 4vmin;
+        }
+
 
         input, .genre-fields input {
-            width: calc(100% - 16px);
+            width: 70%;
             padding: 8px;
             margin-bottom: 12px;
             border: none;
-            border-radius: 4px;
+            border-radius: 2vmin;
             box-sizing: border-box;
-            display: inline-block;
-        }
-
-        .genre-fields {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            width: 100%;
-        }
-
-        .genre-fields input {
-            width: calc(100% - 16px);
-            margin-bottom: 8px;
-        }
-
-        .checkbox-group {
-            display: flex;
-            justify-content: space-between;
-            width: 100%;
-        }
-
-        .checkbox-group label {
-            flex: 1;
-        }
-
-        .genre-fields {
-            display: none;
+            font-size: 3.5vmin;
         }
 
         button {
-            background-color: #ed944d;
+            background-color: #ca433e;
             color: whitesmoke;
-            padding: 10px;
+            padding: 1rem;
             border: none;
-            border-radius: 4px;
+            border-radius: 0.4rem;
             cursor: pointer;
-            font-size: 14px;
-            width: 100%;
+            font-size: 4vmin;
+            width: fit-content;
+            margin-top: 5vmin;
+
         }
 
         button:hover {
+            scale: 1.1;
+            transition: transform 0.3s ease-in-out;
             background-color: black;
+        }
+
+        input[type=checkbox] {
+           padding: 1rem;
+            accent-color: #ca433e;
         }
     </style>
 </head>
@@ -101,98 +92,87 @@
     <nav>
         <a th:href="@{/playlists}">
             <div id="logo">
-                <!--            <img src="../images/logo-alt.gif" th:src="@{/images/logo-alt.gif}" alt="logo">-->
                 <h1 style="font-family: Forte, sans-serif;">RidePal</h1>
             </div>
         </a>
         <ul>
-            <!--            <li><a href="PlaylistsView.html" th:href="@{/playlists}" th:text="#{navigation.playlists}">Explore</a>-->
-            <!--            </li>-->
-            <li th:unless="${isAuthenticated}"><a href="/login" th:href="@{/login}"
-                                                  th:text="#{navigation.login}">Login</a></li>
-            <!--            <li><a href="GenerateView.html" th:href="@{/playlists/generate}"-->
-            <!--                   th:text="#{navigation.generate}">Generate</a></li>-->
-            <li th:unless="${isAuthenticated}"><a href="RegisterView.html" th:href="@{/users/register}"
-                                                  th:text="#{navigation.register}">SignUp</a>
-            </li>
-            <li th:if="${isAuthenticated}" class="nav-item"><a href="#" class="nav-link"
-                                                               th:href="@{/logout}">Logout</a></li>
+            <li th:if="${isAuthenticated}" class="nav-item"><a href="#" class="nav-link" th:href="@{/logout}">Logout</a></li>
         </ul>
     </nav>
 
-<!--    <div id="search-line">-->
-<!--        <form class="search" action="#" id="search-form" th:action="@{/playlists}" method="get">-->
-<!--            <input type="text" name="name" placeholder="Search..." class="search-input" th:object="${name}">-->
-<!--            <a class="search-btn" type="submit"> </a>-->
-<!--        </form>-->
-        <!--        <a class="utility-btn" id="generate-playlist" th:href="${isAuthenticated ? '/playlists/generate' : '/login'}"-->
-        <!--           th:text="#{navigation.generate}">Generate Playlist</a>-->
-<!--    </div>-->
 </section>
 <!--ENDS NAVIGATION BAR-->
 
 <!--GENERATE PLAYLIST-->
 <section id="generator">
 
-    <form th:action="@{/playlists/generate}" th:object="${newPlaylist}" method="post">
-        <label for="name">Name:</label>
-        <input type="text" id="name" th:field="*{name}" required/>
+    <form id="reg-fields" th:action="@{/playlists/generate}" th:object="${newPlaylist}" method="post">
+        <div id="generate-playlist-title">
+            <input type="text" id="name"  th:field="*{name}" placeholder="Enter your awesome playlist name here" required/>
+        </div>
 
-        <label for="startLocation">Start Location:</label>
-        <input type="text" id="startLocation" th:field="*{startLocation}" required/>
+        <h2>Current Location</h2>
+        <div>
+            <label for="startLocation">City:</label>
+            <input type="text" id="startLocation" th:field="*{startLocation}" placeholder="Where are you now?" required/>
+        </div>
+        <div>
+            <label for="startAddress">Address:</label>
+            <input type="text" id="startAddress" th:field="*{startAddress}" placeholder="And more specific?"/>
+        </div>
 
-        <label for="startAddress">Start Address:</label>
-        <input type="text" id="startAddress" th:field="*{startAddress}"/>
+        <h2>Destination</h2>
+        <div>
+            <label for="endLocation">City:</label>
+            <input type="text" id="endLocation" th:field="*{endLocation}" placeholder="Where do you want to go?" required/>
+        </div>
+        <div>
+            <label for="endAddress">Address:</label>
+            <input type="text" id="endAddress" th:field="*{endAddress}" placeholder="Do you know the address?"/>
+        </div>
 
-        <label for="endLocation">End Location:</label>
-        <input type="text" id="endLocation" th:field="*{endLocation}" required/>
-
-        <label for="endAddress">End Address:</label>
-        <input type="text" id="endAddress" th:field="*{endAddress}" required/>
-
-<!--            <div th:each="genre : ${genres}">-->
-<!--                        <h3 th:text="*{name}"></h3>-->
-<!--                <input type="number" id="percentage" th:field="*{}"/>-->
-<!--            </div>-->
-
-<!--        <button id="loadMoreButton">Choose genres</button>-->
-
-        <div th:each="genre, iterStat : *{genres}">
-            <input type="text" th:id="${'genreName' + iterStat.index}" th:field="*{genres[__${iterStat.index}__].name}"
+        <h2>Playlist Genres % Distribution</h2>
+        <div class="genre-fields" th:each="genre, iterStat : *{genres}">
+            <input id="genreName" type="text" th:id="${'genreName' + iterStat.index}" th:field="*{genres[__${iterStat.index}__].name}"
                    placeholder="Genre Name" required readonly/>
             <input type="number" th:id="${'genrePercentage' + iterStat.index}"
                    th:field="*{genres[__${iterStat.index}__].percentage}" placeholder="Percentage" required/>
         </div>
 
-<!--        <script>-->
-<!--            const loadMoreButton = document.getElementById('loadMoreButton');-->
-<!--            const genreFields = document.querySelectorAll('.genre-fields');-->
-<!--            let currentGenreIndex = 0;-->
+        <!--        <script>-->
+        <!--            const loadMoreButton = document.getElementById('loadMoreButton');-->
+        <!--            const genreFields = document.querySelectorAll('.genre-fields');-->
+        <!--            let currentGenreIndex = 0;-->
 
-<!--            loadMoreButton.addEventListener('click', function () {-->
-<!--                showGenre(currentGenreIndex);-->
-<!--                currentGenreIndex++;-->
+        <!--            loadMoreButton.addEventListener('click', function () {-->
+        <!--                showGenre(currentGenreIndex);-->
+        <!--                currentGenreIndex++;-->
 
-<!--                if (currentGenreIndex === genreFields.length) {-->
-<!--                    currentGenreIndex = 0;-->
-<!--                }-->
-<!--            });-->
+        <!--                if (currentGenreIndex === genreFields.length) {-->
+        <!--                    currentGenreIndex = 0;-->
+        <!--                }-->
+        <!--            });-->
 
-<!--            function showGenre(index) {-->
-<!--                genreFields[index].style.display = 'block';-->
-<!--            }-->
-<!--        </script>-->
+        <!--            function showGenre(index) {-->
+        <!--                genreFields[index].style.display = 'block';-->
+        <!--            }-->
+        <!--        </script>-->
 
 
         <div class="checkbox-group">
-            <label for="topRank">Top Rank:</label>
-            <input type="checkbox" id="topRank" th:field="*{topRank}"/>
+            <div id="top-rank">
+                <label for="topRank">Top Rank</label>
+                <input type="checkbox" id="topRank" th:field="*{topRank}"/>
+            </div>
 
-            <label for="uniqueArtists">Unique Artists:</label>
-            <input type="checkbox" id="uniqueArtists" th:field="*{uniqueArtists}"/>
+            <div id="unique">
+                <input type="checkbox" id="uniqueTracks" th:field="*{uniqueArtists}"/>
+                <label for="uniqueTracks">Unique Artists</label>
+            </div>
+
         </div>
 
-        <button type="submit">Submit</button>
+        <button type="submit">Generate!</button>
     </form>
 
 </section>

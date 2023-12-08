@@ -8,88 +8,68 @@
     <title>Main</title>
 
     <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #282828;
-            color: whitesmoke;
+        .registration-container-title {
+            margin-top: 10%;
+            font-size: 6vmin;
+        }
+
+        #reg-form {
             display: flex;
-            align-items: center;
+            flex-direction: column;
             justify-content: center;
-            height: 100vh;
-            margin: 0;
-        }
-
-        form {
-            padding: 16px;
-            border-radius: 8px;
+            padding: 2vmin;
+            border-radius: 2rem;
+            margin: 5vmin;
+            margin-left: 20%;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-            max-width: 500px;
-            width: 100%;
-            box-sizing: border-box;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            max-width: 55%;
         }
 
-        form:hover {
-            background-color: black;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-        }
-
-        input, .genre-fields input {
-            width: calc(100% - 16px);
-            padding: 8px;
-            margin-bottom: 12px;
+        input {
+            width: 95%;
+            padding: 0.8em;
+            margin: 1.5vmin;
             border: none;
-            border-radius: 4px;
+            border-radius: 2vmin;
             box-sizing: border-box;
-            display: inline-block;
-        }
-
-        .genre-fields {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            width: 100%;
-        }
-
-        .genre-fields input {
-            width: calc(100% - 16px);
-            margin-bottom: 8px;
-        }
-
-        .checkbox-group {
-            display: flex;
-            justify-content: space-between;
-            width: 100%;
-        }
-
-        .checkbox-group label {
-            flex: 1;
-        }
-
-        .genre-fields {
-            display: none;
+            font-size: 3.5vmin;
         }
 
         button {
-            background-color: #ed944d;
+            background-color: #ca433e;
             color: whitesmoke;
-            padding: 10px;
+            padding: 1rem;
             border: none;
-            border-radius: 4px;
+            border-radius: 0.4rem;
             cursor: pointer;
-            font-size: 14px;
-            width: 100%;
+            font-size: 4vmin;
+            width: fit-content;
+            margin-top: 5vmin;
+            margin-left: 2vmin;
+            margin-bottom: 2vmin;
         }
 
         button:hover {
+            scale: 1.1;
+            transition: transform 0.3s ease-in-out;
             background-color: black;
+        }
+
+        p {
+            font-size: 1.8rem;
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-family: 'Trebuchet MS', sans-serif;
+            text-decoration: none;
+        }
+
+        p > a {
+            color: whitesmoke;
+            font-size: 2.5rem;
+            text-decoration: underline;
+            padding: 0.5rem;
+            border-radius: 1rem;
         }
     </style>
 </head>
@@ -107,52 +87,54 @@
 
 </section>
 
-<div class="registration-body">
-    <div class="registration-container">
-        <div class="registration-container-title" th:align="center">Registration Form</div>
-        <form action="#" th:action="@{/users/register}" th:object="${user}" method="post">
-            <div class="user-details">
-                <div class="input-box">
-                    <span class="user-details"></span>
-                    <input type="text" th:field="*{firstName}" placeholder="Enter your Fist Name" required>
-                </div>
-                <label class="error" th:errors="*{firstName}">Name error placeholder</label>
-                <div class="input-box">
-                    <span class="user-details"></span>
-                    <input type="text" th:field="*{lastName}" placeholder="Enter your Last Name" required>
-                </div>
-                <label class="error" th:errors="*{lastName}">Name error placeholder</label>
-                <div class="input-box">
-                    <span class="user-details"></span>
-                    <input type="text" th:field="*{email}" placeholder="Enter your Email" required>
-                </div>
-                <label class="error" th:errors="*{email}">Name error placeholder</label>
-                <div class="input-box">
-                    <span class="user-details"></span>
-                    <input type="text" th:field="*{username}" placeholder="Enter your Username" required>
-                </div>
-                <label class="error" th:errors="*{username}">Name error placeholder</label>
-                <div class="input-box">
-                    <span class="user-details"></span>
-                    <input type="password" th:field="*{password}" placeholder="Enter your Password" required>
-                </div>
-                <label class="error" th:errors="*{password}">Name error placeholder</label>
-                <div class="input-box">
-                    <span class="user-details"></span>
-                    <input type="password" th:field="*{confirmPassword}" placeholder="Confirm your password" required>
-                </div>
-                <label class="error" th:errors="*{confirmPassword}">Name error placeholder</label>
-            </div>
-            <div class="button-container">
-                <div class="button">
-                    <button type="submit">Register</button>
-                </div>
-            </div>
-        </form>
-        <p>Already have an account? <a th:href="@{/login}">Login here!</a></p>
+<section>
+<div class="registration-container-title" th:align="center"> RidePal Registration</div>
+<form action="#" id="reg-form" th:action="@{/users/register}" th:object="${user}" method="post">
+    <div class="user-details">
+        <div class="input-box">
+            <span class="user-details"></span>
+            <input type="text" th:field="*{firstName}" placeholder="Enter your Fist Name" required>
+        </div>
+        <label class="error" th:errors="*{firstName}">Name error placeholder</label>
+        <div class="input-box">
+            <span class="user-details"></span>
+            <input type="text" th:field="*{lastName}" placeholder="Enter your Last Name" required>
+        </div>
+        <label class="error" th:errors="*{lastName}">Name error placeholder</label>
+        <div class="input-box">
+            <span class="user-details"></span>
+            <input type="text" th:field="*{email}" placeholder="Enter your Email" required>
+        </div>
+        <label class="error" th:errors="*{email}">Name error placeholder</label>
+        <div class="input-box">
+            <span class="user-details"></span>
+            <input type="text" th:field="*{username}" placeholder="Enter your Username" required>
+        </div>
+        <label class="error" th:errors="*{username}">Name error placeholder</label>
+        <div class="input-box">
+            <span class="user-details"></span>
+            <input type="password" th:field="*{password}" placeholder="Enter your Password" required>
+        </div>
+        <label class="error" th:errors="*{password}">Name error placeholder</label>
+        <div class="input-box">
+            <span class="user-details"></span>
+            <input type="password" th:field="*{confirmPassword}" placeholder="Confirm your password" required>
+        </div>
+        <label class="error" th:errors="*{confirmPassword}">Name error placeholder</label>
     </div>
-</div>
+    <div class="button-container">
+        <div class="button">
+            <button type="submit">Register</button>
+        </div>
+    </div>
+</form>
+<p>Already have an account? <a th:href="@{/login}">Login here!</a></p>
+</section>
 
-
+<!-- FOOTER -->
+<section class="footer">
+    <h5>About Us</h5>
+    <h5>Copyright &copy 2023 WeWhoAreNotAsOthers</h5>
+</section>
 </body>
 </html>
