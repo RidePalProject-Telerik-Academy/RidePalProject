@@ -11,7 +11,7 @@ public class ArtistMapper {
     public Artist fromJsonToArtist(JSONObject jsonObject){
         Artist artist = new Artist();
         artist.setId((Long) jsonObject.get("id"));
-        artist.setName((String) jsonObject.get("playlist"));
+        artist.setName((String) jsonObject.get("name"));
         artist.setArtistTrackListUrl((String) jsonObject.get("tracklist"));
         return artist;
     }

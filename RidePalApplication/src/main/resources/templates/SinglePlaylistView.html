@@ -10,23 +10,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <title>Playlist</title>
-</head>
-<!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="../static/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
-    <link rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"/>
-    <script src="/js/scripts.js"></script>
-    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
     <title>Playlist</title>
-</head>
-<!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:id="http://www.w3.org/1999/xhtml">
-<head>
+
     <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="../static/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
     <link rel="stylesheet"
@@ -100,11 +86,11 @@
                     <li><h4 th:text="'Number of songs: ' + ${singlePlaylist.getSongs().size()}"></h4>
 
 
-                    <!--ADD TAGS-->
+                        <!--ADD TAGS-->
                     <li th:if="${user.username.equals(username)}">
                         <!--                        <h4>Add Tag:</h4>-->
                         <form action="#" th:action="@{/playlists/{id}/tags(id=${singlePlaylist.getId()})}" method="post"
-                            class="add-tag-form">
+                              class="add-tag-form">
                             <input type="text" th:field="*{newTag.tagName}" placeholder="Add tag" required>
                             <button type="submit">Add</button>
                         </form>
@@ -122,11 +108,11 @@
             <button type="submit" class="delete-element-btn">X</button>
         </form>
     </span>
-                        </li>
+                    </li>
 
-                    </ul>
-                </li>
-            </ul>
+                </ul>
+            </li>
+        </ul>
     </div>
 
     <div th:each="song : ${singlePlaylist.songs}">
@@ -145,11 +131,11 @@
             <h4 th:text="'Album: ' + ${song.album.name}"></h4>
         </div>
 
-<!--        <form class="delete-form" th:if="${user.username.equals(username)}"-->
-<!--              th:action="@{'/playlists/'+${singlePlaylist.getId()}+'/songs/'+${song.getId()}}" method="post">-->
-<!--            <input type="hidden" name="tagName" th:value="${song.getId()}"/>-->
-<!--            <button type="submit" class="delete-element-btn">X</button>-->
-<!--        </form>-->
+        <!--        <form class="delete-form" th:if="${user.username.equals(username)}"-->
+        <!--              th:action="@{'/playlists/'+${singlePlaylist.getId()}+'/songs/'+${song.getId()}}" method="post">-->
+        <!--            <input type="hidden" name="tagName" th:value="${song.getId()}"/>-->
+        <!--            <button type="submit" class="delete-element-btn">X</button>-->
+        <!--        </form>-->
         </span>
 
     </div>
@@ -226,8 +212,12 @@
         }
 
 
-        function startMusic(songsArray) {
-            let currentSongIndex = 0;
+        function startMusic(songsArray, index) {
+            let currentSongIndex;
+            if (index) {
+                currentSongIndex = index;
+            }
+            currentSongIndex = 0;
 
             function playCurrentSong() {
                 const currentSong = songsArray[currentSongIndex];
@@ -278,7 +268,6 @@
                     const minutes = Math.floor(currentTimeInSeconds / 60);
                     const seconds = currentTimeInSeconds % 60;
                     currentTimeElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-
                     const targetValue = (currentTimeInSeconds / durationInSeconds) * 100;
                     currentSliderValue += 0.1 * (targetValue - currentSliderValue);
                     seekSlider.value = currentSliderValue;
@@ -352,8 +341,14 @@
         // seek slider
         let seekSlider = document.querySelector('.seek-slider');
         seekSlider.oninput = function () {
+            audioPlayer.pause();
             audioPlayer.currentTime = (audioPlayer.duration * seekSlider.value) / 100;
-            audioPlayer.play();
+            setTimeout(() => audioPlayer.play(), 100);
+        }
+
+        function playCurrentSong() {
+            var index = document.getElementById("index").value;
+            startMusic(songsArray, index);
         }
 
     </script>
