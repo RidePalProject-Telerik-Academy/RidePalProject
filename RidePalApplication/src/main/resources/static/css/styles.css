@@ -273,6 +273,33 @@ nav li:hover {
     margin-bottom: 5vmin;
 }
 
+.update-plus-admin {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: end;
+    margin-bottom: 5vmin;
+}
+.update-plus-admin li{
+    margin-right: 2vmin;
+    list-style-type: none;
+    font-size:4vmin;
+    color: #f8f9fa;
+    text-align: center;
+    padding: 0.5em;
+    border-radius: 0.5em;
+    border: solid #f8f9fa 2px;
+    &:hover {
+        transform: scale(1.1);
+        transition: transform 0.3s ease-in-out;
+        background: black;
+    }
+}
+
+.update-plus-admin li a{
+    text-decoration: none;
+    color: #f8f9fa;
+}
+
 .playlist-item {
     width: 30vmin;
     height: 50vmin;
@@ -321,6 +348,40 @@ nav li:hover {
     margin: 1vmin;
     object-fit: cover;
     border: none;
+}
+
+#user-card {
+    display: flex;
+    width: 80vmin;
+    height: 30vmin;
+}
+#user-card img {
+    width: 25vmin;
+    height: 90%;
+    align-items: center;
+    padding: 1vmin;
+    /*margin: 1vmin;*/
+    object-fit: cover;
+    border: none;
+}
+
+#user-card h2 {
+    color: #f8f9fa;
+    font-size: 8vmin;
+    margin-left: 1.5vmin;
+    margin-bottom: 1vmin;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#user-card p {
+    color: #f8f9fa;
+    font-size: 5vmin;
+    margin-left: 1.5vmin;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 /*PLAYLISTS VIEW ENDS HERE*/

@@ -31,16 +31,19 @@
                                                   th:text="#{navigation.register}">SignUp</a>
             </li>
             <li th:if="${isAuthenticated}" class="nav-item"><a href="#" class="nav-link"
+                                                               th:href="@{/songs}">Explore</a></li>
+            <li th:if="${isAuthenticated}" class="nav-item"><a href="#" class="nav-link"
                                                                th:href="@{/logout}">Logout</a></li>
-
-            <li th:if="${isAdmin}" class="nav-item"><a href="#" class="nav-link"
-                                                       th:href="@{/admins}">Admin Portal</a></li>
-            <li th:if="${isAuthenticated}" class="nav-item"><a href="#" class="nav-link"
-                                                       th:href="@{/songs}">Explore</a></li>
-            <li th:if="${isAuthenticated}" class="nav-item"><a href="#" class="nav-link"
-                                                               th:href="@{/users/update}">Update Profile</a></li>
         </ul>
+
     </nav>
+
+    <ul class="update-plus-admin">
+        <li th:if="${isAdmin}" class="nav-item"><a href="#" class="nav-link"
+                                                   th:href="@{/admins}">Admin Portal</a></li>
+        <li th:if="${isAuthenticated}" class="nav-item"><a href="#" class="nav-link"
+                                                           th:href="@{/users/update}">Update Profile</a></li>
+    </ul>
 
 </section>
 <!--ENDS NAVIGATION BAR-->
@@ -48,18 +51,20 @@
 
 <!--USER CARD-->
 <section class="main-content">
-    <div class="playlist-item">
+    <div class="playlist-item" id="user-card">
         <img class="playlist-item img profileImage" alt="Profile Image">
-        <h2 th:text="${user.username}"></h2>
-        <p th:text="${user.email}"></p>
-        <p th:text="${user.firstName}"></p>
-        <p th:text="${user.lastName}"></p>
+        <div id="user-info">
+            <h2 th:text="${user.username}"></h2>
+            <p th:text="${user.email}"></p>
+            <p th:text="${user.firstName}"></p>
+            <p th:text="${user.lastName}"></p>
+        </div>
     </div>
 </section>
 <!--ENDS USER CARD-->
 
 <!-- USER PLAYLIST STARTS HERE --->
-<h3 th:text="${user.username} + '\'s Playlists'">User's Playlists</h3>
+<h3 style="text-align: center; font-size: 8vmin" th:text="${user.username} + '\'s Playlists'">User's Playlists</h3>
 <section class="main-content">
     <div th:each="playlist : ${userPlaylists}">
         <div class="playlist-item">
