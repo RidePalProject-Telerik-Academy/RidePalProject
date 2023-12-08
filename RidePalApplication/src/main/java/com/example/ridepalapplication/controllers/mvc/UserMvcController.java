@@ -42,12 +42,14 @@ public class UserMvcController {
     @GetMapping("/myProfile")
     public String getMyProfilePage(Authentication authentication,Model model) {
         try {
-
+            boolean isAdmin = authenticationHelper.isAdmin(authentication);
             User user = authenticationHelper.tryGetUser(authentication);
             List<Playlist> userPlaylists = playlistService.getUserPlaylists(user.getId());
             model.addAttribute("userPlaylists",userPlaylists);
             model.addAttribute("user",user);
             model.addAttribute("userToUpdate", new UpdateUserDto());
+            model.addAttribute("isAdmin",isAdmin);
+
 
            return "MyProfileView";
         }catch (AuthorizationException e){
@@ -62,11 +64,6 @@ public class UserMvcController {
     @ModelAttribute("isAuthenticated")
     public boolean populateIsAuthenticated() {
         return authenticationHelper.isAuthenticated();
-    }
-
-    @ModelAttribute("isAdmin")
-    public boolean populateIsAdmin(Authentication authentication) {
-        return authenticationHelper.isAdmin(authentication);
     }
 
 

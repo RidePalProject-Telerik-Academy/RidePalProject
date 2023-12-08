@@ -65,13 +65,16 @@ public class UserMapper {
         if(!registerDto.getPassword().equals(registerDto.getConfirmPassword())){
             throw new AuthorizationException("Passwords does not match please try again");
         }
-        User user = new User();
-        user.setFirstName(registerDto.getFirstName());
-        user.setLastName(registerDto.getLastName());
-        user.setUsername(registerDto.getUsername());
-        user.setPassword(registerDto.getPassword());
-        user.setEmail(registerDto.getEmail());
-        return user;
+        Role userRole = roleRepository.findByAuthority("USER");
+
+        Set<Role> rolesSet = new HashSet<>();
+        rolesSet.add(userRole);
+        String password = passwordEncoder.encode(registerDto.getPassword());
+        return new User(registerDto.getUsername(),password,
+                registerDto.getEmail(),
+                registerDto.getFirstName(),
+                registerDto.getLastName()
+                ,rolesSet);
     }
 
 }

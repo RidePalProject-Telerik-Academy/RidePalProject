@@ -142,6 +142,9 @@ public class DeezerApiConsumer {
                     .bodyToMono(String.class)
                     .block();
             JSONObject trackJsonObject = (JSONObject) parser.parse(trackResponse);
+            if(trackJsonObject.get("tracks")==null){
+                continue;
+            }
             JSONObject tracks = (JSONObject) trackJsonObject.get("tracks");
             JSONArray tracksArray = (JSONArray) tracks.get("data");
             JSONObject artist = (JSONObject) trackJsonObject.get("artist");
