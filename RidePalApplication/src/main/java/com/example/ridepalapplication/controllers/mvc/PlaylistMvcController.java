@@ -62,21 +62,25 @@ public class PlaylistMvcController {
                                @RequestParam(required = false, defaultValue = "0") Integer page,
                                @RequestParam(required = false, defaultValue = "9") Integer pageSize,
                                @RequestParam(required = false, defaultValue = "0") Integer minDuration,
-                               @RequestParam(required = false, defaultValue = "2147483647") Integer maxDuration) {
+                               @RequestParam(required = false, defaultValue = "2147483647") Integer maxDuration,
+                               @RequestParam(required = false, defaultValue = "") List<String> tagName) {
 
-        List<Playlist> filteredList = playlistService.getAll(page, pageSize, name, minDuration, maxDuration, new ArrayList<>());
+
         List<Playlist> recentPlaylists = playlistService.getMostRecent();
-        model.addAttribute("filteredPlaylists", filteredList);
+        List<Playlist> filteredList = playlistService.getAll(page, pageSize, name, minDuration, maxDuration, tagName);
+        int pages = (playlistService.getAll().size())/pageSize;
+
         model.addAttribute("filteredMostRecent", recentPlaylists);
         model.addAttribute("minDuration", minDuration);
         model.addAttribute("maxDuration", maxDuration);
+        model.addAttribute("tagName",tagName);
         model.addAttribute("page", page);
         model.addAttribute("maxDuration", maxDuration);
-        int pages = (playlistService.getAll().size())/pageSize;
         model.addAttribute("pageSize", pages);
-
-
         model.addAttribute("filteredPlaylists", filteredList);
+        model.addAttribute("filteredPlaylists", filteredList);
+
+
 
         return "PlaylistsView";
     }
@@ -211,7 +215,7 @@ public class PlaylistMvcController {
         }
     }
 
-    @PostMapping("/{playlistId}/songs/{songId}")
+    @PostMapping("/{playlistId}/songs/{songId}/delete")
     public String deleteSong(@PathVariable long playlistId,
                              @PathVariable long songId,
                              Authentication authentication) {

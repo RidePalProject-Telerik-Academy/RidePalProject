@@ -54,7 +54,18 @@ function decrementPage() {
         window.location.href = '/playlists?page=' + currentPage;
     }
 }
+function incrementSongPage(pageSize) {
+    if(currentPage++ < pageSize) {
+        window.location.href = '/songs?page=' + currentPage;
+    }
+}
 
+function decrementSongPage() {
+    if(currentPage > 0) {
+        currentPage--;
+        window.location.href = '/songs?page=' + currentPage;
+    }
+}
 $(document).ready(function() {
     // Make an AJAX request to Pixabay API
     $.ajax({

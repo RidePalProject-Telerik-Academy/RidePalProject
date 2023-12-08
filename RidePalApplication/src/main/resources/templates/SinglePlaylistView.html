@@ -118,7 +118,7 @@
     <div th:each="song : ${singlePlaylist.songs}">
         <div style="text-align: right; margin-right: 2vmin">
             <form class = "delete-form" th:if="${user.username.equals(username)}"
-                  th:action="@{'/playlists/'+${singlePlaylist.getId()}+'/songs/'+${song.getId()}}" method="post">
+                  th:action="@{'/playlists/'+${singlePlaylist.getId()}+'/songs/'+${song.getId()+'/delete'}}" method="post">
                 <input type="hidden" name="tagName" th:value="${song.getId()}"/>
                 <button type="submit" class="delete-element-btn">X</button>
             </form>
@@ -145,7 +145,7 @@
     playlist</a></li>
 
 <section>
-    <div class="player">
+    <div th:if="${isAuthenticated}" class="player">
         <div class="wrapper">
             <div class="details">
                 <div class="track-artist"></div>
@@ -155,13 +155,13 @@
             <div class="sliders">
                 <div class="slider-container" id="duration">
                     <div class="current-time">0:00</div>
-                    <input type="range" min="0" max="100" value="0" class="seek-slider" onchange="seekTo()">
+                    <input type="range" min="0" max="100" value="0" class="seek-slider" >
                     <div class="total-duration">0:00</div>
                 </div>
 
                 <div class="slider-container" id="volume">
                     <i class="fa fa-volume-down"></i>
-                    <input type="range" min="1" max="100" value="99" class="volume-slider" onchange="setVolume()">
+                    <input type="range" min="0" max="100" value="99" class="volume-slider" >
                     <i class="fa fa-volume-up"></i>
                 </div>
             </div>
@@ -211,37 +211,31 @@
             }, 500);
         }
 
+             function startMusic(songsArray) {
+                let currentSongIndex = 0;
+                function playCurrentSong() {
+                    const currentSong = songsArray[currentSongIndex];
+                    audioPlayer.src = currentSong.previewUrl;
+                    audioPlayer.play().catch(error => {
+                        console.error('Error playing audio:', error);
+                    });
+                    isPlaying = true;
+                    currentSliderValue = 0;
+                    updateDuration(songsArray[currentSongIndex].title,
+                        songsArray[currentSongIndex].artist.name);
 
-        function startMusic(songsArray, index) {
-            let currentSongIndex;
-            if (index) {
-                currentSongIndex = index;
-            }
-            currentSongIndex = 0;
+                    console.log("Playing:", currentSong.title);
+                }
 
-            function playCurrentSong() {
-                const currentSong = songsArray[currentSongIndex];
-                audioPlayer.src = currentSong.previewUrl;
-                audioPlayer.play().catch(error => {
-                    console.error('Error playing audio:', error);
-                });
-                isPlaying = true;
-                currentSliderValue = 0;
-                updateDuration(songsArray[currentSongIndex].title,
-                    songsArray[currentSongIndex].artist.name);
+                function playNextSong() {
+                    currentSongIndex = (currentSongIndex + 1) % songsArray.length;
+                    playCurrentSong();
+                }
 
-                console.log("Playing:", currentSong.title);
-            }
-
-            function playNextSong() {
-                currentSongIndex = (currentSongIndex + 1) % songsArray.length;
-                playCurrentSong();
-            }
-
-            function playPrevSong() {
-                currentSongIndex = (currentSongIndex - 1 + songsArray.length) % songsArray.length;
-                playCurrentSong();
-            }
+                function playPrevSong() {
+                    currentSongIndex = (currentSongIndex - 1 + songsArray.length) % songsArray.length;
+                    playCurrentSong();
+                }
 
             function updateDuration(title, artist) {
                 const durationElement = document.querySelector('.total-duration');
@@ -343,7 +337,7 @@
         seekSlider.oninput = function () {
             audioPlayer.pause();
             audioPlayer.currentTime = (audioPlayer.duration * seekSlider.value) / 100;
-            setTimeout(() => audioPlayer.play(), 100);
+            setTimeout(() => audioPlayer.play(), 1000);
         }
 
         function playCurrentSong() {

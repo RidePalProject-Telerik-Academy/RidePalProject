@@ -44,6 +44,12 @@ public class SongServiceImpl implements SongService {
 
         return songRepository.findAll(songSpecification, pageable.withSort(Sort.Direction.DESC,"rank")).getContent();
     }
+
+    @Override
+    public List<Song> findAll() {
+        return songRepository.findAll();
+    }
+
     @Override
     public Optional<Song> getById(Long id) {
         Optional<Song> song = songRepository.findById(id);

@@ -13,6 +13,7 @@ import com.example.ridepalapplication.services.UserService;
 import jakarta.validation.Valid;
 import org.hibernate.sql.Update;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.quartz.QuartzTransactionManager;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -89,6 +90,12 @@ public class UserMvcController {
         }
     }
 
+    @GetMapping("/update")
+    public String getUpdateView(Model model,Authentication authentication){
+        model.addAttribute("userToUpdate",new UpdateUserDto());
+        model.addAttribute("user",authenticationHelper.tryGetUser(authentication));
+        return "UserUpdateView";
+    }
     @PostMapping ("/update")
     public String updateUser(@Valid @ModelAttribute("userToUpdate") UpdateUserDto updateUserDto,
                              Authentication authentication,

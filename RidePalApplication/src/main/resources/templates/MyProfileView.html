@@ -35,17 +35,13 @@
 
             <li th:if="${isAdmin}" class="nav-item"><a href="#" class="nav-link"
                                                        th:href="@{/admins}">Admin Portal</a></li>
+            <li th:if="${isAuthenticated}" class="nav-item"><a href="#" class="nav-link"
+                                                       th:href="@{/songs}">Explore</a></li>
+            <li th:if="${isAuthenticated}" class="nav-item"><a href="#" class="nav-link"
+                                                               th:href="@{/users/update}">Update Profile</a></li>
         </ul>
     </nav>
 
-    <div id="search-line">
-        <form class="search" action="#" id="search-form" th:action="@{/playlists}" method="get">
-            <input type="text" name="name" placeholder="Search..." class="search-input" th:object="${name}">
-            <a class="search-btn" type="submit"> </a>
-        </form>
-        <a class="utility-btn" id="generate-playlist" th:href="${isAuthenticated ? '/playlists/generate' : '/login'}"
-           th:text="#{navigation.generate}">Generate Playlist</a>
-    </div>
 </section>
 <!--ENDS NAVIGATION BAR-->
 
@@ -58,37 +54,11 @@
         <p th:text="${user.email}"></p>
         <p th:text="${user.firstName}"></p>
         <p th:text="${user.lastName}"></p>
-        <!--ENDS USER CARD-->
     </div>
 </section>
+<!--ENDS USER CARD-->
 
-<!--UPDATE USER-->
-<div class="update-profile">
-    <div class="update-profile-container">
-        <h3>Update Profile</h3>
-        <form action="#" th:action="@{/users/update}" th:object="${userToUpdate}" method="post">
-            <div class="user-details">
-                <div class="input-box">
-                    <input type="text" th:field="*{firstName}" placeholder="Enter your Fist Name" required>
-                </div>
-                <div class="input-box">
-                    <input type="text" th:field="*{lastName}" placeholder="Enter your Last Name" required>
-                </div>
-                <div class="input-box">
-                    <input type="text" th:field="*{email}" placeholder="Enter your Email" required>
-                </div>
-                <div class="input-box">
-                    <input type="password" th:field="*{password}" placeholder="Enter your Password" required>
-                </div>
-                <div class="button">
-                    <button type="submit">UPDATE</button>
-                </div>
-            </div>
-        </form>
-    </div>
-</div>
-<!--END UPDATE USER-->
-
+<!-- USER PLAYLIST STARTS HERE --->
 <h3 th:text="${user.username} + '\'s Playlists'">User's Playlists</h3>
 <section class="main-content">
     <div th:each="playlist : ${userPlaylists}">
@@ -103,7 +73,7 @@
         </div>
     </div>
 </section>
-
+<!-- USER PLAYLIST ENDS HERE --->
 
 <!-- FOOTER -->
 <section class="footer">

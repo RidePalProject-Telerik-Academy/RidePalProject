@@ -13,4 +13,5 @@ public interface SongService {
     Song getByTitleAndArtist(String name, String artist);
     Optional<Song> getById(Long id);
     List<Song> findAll(Integer page,Integer pageSize,String songTitle,String artist);
+    List<Song> findAll();
 }
