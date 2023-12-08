@@ -665,8 +665,40 @@ i.fa-volume-down, i.fa-volume-up {
 /*!!!END TAGS!!!*/
 /*======================================================================================*/
 
-.update-profile-container{
+.update-profile {
+    display: inline-flex;
+    flex-direction: column;
+}
+.update-profile h3{
     text-align: center;
-    margin: 2% auto;
-    display: inline-block;
+    margin: 10vmin;
+    margin-top: 15vmin;
+    font-size: 10vmin;
+}
+
+.input-box  input{
+    width: 85%;
+    margin-left: 5%;
+    border-radius: 2vmin;
+    padding: 2vmin;
+    font-size: 5vmin;
+    margin-bottom: 3vmin;
+}
+
+.update-profile button {
+    background-color: #ca433e;
+    color: whitesmoke;
+    padding: 1rem;
+    margin: 1vmin;
+    margin-left: 5%;
+    margin-top: 5vmin;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 2rem;
+    &:hover {
+        background-color: black;
+        transition: transform 0.3s ease-in-out;
+        transform: scale(1.1);
+    }
 }
