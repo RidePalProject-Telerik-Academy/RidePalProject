@@ -6,9 +6,11 @@ body {
 }
 
 h1 {
-    display: inline-block;
-    margin: 0;
-    font-size: 400px;
+    /*display: inline-block;*/
+    /*margin: 0;*/
+    font-size:35vmin;
+    margin-right: 5vmin;
+    margin-left: 5vmin;
     background-image: url(../images/vinyl.jpg);
     background-repeat: no-repeat;
     background-size: cover;
@@ -23,31 +25,34 @@ h1 {
     color: rgba(33, 87, 140, 0.8);
 }
 
+h3 {
+    margin-bottom: 10vmin;
+}
+
 .btn-err {
     text-align: center;
     background-color: rgba(62, 152, 319, 0.2);
     margin: 20% auto;
-    border: 0.1em solid;
     border-radius: 0.5em;
-    padding: 0.7em 1.5em;
-    color: #f8f9fa;
-    font-size: 2vmin;
+    padding: 0.5em 1.5em;
+    color: black;
+    font-size: 4vmin;
     text-decoration: none;
 
     &:hover {
-        color: #f8f9fa;
+        color: black;
         background: rgba(52, 152, 219, 0.5);
         transition: transform 0.3s ease-in-out;
         transform: scale(1.05);
     }
 }
 
-@media screen and (max-width: 768px) {
-    h1 {
-        font-size: 200px;
-    }
+/*@media screen and (max-width: 768px) {*/
+/*    h1 {*/
+/*        font-size: 200px;*/
+/*    }*/
 
-    .btn-err {
-        margin: 10% auto;
-    }
-}
+/*    .btn-err {*/
+/*        margin: 10% auto;*/
+/*    }*/
+/*}*/

@@ -1,12 +1,40 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:id="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="UTF-8">
-    <title>Admin View</title>
+    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../static/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"/>
+
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ion-rangeslider@2.3.1/css/ion.rangeSlider.min.css"/>
+    <script src="/js/scripts.js"></script>
+
+    <title>Main</title>
 </head>
 <body>
+<section class="header">
+    <nav>
+        <a th:href="@{/playlists}">
+            <div id="logo">
+                <h1 style="font-family: Forte, sans-serif;">RidePal</h1>
+            </div>
+        </a>
+        <ul>
+            <li th:if="${isAuthenticated}" class="nav-item"><a href="#" class="nav-link"
+                                                               th:href="@{/logout}">Logout</a></li>
+        </ul>
 
-<h1> Hey you, admin! </h1>
+    </nav>
+</section>
 
+<section class="admin-body">
+    <h1> Hey you, admin! </h1>
+</section>
+
+<section class="footer">
+    <h5>About Us</h5>
+    <h5>Copyright &copy 2023 WeWhoAreNotAsOthers</h5>
+</section>
 </body>
 </html>
