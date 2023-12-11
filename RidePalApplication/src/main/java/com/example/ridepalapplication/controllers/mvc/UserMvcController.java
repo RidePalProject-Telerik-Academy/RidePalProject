@@ -41,19 +41,19 @@ public class UserMvcController {
     }
 
     @GetMapping("/myProfile")
-    public String getMyProfilePage(Authentication authentication,Model model) {
+    public String getMyProfilePage(Authentication authentication, Model model) {
         try {
             boolean isAdmin = authenticationHelper.isAdmin(authentication);
             User user = authenticationHelper.tryGetUser(authentication);
             List<Playlist> userPlaylists = playlistService.getUserPlaylists(user.getId());
-            model.addAttribute("userPlaylists",userPlaylists);
-            model.addAttribute("user",user);
+            model.addAttribute("userPlaylists", userPlaylists);
+            model.addAttribute("user", user);
             model.addAttribute("userToUpdate", new UpdateUserDto());
-            model.addAttribute("isAdmin",isAdmin);
+            model.addAttribute("isAdmin", isAdmin);
 
 
-           return "MyProfileView";
-        }catch (AuthorizationException e){
+            return "MyProfileView";
+        } catch (AuthorizationException e) {
             model.addAttribute("statusCode",
                     HttpStatus.UNAUTHORIZED.getReasonPhrase());
 
@@ -91,31 +91,30 @@ public class UserMvcController {
     }
 
     @GetMapping("/update")
-    public String getUpdateView(Model model,Authentication authentication){
-        model.addAttribute("userToUpdate",new UpdateUserDto());
-        model.addAttribute("user",authenticationHelper.tryGetUser(authentication));
+    public String getUpdateView(Model model, Authentication authentication) {
+        model.addAttribute("userToUpdate", new UpdateUserDto());
+        model.addAttribute("user", authenticationHelper.tryGetUser(authentication));
         return "UserUpdateView";
     }
-    @PostMapping ("/update")
+
+    @PostMapping("/update")
     public String updateUser(@Valid @ModelAttribute("userToUpdate") UpdateUserDto updateUserDto,
                              Authentication authentication,
                              BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
-            return "ErrorView";
+            return "UserUpdateView";
         }
 
         User loggedUser = authenticationHelper.tryGetUser(authentication);
-
+        
         try {
             User userToUpdate = userMapper.fromDto(loggedUser.getId(), updateUserDto);
             userService.updateUser(loggedUser, userToUpdate);
             return "redirect:/users/myProfile";
         } catch (EntityDuplicateException e) {
-            bindingResult.rejectValue("username", "username_error", e.getMessage());
             bindingResult.rejectValue("email", "email_error", e.getMessage());
-            return "ErrorView";
+            return "UserUpdateView";
         }
     }
-
 }

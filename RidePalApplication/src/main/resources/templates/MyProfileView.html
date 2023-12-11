@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:id="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" >
 <head>
     <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="../static/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
@@ -52,12 +52,13 @@
 <!--USER CARD-->
 <section class="main-content">
     <div class="playlist-item" id="user-card">
-        <img class="playlist-item img profileImage" alt="Profile Image">
+        <img src="/images/defaultphoto.jpg" alt="Profile Image">
         <div id="user-info">
             <h2 th:text="${user.username}"></h2>
-            <p th:text="${user.email}"></p>
-            <p th:text="${user.firstName}"></p>
-            <p th:text="${user.lastName}"></p>
+            <p th:text="'Email: '+ ${user.email}"></p>
+            <p th:text="'Name: ' + ${user.firstName}"></p>
+            <p th:text="'Surname: ' +${user.lastName}"></p>
+            <p th:text="'Playlists count: '+ ${userPlaylists.size()}"></p>
         </div>
     </div>
 </section>

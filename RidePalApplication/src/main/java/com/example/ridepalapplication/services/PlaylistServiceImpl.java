@@ -299,7 +299,7 @@ public class PlaylistServiceImpl implements PlaylistService {
         Playlist playlistToDelete = playlistRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Playlist", id));
 
-        authorizationHelper.checkAuthorization(user, playlistToDelete.getCreator(), "delete the playlist");
+        authorizationHelper.checkAuthorization(user, playlistToDelete.getCreator().getId(), "delete the playlist");
 
         playlistRepository.deleteById(id);
     }

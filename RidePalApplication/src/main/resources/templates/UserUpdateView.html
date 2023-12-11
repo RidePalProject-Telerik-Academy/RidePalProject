@@ -39,17 +39,21 @@
                     <input type="text" th:field="*{lastName}" placeholder="Enter your Last Name" required>
                 </div>
                 <div class="input-box">
+                    <label class="error" th:align="center" th:errors="*{email}">Name error placeholder</label>
                     <input type="text" th:field="*{email}" placeholder="Enter your Email" required>
                 </div>
                 <div class="input-box">
                     <input type="password" th:field="*{password}" placeholder="Enter your Password" required>
                 </div>
+                <div class="button">
+                    <button type="submit">UPDATE</button>
+                </div>
             </div>
+
         </form>
+
     </div>
-    <div class="button">
-        <button type="submit">UPDATE</button>
-    </div>
+
 </div>
 
 <!-- FOOTER -->

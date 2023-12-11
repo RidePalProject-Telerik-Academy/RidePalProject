@@ -75,11 +75,8 @@ public class UserServiceImpl implements UserService {
     public User updateUser(User loggedUser, User userToBeUpdated) {
         authorizationHelper.checkAuthorization(loggedUser, userToBeUpdated, "update other users");
 
-        boolean emailExists = true;
+        boolean emailExists = userRepository.findByEmail(userToBeUpdated.getEmail()) != null;
 
-        if (userRepository.findByEmail(userToBeUpdated.getEmail()) == null) {
-            emailExists = false;
-        }
         if (emailExists) {
             User userWithSameEmail = userRepository.findByEmail(userToBeUpdated.getEmail());
             if (!userWithSameEmail.equals(userToBeUpdated)) {

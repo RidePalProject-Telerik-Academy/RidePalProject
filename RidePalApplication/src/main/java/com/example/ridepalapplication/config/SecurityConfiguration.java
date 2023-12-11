@@ -56,6 +56,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(auth -> {
                     auth.requestMatchers("api/users/**").permitAll();
                     auth.requestMatchers(HttpMethod.GET, "/api/playlists/**").permitAll();
+                    auth.requestMatchers("/api/admins/**").hasAuthority("ADMIN");
                     auth.requestMatchers("/**", "/resources/**", "/static/**", "/css/**", "/js/**",
                                     "/images/**", "/vendor/**", "/fonts/**")
                             .permitAll();

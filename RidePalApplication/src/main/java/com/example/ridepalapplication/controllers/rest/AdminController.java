@@ -3,6 +3,7 @@ package com.example.ridepalapplication.controllers.rest;
 import com.example.ridepalapplication.helpers.DeezerApiConsumer;
 import com.example.ridepalapplication.models.SynchronizationDetails;
 import com.example.ridepalapplication.repositories.SynchronizationDetailsRepository;
+import com.example.ridepalapplication.services.SynchronizationService;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -17,12 +18,11 @@ import java.time.LocalDateTime;
 public class AdminController {
 
     private final DeezerApiConsumer apiConsumer;
-    SynchronizationDetailsRepository synchronizationDetailsRepository;
-
+    private final SynchronizationService synchronizationService;
     @Autowired
-    public AdminController(DeezerApiConsumer apiConsumer, SynchronizationDetailsRepository synchronizationDetailsRepository) {
+    public AdminController(DeezerApiConsumer apiConsumer,SynchronizationService synchronizationService) {
         this.apiConsumer = apiConsumer;
-        this.synchronizationDetailsRepository = synchronizationDetailsRepository;
+        this.synchronizationService = synchronizationService;
     }
 
     @GetMapping("/artists")
@@ -32,34 +32,15 @@ public class AdminController {
 
     @GetMapping("/genres")
     public void populateGenres() throws ParseException {
-        apiConsumer.populateGenres();
+        synchronizationService.synchronize();
     }
 
     @Scheduled(fixedRateString = "${sync.key}")
-    public void synchronizeGenres() {
-        try {
-            apiConsumer.populateGenres();
-            updateSynchronizationDetails(true);
-        } catch (ParseException e) {
-            updateSynchronizationDetails(false);
-        }
+    public void synchronizeGenres() throws ParseException {
+        synchronizationService.synchronize();
     }
 
-    private void updateSynchronizationDetails(boolean success) {
 
-        LocalDateTime lastSyncTime = LocalDateTime.now();
-        SynchronizationDetails synchronizationDetails = new SynchronizationDetails();
-
-        if (success) {
-            synchronizationDetails.setStatus("success");
-            synchronizationDetails.setSyncTime(lastSyncTime);
-            synchronizationDetailsRepository.save(synchronizationDetails);
-        } else {
-            synchronizationDetails.setStatus("failure");
-            synchronizationDetails.setSyncTime(lastSyncTime);
-            synchronizationDetailsRepository.save(synchronizationDetails);
-        }
-    }
 
     @GetMapping("/albums")
     public void populateAlbums() throws ParseException {

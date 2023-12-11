@@ -130,18 +130,12 @@
             <h4 th:text="'Rank: ' + ${song.rank}"></h4>
             <h4 th:text="'Album: ' + ${song.album.name}"></h4>
         </div>
-
-        <!--        <form class="delete-form" th:if="${user.username.equals(username)}"-->
-        <!--              th:action="@{'/playlists/'+${singlePlaylist.getId()}+'/songs/'+${song.getId()}}" method="post">-->
-        <!--            <input type="hidden" name="tagName" th:value="${song.getId()}"/>-->
-        <!--            <button type="submit" class="delete-element-btn">X</button>-->
-        <!--        </form>-->
         </span>
 
     </div>
 </section>
 
-<a class="utility-btn" style="margin: 5vmin" th:href="@{'/playlists/' + ${singlePlaylist.getId()} + '/delete'}">Delete
+<a th:if="${user.username.equals(username)}" class="utility-btn" style="margin: 5vmin" th:href="@{'/playlists/' + ${singlePlaylist.getId()} + '/delete'}">Delete
     playlist</a></li>
 
 <section>

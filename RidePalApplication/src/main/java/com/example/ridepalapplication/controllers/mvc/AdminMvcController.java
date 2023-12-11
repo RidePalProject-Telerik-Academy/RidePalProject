@@ -2,7 +2,13 @@ package com.example.ridepalapplication.controllers.mvc;
 
 import com.example.ridepalapplication.exceptions.AuthorizationException;
 import com.example.ridepalapplication.helpers.AuthenticationHelper;
+import com.example.ridepalapplication.helpers.DeezerApiConsumer;
+import com.example.ridepalapplication.models.Playlist;
+import com.example.ridepalapplication.models.SynchronizationDetails;
 import com.example.ridepalapplication.models.User;
+import com.example.ridepalapplication.services.PlaylistService;
+import com.example.ridepalapplication.services.SynchronizationService;
+import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
@@ -12,26 +18,33 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/admins")
 public class AdminMvcController {
 
     private final AuthenticationHelper authenticationHelper;
+    private final PlaylistService playlistService;
+    private final SynchronizationService synchronizationService;
 
     @Autowired
-    public AdminMvcController(AuthenticationHelper authenticationHelper) {
+    public AdminMvcController(AuthenticationHelper authenticationHelper, PlaylistService playlistService,SynchronizationService synchronizationService) {
         this.authenticationHelper = authenticationHelper;
-    }
+        this.playlistService = playlistService;
 
+        this.synchronizationService = synchronizationService;
+    }
+    @ModelAttribute("isAuthenticated")
+    public boolean populateIsAuthenticated() {
+        return authenticationHelper.isAuthenticated();
+    }
     @GetMapping
     public String getAdminPanel(Authentication authentication, Model model) {
         try {
-            User user = authenticationHelper.tryGetUser(authentication);
-
-            if (!authenticationHelper.isAdmin(authentication)) {
-                throw new AuthorizationException("You are not allowed to enter Admin portal.");
-            }
-
+            User user = verifyAuthority(authentication);
+            List<Playlist> playLists = playlistService.getAll();
+            model.addAttribute("playlists",playLists);
             model.addAttribute("user", user);
             return "AdminView";
 
@@ -43,9 +56,34 @@ public class AdminMvcController {
         }
     }
 
-    @ModelAttribute("isAuthenticated")
-    public boolean populateIsAuthenticated() {
-        return authenticationHelper.isAuthenticated();
+
+    @GetMapping("/synchronize")
+    public String synchronizeGenres(Authentication authentication,Model model) throws ParseException{
+       try {
+           User user = verifyAuthority(authentication);
+          synchronizationService.synchronize();
+           return "redirect:/admins/sync";
+       }catch (AuthorizationException e){
+           model.addAttribute("error",e.getMessage());
+           return "ErrorView";
+       }
     }
 
+    @GetMapping("/sync")
+    public String getSyncView(Authentication authentication,Model model){
+        User user = verifyAuthority(authentication);
+        List<SynchronizationDetails> mostRecent = synchronizationService.mostRecent();
+        model.addAttribute("user",user);
+        model.addAttribute("mostRecent",mostRecent);
+        return "SyncView";
+    }
+
+    private User verifyAuthority(Authentication authentication) {
+        User user = authenticationHelper.tryGetUser(authentication);
+
+        if (!authenticationHelper.isAdmin(authentication)) {
+            throw new AuthorizationException("You are not allowed to enter Admin portal.");
+        }
+        return user;
+    }
 }
