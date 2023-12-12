@@ -18,36 +18,73 @@
             </div>
         </a>
         <ul>
-            <li  class="nav-item"><a href="#" class="nav-link"
-                                     th:href="@{/admins/synchronize}">Sync</a></li>
             <li class="nav-item"><a href="#" class="nav-link"
                                     th:href="@{/admins}">Admin Panel</a></li>
+            <li  class="nav-item"><a href="#" class="nav-link"
+                                     th:href="@{/admins/synchronize}">Sync</a></li>
             <li class="nav-item"><a href="#" class="nav-link"
                                     th:href="@{/logout}">Logout</a></li>
         </ul>
 
     </nav>
 </section>
-<section class="main-content">
-    <div th:each="user : ${allUsers}">
-        <form class = "delete-form"
-              th:action="@{'/admins/users/' + ${user.getId()} + '/delete'}" method="get">
-            <button type="submit" class="delete-element-btn">X</button>
-        </form>
-        <div class="playlist-item">
-            <h2 th:text="${user.username}"></h2>
-            <h3 th:text="${user.firstName}"></h3>
-            <h3 th:text="${user.lastName}"></h3>
-            <h3 th:text="${user.email}"></h3>
-            <h3> Authorities: <br>
-                <span th:each="authority : ${user.authorities}">
-        <span th:text="${authority.authority}"></span><br/>
-    </span>
-            </h3>
 
-        </div>
-    </div>
+<!--<section class="main-content">-->
+<!--    <div th:each="user : ${allUsers}">-->
+<!--        <form class = "delete-form"-->
+<!--              th:action="@{'/admins/users/' + ${user.getId()} + '/delete'}" method="get">-->
+<!--            <button type="submit" class="delete-element-btn">X</button>-->
+<!--        </form>-->
+<!--        <div class="playlist-item">-->
+<!--            <h2 th:text="${user.username}"></h2>-->
+<!--            <h3 th:text="${user.firstName}"></h3>-->
+<!--            <h3 th:text="${user.lastName}"></h3>-->
+<!--            <h3 th:text="${user.email}"></h3>-->
+<!--            <h3> Authorities: <br>-->
+<!--                <span th:each="authority : ${user.authorities}">-->
+<!--        <span th:text="${authority.authority}"></span><br/>-->
+<!--    </span>-->
+<!--            </h3>-->
+
+<!--        </div>-->
+<!--    </div>-->
+<!--</section>-->
+
+<section class="main-content">
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Username</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
+            <th>Authorities</th>
+            <th>Delete User</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        <tr th:each="user : ${allUsers}">
+            <td th:text="${user.username}"></td>
+            <td th:text="${user.firstName}"></td>
+            <td th:text="${user.lastName}"></td>
+            <td th:text="${user.email}"></td>
+            <td>
+                    <span th:each="authority : ${user.authorities}">
+                        <span th:text="${authority.authority}"></span><br/>
+                    </span>
+            </td>
+            <td>
+                <form class="delete-form"
+                      th:action="@{'/admins/users/' + ${user.getId()} + '/delete'}" method="get">
+                    <button type="submit" class="delete-element-btn">X</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
 </section>
+
 
 <section class="footer">
     <h5>About Us</h5>

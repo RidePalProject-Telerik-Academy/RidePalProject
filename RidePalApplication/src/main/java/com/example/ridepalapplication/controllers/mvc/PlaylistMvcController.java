@@ -56,7 +56,6 @@ public class PlaylistMvcController {
     }
 
 
-
     @GetMapping
     public String playlistPage(Model model, @RequestParam(required = false, defaultValue = "") String name,
                                @RequestParam(required = false, defaultValue = "0") Integer page,
@@ -68,18 +67,17 @@ public class PlaylistMvcController {
 
         List<Playlist> recentPlaylists = playlistService.getMostRecent();
         List<Playlist> filteredList = playlistService.getAll(page, pageSize, name, minDuration, maxDuration, tagName);
-        int pages = (playlistService.getAll().size())/pageSize;
+        int pages = (playlistService.getAll().size()) / pageSize;
 
         model.addAttribute("filteredMostRecent", recentPlaylists);
         model.addAttribute("minDuration", minDuration);
         model.addAttribute("maxDuration", maxDuration);
-        model.addAttribute("tagName",tagName);
+        model.addAttribute("tagName", tagName);
         model.addAttribute("page", page);
         model.addAttribute("maxDuration", maxDuration);
         model.addAttribute("pageSize", pages);
         model.addAttribute("filteredPlaylists", filteredList);
         model.addAttribute("filteredPlaylists", filteredList);
-
 
 
         return "PlaylistsView";
@@ -121,20 +119,19 @@ public class PlaylistMvcController {
     }
 
     @GetMapping("/{id}")
-    public String singlePlaylistView(@PathVariable long id, Model model,Authentication authentication) {
+    public String singlePlaylistView(@PathVariable long id, Model model, Authentication authentication) {
         String username;
-        try{
+        try {
             username = authentication.getName();
-        }
-        catch (NullPointerException e){
+        } catch (NullPointerException e) {
             username = "";
         }
-        try{
+        try {
             Playlist playlist = playlistService.getById(id).orElseThrow();
             model.addAttribute("singlePlaylist", playlist);
             playlist.getSongs().forEach(song -> model.addAttribute(song.getTitle(), song));
-            model.addAttribute("user",playlist.getCreator());
-            model.addAttribute("username",username);
+            model.addAttribute("user", playlist.getCreator());
+            model.addAttribute("username", username);
             model.addAttribute("newTag", new TagDto());
             model.addAttribute("tags", playlist.getTags());
             model.addAttribute("updatePlaylistDto", new UpdatePlaylistDto());
@@ -150,7 +147,7 @@ public class PlaylistMvcController {
     public String updatePlaylist(@PathVariable long id,
                                  Authentication authentication,
                                  @Valid @ModelAttribute("updatePlaylistDto") UpdatePlaylistDto updatePlaylistDto,
-                                  BindingResult bindingResult, Model model) {
+                                 BindingResult bindingResult, Model model) {
 
         if (bindingResult.hasErrors()) {
             return "ErrorView";
@@ -171,7 +168,7 @@ public class PlaylistMvcController {
 
     @GetMapping("/{id}/delete")
     public String deletePlaylist(@PathVariable long id,
-                             Authentication authentication) {
+                                 Authentication authentication) {
 
         User user = authenticationHelper.tryGetUser(authentication);
         playlistService.delete(user, id);

@@ -788,3 +788,30 @@ i.fa-volume-down, i.fa-volume-up {
         }
     }
 
+
+.table {
+    width: 80%;
+    margin: 0 auto;
+    border-collapse: collapse;
+}
+
+.table th, .table td {
+    border: 1px solid #f8f9fa;
+    padding: 15px;
+    text-align: left;
+}
+
+.table th {
+    background-color: rgba(52, 152, 219, 0.5);
+    color: #f8f9fa;
+    padding: 20px;
+    text-transform: uppercase;
+}
+
+.table tbody tr {
+    transition: background-color 0.3s;
+}
+
+.table tbody tr:hover {
+    background-color: rgba(52, 152, 219, 0.2);
+}

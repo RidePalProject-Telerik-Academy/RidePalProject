@@ -240,7 +240,6 @@ public class UserServiceTests {
                 .deleteById(mockUser.getId());
     }
 
-    //TODO: check for security auth role
     @Test
     void deleteUser_Should_ThrowException_When_OtherUser() {
         User mockUser = createMockUser();

@@ -19,21 +19,42 @@
         </a>
         <ul>
             <li  class="nav-item"><a href="#" class="nav-link"
-                                     th:href="@{/logout}">Logout</a></li>
-            <li  class="nav-item"><a href="#" class="nav-link"
                                      th:href="@{/admins}">Admin Panel</a></li>
+            <li  class="nav-item"><a href="#" class="nav-link"
+                                     th:href="@{/admins/users}">Users</a></li>
+            <li  class="nav-item"><a href="#" class="nav-link"
+                                     th:href="@{/logout}">Logout</a></li>
         </ul>
 
     </nav>
 </section>
+
+<!--<section class="main-content">-->
+<!--    <div th:each="mostRecent : ${mostRecent}">-->
+<!--        <div class="playlist-item">-->
+<!--            <h3 th:text="${mostRecent.status}"></h3>-->
+<!--            <h4 th:text="${mostRecent.syncTime}"></h4>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</section>-->
+
 <section class="main-content">
-    <div th:each="mostRecent : ${mostRecent}">
-        <div class="playlist-item">
-            <h3 th:text="${mostRecent.status}"></h3>
-            <h4 th:text="${mostRecent.syncTime}"></h4>
-        </div>
-    </div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Status</th>
+            <th>Sync Time</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="mostRecent : ${mostRecent}">
+            <td th:text="${mostRecent.status}"></td>
+            <td th:text="${mostRecent.syncTime}"></td>
+        </tr>
+        </tbody>
+    </table>
 </section>
+
 
 <section class="footer">
     <h5>About Us</h5>
