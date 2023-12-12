@@ -90,7 +90,7 @@ nav li:hover {
     margin-left: 5vmin;
 }
 
-#generate-playlist{
+#generate-playlist {
     padding: 0.5em;
 }
 
@@ -279,15 +279,17 @@ nav li:hover {
     justify-content: end;
     margin-bottom: 5vmin;
 }
-.update-plus-admin li{
+
+.update-plus-admin li {
     margin-right: 2vmin;
     list-style-type: none;
-    font-size:4vmin;
+    font-size: 4vmin;
     color: #f8f9fa;
     text-align: center;
     padding: 0.5em;
     border-radius: 0.5em;
     border: solid #f8f9fa 2px;
+
     &:hover {
         transform: scale(1.1);
         transition: transform 0.3s ease-in-out;
@@ -295,7 +297,7 @@ nav li:hover {
     }
 }
 
-.update-plus-admin li a{
+.update-plus-admin li a {
     text-decoration: none;
     color: #f8f9fa;
 }
@@ -350,11 +352,28 @@ nav li:hover {
     border: none;
 }
 
+
+.playlist-item audio {
+    margin-left: auto;
+    width: 100%;
+    background-color: rgba(62, 152, 319, 0.2);
+    border-radius: 5px;
+
+    &:hover {
+        background-color: rgba(52, 152, 219, 0.5);
+        transition: transform 0.3s ease-in-out;
+        transform: scale(1.1);
+    }
+
+}
+
+
 #user-card {
     display: flex;
     width: 100vmin;
     height: 35vmin;
 }
+
 #user-card img {
     width: 25vmin;
     height: 90%;
@@ -396,7 +415,7 @@ nav li:hover {
     overflow-wrap: break-word;
 }
 
-.song-item{
+.song-item {
     margin-left: 5vmin;
     margin-bottom: 2vmin;
     margin-right: 5vmin;
@@ -730,14 +749,15 @@ i.fa-volume-down, i.fa-volume-up {
     display: inline-flex;
     flex-direction: column;
 }
-.update-profile h3{
+
+.update-profile h3 {
     text-align: center;
     margin: 10vmin;
     margin-top: 15vmin;
     font-size: 10vmin;
 }
 
-.input-box  input{
+.input-box input {
     width: 85%;
     margin-left: 5%;
     border-radius: 2vmin;
@@ -757,6 +777,7 @@ i.fa-volume-down, i.fa-volume-up {
     border-radius: 4px;
     cursor: pointer;
     font-size: 2rem;
+
     &:hover {
         background-color: black;
         transition: transform 0.3s ease-in-out;
@@ -764,29 +785,29 @@ i.fa-volume-down, i.fa-volume-up {
     }
 }
 
-.admin-body h1{
+.admin-body h1 {
     text-align: center;
     margin-top: 10vmin;
     font-size: 10vmin;
 }
 
-.delete-user{
-        width: fit-content;
-        border-style: solid;
-        border-width: 0.1em;
-        border-radius: 0.5em;
-        padding: 0.5em;
-        color: #f8f9fa;
-        font-size: 4vmin;
-        margin-right: 2%;
+.delete-user {
+    width: fit-content;
+    border-style: solid;
+    border-width: 0.1em;
+    border-radius: 0.5em;
+    padding: 0.5em;
+    color: #f8f9fa;
+    font-size: 4vmin;
+    margin-right: 2%;
 
-        &:hover {
-            color: #f8f9fa;
-            background: black;
-            transition: transform 0.3s ease-in-out;
-            transform: scale(1.1);
-        }
+    &:hover {
+        color: #f8f9fa;
+        background: black;
+        transition: transform 0.3s ease-in-out;
+        transform: scale(1.1);
     }
+}
 
 
 .table {

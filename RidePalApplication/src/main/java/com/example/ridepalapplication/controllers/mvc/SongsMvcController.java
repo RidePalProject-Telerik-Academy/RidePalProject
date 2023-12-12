@@ -36,7 +36,7 @@ public class SongsMvcController {
     @GetMapping
     public String getSongsPage(Model model, @RequestParam(required = false, defaultValue = "") String songTitle,
                                @RequestParam(required = false, defaultValue = "0") Integer page,
-                               @RequestParam(required = false, defaultValue = "50") Integer pageSize,
+                               @RequestParam(required = false, defaultValue = "10") Integer pageSize,
                                @RequestParam(required = false,defaultValue = "")String artist){
         model.addAttribute("title",songTitle);
 

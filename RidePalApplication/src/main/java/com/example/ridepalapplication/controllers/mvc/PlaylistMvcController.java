@@ -99,6 +99,7 @@ public class PlaylistMvcController {
     @PostMapping("/generate")
     public String generatePlaylist(@Valid @ModelAttribute("newPlaylist") MvcPlaylistDto mvcPlaylistDto,
                                    Authentication authentication, BindingResult bindingResult, Model model) throws ParseException {
+
         if (bindingResult.hasErrors()) {
             return "GenerateView";
         }
@@ -176,10 +177,16 @@ public class PlaylistMvcController {
         return "redirect:/users/myProfile";
     }
 
+    //TODO: fix BindingResult
     @PostMapping("/{id}/tags")
     public String createTag(@PathVariable long id,
                             @Valid @ModelAttribute("newTag") TagDto tagDto,
+                            BindingResult bindingResult,
                             Authentication authentication, Model model) {
+
+        if (bindingResult.hasErrors()) {
+            return "redirect:/playlists" + id;
+        }
 
         try {
             User user = authenticationHelper.tryGetUser(authentication);
@@ -189,6 +196,7 @@ public class PlaylistMvcController {
             playlistService.createTag(user, tag, playlist);
             return "redirect:/playlists/" + id;
         } catch (EntityDuplicateException e) {
+//            bindingResult.rejectValue("name", "name_error", e.getMessage());
             model.addAttribute("error", e.getMessage());
             return "ErrorView";
         }

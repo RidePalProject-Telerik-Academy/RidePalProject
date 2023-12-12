@@ -1,12 +1,18 @@
 package com.example.ridepalapplication.dtos;
 
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class MvcPlaylistDto {
+    @NotNull(message = "Name is required.")
     String name;
+    @NotNull(message = "Start location is required.")
     private String startLocation;
     private String startAddress;
+    @NotNull(message = "End location is required.")
     private String endLocation;
     private String endAddress;
     private List<GenreDto> genres;

@@ -6,6 +6,7 @@ import com.example.ridepalapplication.exceptions.EntityNotFoundException;
 import com.example.ridepalapplication.helpers.AuthorizationHelper;
 import com.example.ridepalapplication.models.User;
 import com.example.ridepalapplication.repositories.PlaylistRepository;
+import com.example.ridepalapplication.repositories.RoleRepository;
 import com.example.ridepalapplication.repositories.UserRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -14,13 +15,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.verification.VerificationMode;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static com.example.ridepalapplication.MockHelpers.createAdminMockUser;
-import static com.example.ridepalapplication.MockHelpers.createMockUser;
+import static com.example.ridepalapplication.MockHelpers.*;
 
 @ExtendWith(MockitoExtension.class)
 public class UserServiceTests {
@@ -31,6 +32,8 @@ public class UserServiceTests {
     AuthorizationHelper authorizationHelper;
     @Mock
     PlaylistRepository playlistRepository;
+    @Mock
+    RoleRepository roleRepository;
     @InjectMocks
     UserServiceImpl service;
 
@@ -75,20 +78,6 @@ public class UserServiceTests {
 
         Assertions.assertEquals(String.format("User with id %s not found.", mockId), exception.getMessage());
     }
-
-//    @Test
-//    void getByUsername_Should_ReturnUser() {
-//        User mockUser = createMockUser();
-//
-//        Mockito.when(mockRepository.findByUsername(mockUser.getUsername()))
-//                .thenReturn(mockUser);
-//
-//        User result = service.getByUsername(mockUser.getUsername());
-//        Assertions.assertEquals(mockUser, result);
-//
-//        Mockito.verify(mockRepository, Mockito.times(1))
-//                .findByUsername(mockUser.getUsername());
-//    }
 
     @Test
     void getByUsername_Should_ThrowException_When_NotFound() {
@@ -165,7 +154,6 @@ public class UserServiceTests {
                 .save(userToUpdate);
     }
 
-    //TODO: fix logic
     @Test
     void updateUser_Should_ReturnUser_When_EmailNotExists_And_Admin() {
         User mockUser = createMockUser();
@@ -181,12 +169,10 @@ public class UserServiceTests {
                 .save(mockUser);
     }
 
-    //TODO: fix logic in service
     @Test
     void updateUser_Should_ThrowException_When_EmailExists() {
         User mockUser = createMockUser();
         User anotherUser = createAdminMockUser();
-        anotherUser.setEmail("mock_user@user.com");
 
         Mockito.when(mockRepository.findByEmail(mockUser.getEmail()))
                 .thenReturn(anotherUser);
@@ -199,17 +185,17 @@ public class UserServiceTests {
     }
 
 
-    //TODO: check also here I believe there is an issue with logic
     @Test
     void updateUser_Should_ThrowException_When_OtherUser() {
         User mockUser = createMockUser();
-        User newMockUser = new User();
+        User newMockUser = create2ndMockUser();
 
-        AuthorizationException exception = Assertions.assertThrows(
-                AuthorizationException.class,
-                () -> service.updateUser(newMockUser, mockUser));
+        Mockito.doThrow(AuthorizationException.class)
+                .when(authorizationHelper)
+                .checkAuthorization(mockUser, newMockUser, "update other users");
 
-        Assertions.assertEquals(String.format("You are not allowed to %s other users.", "update"), exception.getMessage());
+        Assertions.assertThrows(AuthorizationException.class,
+                () -> service.updateUser(mockUser, newMockUser));
     }
 
 
@@ -240,18 +226,18 @@ public class UserServiceTests {
                 .deleteById(mockUser.getId());
     }
 
+
     @Test
     void deleteUser_Should_ThrowException_When_OtherUser() {
         User mockUser = createMockUser();
-        User newMockUser = new User();
+        User newMockUser = create2ndMockUser();
 
-        Mockito.when(mockRepository.findById(mockUser.getId()))
-                .thenReturn(Optional.of(mockUser));
+        Mockito.doThrow(AuthorizationException.class)
+                .when(authorizationHelper)
+                .checkAuthorization(mockUser, newMockUser.getId(), "delete other users");
 
-        AuthorizationException exception = Assertions.assertThrows(
-                AuthorizationException.class,
-                () -> service.deleteUser(newMockUser, mockUser.getId()));
-
-        Assertions.assertEquals(String.format("You are not allowed to %s other users.", "delete"), exception.getMessage());
+        Assertions.assertThrows(AuthorizationException.class,
+                () -> service.deleteUser(mockUser, newMockUser.getId()));
     }
+
 }

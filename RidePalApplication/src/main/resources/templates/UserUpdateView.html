@@ -5,14 +5,77 @@
     <link href="../static/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
     <link rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"/>
-
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ion-rangeslider@2.3.1/css/ion.rangeSlider.min.css"/>
-    <script src="/js/scripts.js"></script>
-
     <title>Main</title>
+
+    <style>
+        .registration-container-title {
+            margin-top: 10%;
+            font-size: 6vmin;
+        }
+
+        #reg-form {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 2vmin;
+            border-radius: 2rem;
+            margin: 5vmin;
+            margin-left: 20%;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            max-width: 55%;
+        }
+
+        input {
+            width: 95%;
+            padding: 0.8em;
+            margin: 1.5vmin;
+            border: none;
+            border-radius: 2vmin;
+            box-sizing: border-box;
+            font-size: 3.5vmin;
+        }
+
+        button {
+            background-color: #ca433e;
+            color: whitesmoke;
+            padding: 1rem;
+            border: none;
+            border-radius: 0.4rem;
+            cursor: pointer;
+            font-size: 4vmin;
+            width: fit-content;
+            margin-top: 5vmin;
+            margin-left: 2vmin;
+            margin-bottom: 2vmin;
+        }
+
+        button:hover {
+            scale: 1.1;
+            transition: transform 0.3s ease-in-out;
+            background-color: black;
+        }
+
+        p {
+            font-size: 1.8rem;
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-family: 'Trebuchet MS', sans-serif;
+            text-decoration: none;
+        }
+
+        p > a {
+            color: whitesmoke;
+            font-size: 2.5rem;
+            text-decoration: underline;
+            padding: 0.5rem;
+            border-radius: 1rem;
+        }
+    </style>
 </head>
-<body>
+
+<body id="main-body">
+
 <section class="header">
     <nav>
         <a th:href="@{/playlists}">
@@ -20,41 +83,45 @@
                 <h1 style="font-family: Forte, sans-serif;">RidePal</h1>
             </div>
         </a>
-        <ul>
-            <li th:if="${isAuthenticated}" class="nav-item"><a href="#" class="nav-link" th:href="@{/logout}">Logout</a></li>
-        </ul>
+<ul>
+    <li th:if="${isAuthenticated}" class="nav-item"><a href="#" class="nav-link" th:href="@{/logout}">Logout</a></li>
+</ul>
     </nav>
 
 </section>
 
-<div class="update-profile">
-    <h3>Update Profile</h3>
-    <div class="update-profile-container">
-        <form action="#" th:action="@{/users/update}" th:object="${userToUpdate}" method="post">
-            <div class="user-details">
-                <div class="input-box">
-                    <input type="text"  th:field="*{firstName}" placeholder="Enter your First Name" required>
-                </div>
-                <div class="input-box">
-                    <input type="text" th:field="*{lastName}" placeholder="Enter your Last Name" required>
-                </div>
-                <div class="input-box">
-                    <label class="error" th:align="center" th:errors="*{email}">Name error placeholder</label>
-                    <input type="text" th:field="*{email}" placeholder="Enter your Email" required>
-                </div>
-                <div class="input-box">
-                    <input type="password" th:field="*{password}" placeholder="Enter your Password" required>
-                </div>
+<section>
+    <div class="registration-container-title" th:align="center">Update Profile</div>
+    <form action="#" id="reg-form" th:action="@{/users/update}" th:object="${userToUpdate}" method="post">
+        <div class="user-details">
+            <div class="input-box">
+                <span class="user-details"></span>
+                <input type="text" th:field="*{firstName}" placeholder="Enter your First Name" required>
+            </div>
+            <label class="error" th:errors="*{firstName}">Name error placeholder</label>
+            <div class="input-box">
+                <span class="user-details"></span>
+                <input type="text" th:field="*{lastName}" placeholder="Enter your Last Name" required>
+            </div>
+            <label class="error" th:errors="*{lastName}">Name error placeholder</label>
+            <div class="input-box">
+                <span class="user-details"></span>
+                <input type="text" th:field="*{email}" placeholder="Enter your Email" required>
+            </div>
+            <label class="error" th:errors="*{email}">Name error placeholder</label>
+            <div class="input-box">
+                <span class="user-details"></span>
+                <input type="password" th:field="*{password}" placeholder="Enter your Password" required>
+            </div>
+            <label class="error" th:errors="*{password}">Name error placeholder</label>
+            <div class="button-container">
                 <div class="button">
-                    <button type="submit">UPDATE</button>
+                    <button type="submit">Update</button>
                 </div>
             </div>
-
-        </form>
-
-    </div>
-
-</div>
+        </div>
+    </form>
+</section>
 
 <!-- FOOTER -->
 <section class="footer">

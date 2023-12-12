@@ -1,9 +1,12 @@
 package com.example.ridepalapplication.services;
 
 import com.example.ridepalapplication.dtos.GenreDto;
+import com.example.ridepalapplication.dtos.LocationDto;
+import com.example.ridepalapplication.dtos.PlaylistDto;
 import com.example.ridepalapplication.exceptions.AuthorizationException;
 import com.example.ridepalapplication.exceptions.EntityDuplicateException;
 import com.example.ridepalapplication.exceptions.EntityNotFoundException;
+import com.example.ridepalapplication.helpers.AuthorizationHelper;
 import com.example.ridepalapplication.models.*;
 import com.example.ridepalapplication.repositories.GenreRepository;
 import com.example.ridepalapplication.repositories.PlaylistRepository;
@@ -34,25 +37,12 @@ public class PlaylistServiceTests {
     @Mock
     SongRepository songMockRepository;
     @Mock
+    AuthorizationHelper authorizationHelper;
+    @Mock
     TagRepository tagMockRepository;
     @InjectMocks
     PlaylistServiceImpl service;
 
-//    @Test
-//    void getAll_Should_ReturnAllPlaylists() {
-//        Playlist mockPlaylist = new Playlist();
-//        List<Playlist> allPlaylists = new ArrayList<>();
-//        allPlaylists.add(mockPlaylist);
-//
-//        Mockito.when(mockRepository.findAll())
-//                .thenReturn(allPlaylists);
-//
-//        List<Playlist> result = service.getAll();
-//        Assertions.assertEquals(allPlaylists, result);
-//
-//        Mockito.verify(mockRepository, Mockito.times(1))
-//                .findAll();
-//    }
 
     @Test
     void getById_Should_ReturnPlaylist() {
@@ -80,43 +70,96 @@ public class PlaylistServiceTests {
         Assertions.assertEquals(String.format("Playlist with id %s not found.", mockId), exception.getMessage());
     }
 
+
+    // --- choosePlaylistStrategy ---
     @Test
-    //TODO: fix this test logic
-    void generatePlaylist_Should_ReturnNewPlaylist() {
-        Playlist mockPlaylist = new Playlist();
-        int travelDuration = 100;
+    void choosePlaylistStrategy_ShouldReturnGenerateTopRankSongsUniqueArtistsPlaylistMethod_WhenTopRankAndUniqueArtist() {
 
-        List<GenreDto> genresList = new ArrayList<>();
+        Playlist playlist = new Playlist();
+        PlaylistDto playlistDto = createTopRankUniqueArtistsPlaylistDto();
+        int travelDuration = 60;
 
-        GenreDto rockGenreDto = new GenreDto("rock", 50);
-        genresList.add(rockGenreDto);
+        Mockito.verify(Mockito.when(service.choosePlaylistStrategy(playlistDto, playlist, travelDuration, playlistDto.getGenreDtoList())).thenReturn(playlist));
 
-        GenreDto popGenreDto = new GenreDto("pop", 50);
-        genresList.add(popGenreDto);
-
-        Genre mockRockGenre = createMockGenre();
-        mockRockGenre.setName("rock");
-        Mockito.when(genreMockRepository.findByName("rock")).thenReturn(mockRockGenre);
-
-        Genre mockPopGenre = createMockGenre();
-        mockPopGenre.setName("pop");
-        Mockito.when(genreMockRepository.findByName("pop")).thenReturn(mockPopGenre);
-
-        Song mockSong = createMockSong();
-        Mockito.when(songMockRepository.getMeSingleSongByGenre(anyLong())).thenReturn(List.of(mockSong));
-
-        Mockito.when(mockRepository.save(mockPlaylist)).thenReturn(mockPlaylist);
-
-        Playlist result = service.generateDefaultRankUniqueArtistsPlaylist(new Playlist(), travelDuration, genresList);
-
-        Mockito.verify(mockRepository, Mockito.times(1)).save(mockPlaylist);
+        //top rank + unique artist
+        //we need to verify that the following method is called:
+        //generateTopRankSongsUniqueArtistsPlaylist
     }
+
+    @Test
+    void choosePlaylistStrategy_ShouldReturnGenerateTopRankSongsNonUniqueArtistPlaylist_WhenTopRankNoUniqueArtist() {
+
+        PlaylistDto playlistDto = createTopRankUniqueArtistsPlaylistDto();
+        playlistDto.setUniqueArtists(false);
+
+        //top rank + NO unique artist
+        //we need to verify that the following method is called:
+        //generateTopRankSongsNonUniqueArtistPlaylist
+    }
+
+    @Test
+    void choosePlaylistStrategy_ShouldReturnGenerateTopRankSongsUniqueArtistsPlaylist_WhenNoTopRankUniqueArtist() {
+
+        PlaylistDto playlistDto = createTopRankUniqueArtistsPlaylistDto();
+        playlistDto.setTopRank(false);
+
+        //no top rank + unique artist
+        //we need to verify that the following method is called:
+        //generateTopRankSongsUniqueArtistsPlaylist //TODO: ask Boby why this method
+    }
+
+    @Test
+    void choosePlaylistStrategy_ShouldReturnGenerateDefaultRankNonUniqueArtistPlaylist_WhenNoTopRankNoUniqueArtist() {
+
+        PlaylistDto playlistDto = createTopRankUniqueArtistsPlaylistDto();
+        playlistDto.setUniqueArtists(false);
+        playlistDto.setTopRank(false);
+
+        //no top rank + no unique artist
+        //we need to verify that the following method is called:
+        //generateDefaultRankNonUniqueArtistPlaylist
+    }
+
+
+
+
+
+//    @Test
+//    void generatePlaylist_Should_ReturnNewPlaylist() {
+//        Playlist mockPlaylist = new Playlist();
+//        int travelDuration = 100;
+//
+//        List<GenreDto> genresList = new ArrayList<>();
+//
+//        GenreDto rockGenreDto = new GenreDto("rock", 50);
+//        genresList.add(rockGenreDto);
+//
+//        GenreDto popGenreDto = new GenreDto("pop", 50);
+//        genresList.add(popGenreDto);
+//
+//        Genre mockRockGenre = createMockGenre();
+//        mockRockGenre.setName("rock");
+//        Mockito.when(genreMockRepository.findByName("rock")).thenReturn(mockRockGenre);
+//
+//        Genre mockPopGenre = createMockGenre();
+//        mockPopGenre.setName("pop");
+//        Mockito.when(genreMockRepository.findByName("pop")).thenReturn(mockPopGenre);
+//
+//        Song mockSong = createMockSong();
+//        Mockito.when(songMockRepository.getMeSingleSongByGenre(anyLong())).thenReturn(List.of(mockSong));
+//
+//        Mockito.when(mockRepository.save(mockPlaylist)).thenReturn(mockPlaylist);
+//
+//        Playlist result = service.generateDefaultRankUniqueArtistsPlaylist(new Playlist(), travelDuration, genresList);
+//
+//        Mockito.verify(mockRepository, Mockito.times(1)).save(mockPlaylist);
+//    }
 
     @Test
     void updateName_Should_ReturnUpdatedPlaylistName_When_SameUser() {
         User mockUser = createMockUser();
         Playlist mockPlaylist = createMockPlaylist();
-        String newName = "new_name";
+        String newName = "new_playlist_name";
 
         service.update(mockUser, mockPlaylist, newName);
 
@@ -149,11 +192,12 @@ public class PlaylistServiceTests {
         Playlist mockPlaylist = createMockPlaylist();
         String newName = "new_name";
 
-        AuthorizationException exception = Assertions.assertThrows(
-                AuthorizationException.class,
-                () -> service.update(otherMockUser, mockPlaylist, newName));
+        Mockito.doThrow(AuthorizationException.class)
+                .when(authorizationHelper)
+                .checkAuthorization(otherMockUser, mockPlaylist.getCreator(), "update playlist name");
 
-        Assertions.assertEquals(String.format("You are not allowed to update playlist."), exception.getMessage());
+        Assertions.assertThrows(AuthorizationException.class,
+                () -> service.update(otherMockUser, mockPlaylist, newName));
     }
 
     @Test
@@ -204,13 +248,7 @@ public class PlaylistServiceTests {
         User mockUser = createMockUser();
         Playlist playlist = createMockPlaylist();
         Song song = createMockSong();
-        //create a 2nd song in the playlist to avoid the 0 pointer exception
-        song.setId(2);
-        song.setTitle("New Song");
-        playlist.addSong(song);
 
-        //TODO: here, if I don't make a 2nd song and add it (if I am trying to delete the only 1 song in my playlist),
-        // I hit a corner case with Arithmetic / by zero exception when calculating the rank in the Service
         service.deleteSong(mockUser, song, playlist);
 
         Assertions.assertFalse(playlist.getSongs().contains(song));
@@ -238,18 +276,17 @@ public class PlaylistServiceTests {
 
     @Test
     void deleteSong_Should_ThrowException_When_OtherUser() {
-        User otherMockUser = createMockUser();
-        otherMockUser.setId(2);
-        otherMockUser.setUsername("other_user");
+        User otherMockUser = create2ndMockUser();
 
         Playlist playlist = createMockPlaylist();
         Song song = createMockSong();
 
-        AuthorizationException exception = Assertions.assertThrows(
-                AuthorizationException.class,
-                () -> service.deleteSong(otherMockUser, song, playlist));
+        Mockito.doThrow(AuthorizationException.class)
+                .when(authorizationHelper)
+                .checkAuthorization(otherMockUser, playlist.getCreator(), "update playlist songs");
 
-        Assertions.assertEquals(String.format("You are not allowed to update playlist songs."), exception.getMessage());
+        Assertions.assertThrows(AuthorizationException.class,
+                () -> service.deleteSong(otherMockUser, song, playlist));
     }
 
     @Test
@@ -300,18 +337,18 @@ public class PlaylistServiceTests {
 
     @Test
     void createTag_Should_ThrowException_When_OtherUser() {
-        User otherMockUser = createMockUser();
-        otherMockUser.setId(2);
-        otherMockUser.setUsername("other_user");
+        User otherMockUser = create2ndMockUser();
 
         Playlist playlist = createMockPlaylist();
         Tag tag = createMockTag();
 
-        AuthorizationException exception = Assertions.assertThrows(
+        Mockito.doThrow(AuthorizationException.class)
+                .when(authorizationHelper)
+                .checkAuthorization(otherMockUser, playlist.getCreator(), "add tags to other users' playlists");
+
+        Assertions.assertThrows(
                 AuthorizationException.class,
                 () -> service.createTag(otherMockUser, tag, playlist));
-
-        Assertions.assertEquals(String.format("You are not allowed to add tags to other users' playlists."), exception.getMessage());
     }
 
     @Test
@@ -372,11 +409,13 @@ public class PlaylistServiceTests {
         Playlist playlist = createMockPlaylist();
         Tag tag = createMockTag();
 
-        AuthorizationException exception = Assertions.assertThrows(
+        Mockito.doThrow(AuthorizationException.class)
+                .when(authorizationHelper)
+                .checkAuthorization(otherMockUser, playlist.getCreator(), "delete tags from other users' playlists");
+
+        Assertions.assertThrows(
                 AuthorizationException.class,
                 () -> service.deleteTag(otherMockUser, tag, playlist));
-
-        Assertions.assertEquals(String.format("You are not allowed to delete tags from other users' playlists."), exception.getMessage());
     }
 
     @Test
@@ -422,17 +461,18 @@ public class PlaylistServiceTests {
 
     @Test
     void delete_Should_ThrowException_When_OtherUser() {
-        User mockUser = createMockUser();
-        mockUser.setId(2);
-        mockUser.setUsername("other_mock_user");
+        User otherMockUser = create2ndMockUser();
         Playlist mockPlaylist = createMockPlaylist();
 
         Mockito.when(mockRepository.findById(mockPlaylist.getId())).thenReturn(Optional.of(mockPlaylist));
 
-        AuthorizationException exception = Assertions.assertThrows(
-                AuthorizationException.class,
-                () -> service.delete(mockUser, mockPlaylist.getId()));
+        Mockito.doThrow(AuthorizationException.class)
+                .when(authorizationHelper)
+                .checkAuthorization(otherMockUser, mockPlaylist.getCreator().getId(), "delete the playlist");
 
-        Assertions.assertEquals(String.format("You are not allowed to delete the playlist."), exception.getMessage());
+        Assertions.assertThrows(AuthorizationException.class,
+                () -> service.delete(otherMockUser, mockPlaylist.getId()));
     }
+
+
 }

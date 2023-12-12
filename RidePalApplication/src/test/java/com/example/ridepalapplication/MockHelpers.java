@@ -1,8 +1,13 @@
 package com.example.ridepalapplication;
 
+import com.example.ridepalapplication.dtos.GenreDto;
+import com.example.ridepalapplication.dtos.LocationDto;
+import com.example.ridepalapplication.dtos.PlaylistDto;
 import com.example.ridepalapplication.models.*;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class MockHelpers {
@@ -10,25 +15,40 @@ public class MockHelpers {
     public static User createMockUser() {
         Set<Role> authorities = new HashSet<>();
         authorities.add(new Role("USER"));
-        return new User("mock_username",
+        User user = new User("mock_username",
                 "mockFirstName",
                 "mockFirstName",
                 "mock_email@gmail.com",
                 "mockPassword98!@",
                 authorities);
+        user.setId(1L);
+        return user;
+    }
+
+    public static User create2ndMockUser() {
+        Set<Role> authorities = new HashSet<>();
+        authorities.add(new Role("USER"));
+        User user = new User("mock_username_2",
+                "mockFirstName_2",
+                "mockFirstName2",
+                "mock_email2@gmail.com",
+                "mockPassword982!@",
+                authorities);
+        user.setId(2L);
+        return user;
     }
 
     public static User createAdminMockUser() {
         Set<Role> authorities = new HashSet<>();
         authorities.add(new Role("ADMIN"));
-        return new User("admin_mock_username",
+        User user = new User("admin_mock_username",
                 "AdminMockFirstName",
                 "AdminMockFirstName",
                 "admin_mock_user@user.com",
                 "Admin_MockPassword98!@",
                 authorities);
-
-
+        user.setId(3L);
+        return user;
     }
 
     public static Playlist createMockPlaylist() {
@@ -85,6 +105,30 @@ public class MockHelpers {
         mockTag.setId(1L);
         mockTag.setName("Mock");
         return mockTag;
+    }
+
+    public static LocationDto createLocationDto() {
+        LocationDto locationDto = new LocationDto();
+        locationDto.setStartLocation("Sofia");
+        locationDto.setStartLocation("Pernik");
+
+        return locationDto;
+    }
+
+    public static PlaylistDto createTopRankUniqueArtistsPlaylistDto() {
+        PlaylistDto playlistDto = new PlaylistDto();
+
+        List<GenreDto> genreDtoList = new ArrayList<>();
+        genreDtoList.add(1, new GenreDto("Pop", 0));
+        genreDtoList.add(1, new GenreDto("Rock", 0));
+        genreDtoList.add(1, new GenreDto("Rap/Hip Hop", 0));
+
+        playlistDto.setLocationDto(createLocationDto());
+        playlistDto.setGenreDtoList(genreDtoList);
+        playlistDto.setUniqueArtists(true);
+        playlistDto.setTopRank(true);
+
+        return playlistDto;
     }
 
 }

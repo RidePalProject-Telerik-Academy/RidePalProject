@@ -97,17 +97,38 @@ public class UserMvcController {
         return "UserUpdateView";
     }
 
+//    @PostMapping("/update")
+//    public String updateUser(@Valid @ModelAttribute("userToUpdate") UpdateUserDto updateUserDto,
+//                             Authentication authentication,
+//                             BindingResult bindingResult) {
+//
+//        if (bindingResult.hasErrors()) {
+//            return "UserUpdateView";
+//        }
+//
+//        User loggedUser = authenticationHelper.tryGetUser(authentication);
+//
+//        try {
+//            User userToUpdate = userMapper.fromDto(loggedUser.getId(), updateUserDto);
+//            userService.updateUser(loggedUser, userToUpdate);
+//            return "redirect:/users/myProfile";
+//        } catch (EntityDuplicateException e) {
+//            bindingResult.rejectValue("email", "email_error", e.getMessage());
+//            return "UserUpdateView";
+//        }
+//    }
+
     @PostMapping("/update")
     public String updateUser(@Valid @ModelAttribute("userToUpdate") UpdateUserDto updateUserDto,
-                             Authentication authentication,
-                             BindingResult bindingResult) {
+                             BindingResult bindingResult,
+                             Authentication authentication) {
 
         if (bindingResult.hasErrors()) {
             return "UserUpdateView";
         }
 
         User loggedUser = authenticationHelper.tryGetUser(authentication);
-        
+
         try {
             User userToUpdate = userMapper.fromDto(loggedUser.getId(), updateUserDto);
             userService.updateUser(loggedUser, userToUpdate);

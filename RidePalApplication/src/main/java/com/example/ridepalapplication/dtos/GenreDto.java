@@ -1,9 +1,13 @@
 package com.example.ridepalapplication.dtos;
 
 
+import jakarta.validation.constraints.NotNull;
+
 public class GenreDto {
 
+    @NotNull(message = "Name is required.")
     String name;
+    @NotNull(message = "Percentage is required.")
     int percentage;
     public GenreDto() {
     }

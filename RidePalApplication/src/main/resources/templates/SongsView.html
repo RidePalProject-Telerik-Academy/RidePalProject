@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ion-rangeslider@2.3.1/css/ion.rangeSlider.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ion-rangeslider@2.3.1/css/ion.rangeSlider.min.css"/>
 
     <script src="https://cdn.jsdelivr.net/npm/ion-rangeslider@2.3.1/js/ion.rangeSlider.min.js"></script>
     <script src="/js/scripts.js"></script>
@@ -45,57 +45,59 @@
 </section>
 
 
-
 <section class="main-content">
     <div th:each="song : ${songs}">
-        <div class="playlist-item" th:attr="data-preview-url=${song.previewUrl}" onclick="playPauseSong(this)" ondblclick="stopSong()">
+        <div class="playlist-item" th:attr="data-preview-url=${song.previewUrl}"
+             ondblclick="stopSong()">
             <img src="/images/logo-alt.gif" alt="Song Image">
             <h3 th:text="${song.title}"></h3>
             <h4 th:text="'Artist: ' + ${song.artist.name}"></h4>
             <h4 th:text="'Album: ' + ${song.album.name}"></h4>
             <h4 th:text="'Duration: ' + ${song.duration/60} + ':'+ ${T(java.lang.String).format('%02d',song.duration%60)} + ' min'"></h4>
+
+            <div onclick="playPause(this)">
+                <audio class="audio-player" controls>
+                    <source th:src="${song.previewUrl}">
+                </audio>
+            </div>
+
+            <script>
+                document.addEventListener('play', function (e) {
+                    var audioElements = document.getElementsByClassName('audio-player');
+
+                    for (var i = 0; i < audioElements.length; i++) {
+                        if (audioElements[i] !== e.target) {
+                            audioElements[i].pause();
+                        }
+                    }
+                }, true);
+
+                function playPause(element) {
+                    var audio = element.querySelector('.audio-player');
+
+                    if (audio.paused) {
+                        audio.play();
+                    } else {
+                        audio.pause();
+                    }
+                }
+            </script>
+
+
         </div>
     </div>
 </section>
 
-<audio id="audioPlayer">
-    <source id="audioSource" type="audio/mp3">
-</audio>
-
-<script>
-    var audioPlayer = document.getElementById('audioPlayer');
-    var audioSource = document.getElementById('audioSource');
-
-
-    function playPauseSong(element) {
-        var previewUrl = element.getAttribute('data-preview-url');
-
-        if (audioPlayer.src === previewUrl && !audioPlayer.paused) {
-            audioPlayer.pause();
-
-        } else {
-            audioSource.src = previewUrl;
-            audioPlayer.load();
-            audioPlayer.play();
-
-        }
-    }
-
-    function stopSong() {
-        audioPlayer.pause();
-        audioPlayer.currentTime = 0;
-
-    }
-</script>
 
 <script th:inline="javascript">
     var pageSize = /*[[${pageSize}]]*/ 0;
     var currentPage = /*[[${page}]]*/ 0;
 </script>
 
-<a th:if="${pageSize > page}" class="utility-btn" style="margin: 3%" href="#" onclick="incrementSongPage(pageSize)">Load more...</a>
-<a th:if="${page > 0}" class="utility-btn" style="margin: 3%" href="#" onclick="decrementSongPage()">Load previous...</a>
-
+<a th:if="${pageSize > page}" class="utility-btn" style="margin: 3%" href="#" onclick="incrementSongPage(pageSize)">Load
+    more...</a>
+<a th:if="${page > 0}" class="utility-btn" style="margin: 3%" href="#" onclick="decrementSongPage()">Load
+    previous...</a>
 
 
 <!-- FOOTER -->
