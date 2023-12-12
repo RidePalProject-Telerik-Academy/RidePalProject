@@ -100,15 +100,19 @@ public class PlaylistServiceImpl implements PlaylistService {
     @Override
     public Playlist generateDefaultRankUniqueArtistsPlaylist(Playlist playlist, int travelDuration, List<GenreDto> genreDtoList) {
         Set<Song> playlistSongs = new HashSet<>();
+        Set<Genre> genreList = new HashSet<>();
         List<Long> artistsId = new ArrayList<>();
         int totalPlaylistDuration = 0;
         Long totalRank = 0L;
         for (GenreDto genreDto : genreDtoList) {
+            if (isPercentageZero(genreDto)) continue;
+
             int getGenrePercentage = genreDto.getPercentage();
             int currentGenreDuration = 0;
             int totalGenreDuration = (travelDuration * getGenrePercentage) / 100;
 
             Genre genre = PlaylistHelper.extractGenres(genreRepository, genreDto);
+            genreList.add(genre);
 
             while (currentGenreDuration < totalGenreDuration) {
                 List<Song> songs;
@@ -130,21 +134,25 @@ public class PlaylistServiceImpl implements PlaylistService {
             }
 
         }
-        PlaylistHelper.updatePlaylistDetails(playlist, totalRank, playlistSongs, totalPlaylistDuration);
+        PlaylistHelper.updatePlaylistDetails(playlist, totalRank, playlistSongs, totalPlaylistDuration, genreList);
         return playlistRepository.save(playlist);
     }
 
     @Override
     public Playlist generateTopRankSongsNonUniqueArtistPlaylist(Playlist playlist, int travelDuration, List<GenreDto> genreDtoList) {
         Set<Song> playlistSongs = new HashSet<>();
+        Set<Genre> genreList = new HashSet<>();
         int totalPlaylistDuration = 0;
         Long totalRank = 0L;
         for (GenreDto genreDto : genreDtoList) {
+            if (isPercentageZero(genreDto)) continue;
+
             int getGenrePercentage = genreDto.getPercentage();
             int currentGenreDuration = 0;
             int totalGenreDuration = (travelDuration * getGenrePercentage) / 100;
 
             Genre genre = PlaylistHelper.extractGenres(genreRepository, genreDto);
+            genreList.add(genre);
 
             while (currentGenreDuration < totalGenreDuration) {
                 List<Song> songs = songRepository.getMeSingleTopSongByGenre(genre.getId());
@@ -158,7 +166,7 @@ public class PlaylistServiceImpl implements PlaylistService {
 
             }
         }
-        PlaylistHelper.updatePlaylistDetails(playlist, totalRank, playlistSongs, totalPlaylistDuration);
+        PlaylistHelper.updatePlaylistDetails(playlist, totalRank, playlistSongs, totalPlaylistDuration, genreList);
         return playlistRepository.save(playlist);
     }
 
@@ -166,15 +174,19 @@ public class PlaylistServiceImpl implements PlaylistService {
     @Override
     public Playlist generateTopRankSongsUniqueArtistsPlaylist(Playlist playlist, int travelDuration, List<GenreDto> genreDtoList) {
         Set<Song> playlistSongs = new HashSet<>();
+        Set<Genre> genreList = new HashSet<>();
         List<Long> artistsId = new ArrayList<>();
         int totalPlaylistDuration = 0;
         Long totalRank = 0L;
         for (GenreDto genreDto : genreDtoList) {
+            if (isPercentageZero(genreDto)) continue;
+
             int getGenrePercentage = genreDto.getPercentage();
             int currentGenreDuration = 0;
             int totalGenreDuration = (travelDuration * getGenrePercentage) / 100;
 
             Genre genre = PlaylistHelper.extractGenres(genreRepository, genreDto);
+            genreList.add(genre);
 
             while (currentGenreDuration < totalGenreDuration) {
                 List<Song> songs;
@@ -196,7 +208,7 @@ public class PlaylistServiceImpl implements PlaylistService {
             }
 
         }
-        PlaylistHelper.updatePlaylistDetails(playlist, totalRank, playlistSongs, totalPlaylistDuration);
+        PlaylistHelper.updatePlaylistDetails(playlist, totalRank, playlistSongs, totalPlaylistDuration, genreList);
         return playlistRepository.save(playlist);
 
     }
@@ -205,14 +217,18 @@ public class PlaylistServiceImpl implements PlaylistService {
     @Override
     public Playlist generateDefaultRankNonUniqueArtistPlaylist(Playlist playlist, int travelDuration, List<GenreDto> genreDtoList) {
         Set<Song> playlistSongs = new HashSet<>();
+        Set<Genre> genreList = new HashSet<>();
         int totalPlaylistDuration = 0;
         Long totalRank = 0L;
         for (GenreDto genreDto : genreDtoList) {
+            if (isPercentageZero(genreDto)) continue;
             int getGenrePercentage = genreDto.getPercentage();
             int currentGenreDuration = 0;
             int totalGenreDuration = (travelDuration * getGenrePercentage) / 100;
 
             Genre genre = PlaylistHelper.extractGenres(genreRepository, genreDto);
+
+            genreList.add(genre);
 
             while (currentGenreDuration < totalGenreDuration) {
                 List<Song> songs = songRepository.getMeSingleSongByGenre(genre.getId());
@@ -226,8 +242,15 @@ public class PlaylistServiceImpl implements PlaylistService {
 
             }
         }
-        PlaylistHelper.updatePlaylistDetails(playlist, totalRank, playlistSongs, totalPlaylistDuration);
+        PlaylistHelper.updatePlaylistDetails(playlist, totalRank, playlistSongs, totalPlaylistDuration, genreList);
         return playlistRepository.save(playlist);
+    }
+
+    private static boolean isPercentageZero(GenreDto genreDto) {
+        if(genreDto.getPercentage() == 0){
+            return true;
+       }
+        return false;
     }
 
     @Override

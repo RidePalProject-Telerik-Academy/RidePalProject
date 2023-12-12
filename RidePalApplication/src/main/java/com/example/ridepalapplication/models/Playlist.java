@@ -38,6 +38,14 @@ public class Playlist {
     )
     private Set<Tag> tags = new HashSet<>();
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "playlists_genres",
+            joinColumns = @JoinColumn(name = "playlist_id"),
+            inverseJoinColumns = @JoinColumn(name = "genre_id")
+    )
+    private Set<Genre> genres = new HashSet<>();
+
     public Playlist() {
     }
 
@@ -67,6 +75,10 @@ public class Playlist {
 
     public Set<Tag> getTags() {
         return tags;
+    }
+
+    public Set<Genre> getGenres() {
+        return genres;
     }
 
     public void setId(long id) {
@@ -103,6 +115,10 @@ public class Playlist {
 
     public void setDuration(int duration) {
         this.duration = duration;
+    }
+
+    public void setGenres(Set<Genre> genres) {
+        this.genres = genres;
     }
 
     @Override

@@ -46,10 +46,11 @@ public class PlaylistHelper {
         playlistToUpdate.setRank(Math.absExact(totalPlaylistRank) / playlistToUpdate.getSongs().size());
     }
 
-    public static void updatePlaylistDetails(Playlist playlist, Long totalRank, Set<Song> playlistSongs, int totalPlaylistDuration) {
+    public static void updatePlaylistDetails(Playlist playlist, Long totalRank, Set<Song> playlistSongs, int totalPlaylistDuration, Set<Genre> genres) {
         playlist.setRank(totalRank / playlistSongs.size());
         playlist.setDuration(totalPlaylistDuration);
         playlist.setSongs(playlistSongs);
+        playlist.setGenres(genres);
     }
 
     public static List<GenreDto> verifyTotalGenrePercentage(List<GenreDto> genreDtoList) {
