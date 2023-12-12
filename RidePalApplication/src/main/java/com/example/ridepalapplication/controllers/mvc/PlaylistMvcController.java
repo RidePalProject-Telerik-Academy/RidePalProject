@@ -62,17 +62,17 @@ public class PlaylistMvcController {
                                @RequestParam(required = false, defaultValue = "9") Integer pageSize,
                                @RequestParam(required = false, defaultValue = "0") Integer minDuration,
                                @RequestParam(required = false, defaultValue = "2147483647") Integer maxDuration,
-                               @RequestParam(required = false, defaultValue = "") List<String> tagName) {
+                               @RequestParam(required = false, defaultValue = "") List<String> genres) {
 
 
         List<Playlist> recentPlaylists = playlistService.getMostRecent();
-        List<Playlist> filteredList = playlistService.getAll(page, pageSize, name, minDuration, maxDuration, tagName);
+        List<Playlist> filteredList = playlistService.getAll(page, pageSize, name, minDuration, maxDuration, genres);
         int pages = (playlistService.getAll().size()) / pageSize;
 
         model.addAttribute("filteredMostRecent", recentPlaylists);
         model.addAttribute("minDuration", minDuration);
         model.addAttribute("maxDuration", maxDuration);
-        model.addAttribute("tagName", tagName);
+        model.addAttribute("genres", genres);
         model.addAttribute("page", page);
         model.addAttribute("maxDuration", maxDuration);
         model.addAttribute("pageSize", pages);
@@ -142,29 +142,29 @@ public class PlaylistMvcController {
             return "ErrorView";
         }
     }
+    
+        @PostMapping("/{id}/update")
+        public String updatePlaylist(@PathVariable long id,
+                                     Authentication authentication,
+                                     @Valid @ModelAttribute("updatePlaylistDto") UpdatePlaylistDto updatePlaylistDto,
+                                     BindingResult bindingResult, Model model) {
 
-    @PostMapping("/{id}/update")
-    public String updatePlaylist(@PathVariable long id,
-                                 Authentication authentication,
-                                 @Valid @ModelAttribute("updatePlaylistDto") UpdatePlaylistDto updatePlaylistDto,
-                                 BindingResult bindingResult, Model model) {
+            if (bindingResult.hasErrors()) {
+                return "ErrorView";
+            }
 
-        if (bindingResult.hasErrors()) {
-            return "ErrorView";
+            try {
+                User user = authenticationHelper.tryGetUser(authentication);
+                Playlist playlist = playlistService.getById(id).orElseThrow();
+                playlistService.update(user, playlist, updatePlaylistDto.getName());
+                return "redirect:/playlists/" + id;
+            } catch (AuthorizationException e) {
+                model.addAttribute("error", e.getMessage());
+                bindingResult.rejectValue("name", "name_error", e.getMessage());
+                return "ErrorView";
+            }
+
         }
-
-        try {
-            User user = authenticationHelper.tryGetUser(authentication);
-            Playlist playlist = playlistService.getById(id).orElseThrow();
-            playlistService.update(user, playlist, updatePlaylistDto.getName());
-            return "redirect:/playlists/" + id;
-        } catch (AuthorizationException e) {
-            model.addAttribute("error", e.getMessage());
-            bindingResult.rejectValue("name", "name_error", e.getMessage());
-            return "ErrorView";
-        }
-
-    }
 
     @GetMapping("/{id}/delete")
     public String deletePlaylist(@PathVariable long id,

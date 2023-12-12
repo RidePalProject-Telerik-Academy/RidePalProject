@@ -6,8 +6,7 @@ import com.example.ridepalapplication.models.Genre;
 import com.example.ridepalapplication.models.Playlist;
 import com.example.ridepalapplication.models.Song;
 import com.example.ridepalapplication.repositories.GenreRepository;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.server.ResponseStatusException;
+
 
 import java.util.List;
 import java.util.Set;
@@ -75,5 +74,8 @@ public class PlaylistHelper {
             throw new UnsupportedOperationException(String.format("The application does not support enough unique songs with genre " +
                     "%s to satisfy your request !", genre.getName()));
         }
+    }
+    public static boolean isPercentageZero(GenreDto genreDto) {
+        return genreDto.getPercentage() == 0;
     }
 }

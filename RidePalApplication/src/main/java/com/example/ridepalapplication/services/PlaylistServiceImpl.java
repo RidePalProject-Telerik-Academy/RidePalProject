@@ -41,7 +41,7 @@ public class PlaylistServiceImpl implements PlaylistService {
 
 
     @Override
-    public List<Playlist> getAll(Integer page, Integer pageSize, String name, Integer minDuration, Integer maxDuration, List<String> tagName) {
+    public List<Playlist> getAll(Integer page, Integer pageSize, String name, Integer minDuration, Integer maxDuration, List<String> genres) {
         PageRequest pageRequest = PageRequest.of(page, pageSize);
         Specification<Playlist> playlistSpecification;
 
@@ -51,11 +51,11 @@ public class PlaylistServiceImpl implements PlaylistService {
         Specification<Playlist> durationSpec = (root, query, criteriaBuilder) ->
                 criteriaBuilder.between(root.get("duration"), minDuration, maxDuration);
         Specification<Playlist> tagNameSpec;
-        if (!tagName.isEmpty()) {
+        if (!genres.isEmpty()) {
             tagNameSpec = (root, query, criteriaBuilder) -> {
 
-                Join<Playlist, Tag> tagJoin = root.join("tags", JoinType.INNER);
-                return tagJoin.get("name").as(String.class).in(tagName);
+                Join<Playlist, Genre> tagJoin = root.join("genres", JoinType.INNER);
+                return tagJoin.get("name").as(String.class).in(genres);
 
 
             };
@@ -105,8 +105,7 @@ public class PlaylistServiceImpl implements PlaylistService {
         int totalPlaylistDuration = 0;
         Long totalRank = 0L;
         for (GenreDto genreDto : genreDtoList) {
-            if (isPercentageZero(genreDto)) continue;
-
+            if (PlaylistHelper.isPercentageZero(genreDto)) continue;
             int getGenrePercentage = genreDto.getPercentage();
             int currentGenreDuration = 0;
             int totalGenreDuration = (travelDuration * getGenrePercentage) / 100;
@@ -145,8 +144,7 @@ public class PlaylistServiceImpl implements PlaylistService {
         int totalPlaylistDuration = 0;
         Long totalRank = 0L;
         for (GenreDto genreDto : genreDtoList) {
-            if (isPercentageZero(genreDto)) continue;
-
+            if (PlaylistHelper.isPercentageZero(genreDto)) continue;
             int getGenrePercentage = genreDto.getPercentage();
             int currentGenreDuration = 0;
             int totalGenreDuration = (travelDuration * getGenrePercentage) / 100;
@@ -179,8 +177,7 @@ public class PlaylistServiceImpl implements PlaylistService {
         int totalPlaylistDuration = 0;
         Long totalRank = 0L;
         for (GenreDto genreDto : genreDtoList) {
-            if (isPercentageZero(genreDto)) continue;
-
+            if (PlaylistHelper.isPercentageZero(genreDto)) continue;
             int getGenrePercentage = genreDto.getPercentage();
             int currentGenreDuration = 0;
             int totalGenreDuration = (travelDuration * getGenrePercentage) / 100;
@@ -221,7 +218,7 @@ public class PlaylistServiceImpl implements PlaylistService {
         int totalPlaylistDuration = 0;
         Long totalRank = 0L;
         for (GenreDto genreDto : genreDtoList) {
-            if (isPercentageZero(genreDto)) continue;
+            if (PlaylistHelper.isPercentageZero(genreDto)) continue;
             int getGenrePercentage = genreDto.getPercentage();
             int currentGenreDuration = 0;
             int totalGenreDuration = (travelDuration * getGenrePercentage) / 100;
@@ -246,12 +243,7 @@ public class PlaylistServiceImpl implements PlaylistService {
         return playlistRepository.save(playlist);
     }
 
-    private static boolean isPercentageZero(GenreDto genreDto) {
-        if(genreDto.getPercentage() == 0){
-            return true;
-       }
-        return false;
-    }
+
 
     @Override
     public Playlist update(User user, Playlist playlistToUpdate, String newName) {

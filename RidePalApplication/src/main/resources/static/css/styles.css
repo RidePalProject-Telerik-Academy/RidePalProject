@@ -815,3 +815,44 @@ i.fa-volume-down, i.fa-volume-up {
 .table tbody tr:hover {
     background-color: rgba(52, 152, 219, 0.2);
 }
+.update-playlist-modal {
+    display: none;
+    position: fixed;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 50px;
+    background-color: rgba(46, 88, 140, 0.5);
+    z-index: 1000;
+    box-shadow: 0 0 10px rgba(215, 48, 48, 0.5);
+    border-radius: 10px;
+    width: 300px;
+}
+
+.close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+}
+
+#open-modal-button {
+    width: fit-content;
+    border-style: solid;
+    border-width: 0.1em;
+    border-radius: 0.5em;
+    padding: 0.5em;
+    color: #f8f9fa;
+    font-size: 4vmin;
+    margin-right: 2%;
+    margin-left: 80%;
+    margin-top: 30px;
+
+;
+    &:hover {
+        color: #f8f9fa;
+        background: black;
+        transition: transform 0.3s ease-in-out;
+        transform: scale(1.1);
+    }
+}

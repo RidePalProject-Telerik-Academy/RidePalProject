@@ -17,30 +17,6 @@ function convertAndSubmit() {
     $("#filterForm").submit();
 }
 
-    function incrementPage() {
-    currentPage++;
-
-    window.location.href = '/playlists?page=' + currentPage;
-}
-
-$(document).ready(function () {
-    var durationSlider = $("#durationSlider").ionRangeSlider({
-        type: "double",
-        grid: true,
-        min: 0,
-        max: 600,
-        step: 15,
-        from:  0,
-        to:  600,
-        onChange: function (data) {
-            $("#minDuration").val(data.from * 60);
-            $("#maxDuration").val(data.to * 60);
-        }
-    }).data("ionRangeSlider");
-});
-function convertAndSubmit() {
-    $("#filterForm").submit();
-}
 
 function incrementPage(pageSize) {
     if(currentPage++ < pageSize) {
@@ -119,18 +95,3 @@ $(document).ready(function () {
     });
 });
 
-function deletePopUp() {
-    document.getElementById("popUp");
-    var deleteLinks = document.querySelectorAll('.delete-user');
-    for (var i = 0; i < deleteLinks.length; i++) {
-        deleteLinks[i].addEventListener('click', function (event) {
-            event.preventDefault();
-
-            var choice = confirm(this.getAttribute('data-confirm'));
-
-            if (choice) {
-                window.location.href = this.getAttribute('href');
-            }
-        });
-    }
-}

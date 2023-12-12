@@ -44,15 +44,16 @@
 
         </ul>
     </nav>
-
+    <!----- SEARCH BAR STARTS HERE -->
     <div id="search-line">
         <form class="search" action="#" id="search-form" th:action="@{/playlists}" method="get">
-            <input type="text" name="tagName" placeholder="Search..." class="search-input" th:object="${tagName}">
+            <input type="text" name="genres" placeholder="Search..." class="search-input" th:object="${genres}">
             <a class="search-btn" type="submit"> </a>
         </form>
         <a class="utility-btn" id="generate-playlist" th:href="${isAuthenticated ? '/playlists/generate' : '/login'}"
            th:text="#{navigation.generate}">Generate Playlist</a>
     </div>
+    <!----- SEARCH BAR ENDS HERE -->
 </section>
 <!--ENDS NAVIGATION BAR-->
 

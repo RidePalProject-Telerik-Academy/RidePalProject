@@ -27,6 +27,7 @@
 
 
     <title>Playlist</title>
+
 </head>
 
 <body id="main-body">
@@ -36,17 +37,13 @@
     <nav>
         <a th:href="@{/playlists}">
             <div id="logo">
-                <!--            <img src="../images/logo-alt.gif" th:src="@{/images/logo-alt.gif}" alt="logo">-->
                 <h1 style="font-family: Forte, sans-serif;">RidePal</h1>
             </div>
         </a>
         <ul>
-            <!--            <li><a href="PlaylistsView.html" th:href="@{/playlists}" th:text="#{navigation.playlists}">Explore</a>-->
-            <!--            </li>-->
             <li th:unless="${isAuthenticated}"><a href="/login" th:href="@{/login}"
                                                   th:text="#{navigation.login}">Login</a></li>
-            <!--            <li><a href="GenerateView.html" th:href="@{/playlists/generate}"-->
-            <!--                   th:text="#{navigation.generate}">Generate</a></li>-->
+
             <li th:unless="${isAuthenticated}"><a href="RegisterView.html" th:href="@{/users/register}"
                                                   th:text="#{navigation.register}">SignUp</a>
             </li>
@@ -60,24 +57,40 @@
 
     <div id="search-line">
         <form class="search" action="#" id="search-form" th:action="@{/playlists}" method="get">
-            <input type="text" name="name" placeholder="Search..." class="search-input" th:object="${name}">
+            <input type="text" name="genres" placeholder="Search..." class="search-input" th:object="${genres}">
             <a class="search-btn" type="submit"> </a>
         </form>
         <a class="utility-btn" id="generate-playlist" th:href="${isAuthenticated ? '/playlists/generate' : '/login'}"
            th:text="#{navigation.generate}">Generate Playlist</a>
     </div>
 </section>
-<!--ENDS NAVIGATION BAR-->
+
+<a  id="open-modal-button">Update Playlist</a>
+
+<!-- Update Playlist Modal STARTS HERE> -->
+
+<div id="updatePlaylistModal" class="update-playlist-modal">
+    <div class="modal-content">
+        <span class="close" id="close-modal-button">&times;</span>
+        <form id="update-playlist-form" th:object="${updatePlaylistDto}"
+              th:action="@{'/playlists/' + ${id} + '/update'}" method="post">
+            <label for="playlist-name">Enter name:</label>
+            <input type="text" id="playlist-name" name="playlist-name"  th:field="*{name}" maxlength="64" value="Current Playlist Name">
+            <button type="submit" id="submit-update">Submit</button>
+        </form>
+    </div>
+</div>
+
+<!-- Update Playlist Modal ENDS HERE> -->
 
 
 <section class="song-list">
     <h2 th:text="${singlePlaylist.name}"></h2>
+
     <div class="playlist-details">
         <img id="singlePlaylistImage" alt="Playlist Image" class="cropped-image">
 
         <ul>
-
-
             <li>
                 <ul id="playlist-details-info">
                     <li><h4 th:text="'Creator: ' + ${singlePlaylist.creator.getUsername()}"></h4></li>
@@ -85,18 +98,6 @@
                     <li><h4 th:text="'Rank: ' + ${singlePlaylist.rank}"></h4>
                     <li><h4 th:text="'Number of songs: ' + ${singlePlaylist.getSongs().size()}"></h4>
 
-
-                        <!--ADD TAGS-->
-                    <li th:if="${user.username.equals(username)}">
-                        <!--                        <h4>Add Tag:</h4>-->
-                        <form action="#" th:action="@{/playlists/{id}/tags(id=${singlePlaylist.getId()})}" method="post"
-                              class="add-tag-form">
-                            <input type="text" th:field="*{newTag.tagName}" placeholder="Add tag" required>
-                            <button type="submit">Add</button>
-                        </form>
-                    </li>
-
-                    <!--VIEW TAGS-->
                     <li th:if="${not #lists.isEmpty(tags)}">
                         <span th:each="tag : ${tags}" class="tag-bubble">
                         <span th:text="'&#35;' + ${tag.getName()}"></span>
@@ -334,10 +335,25 @@
             setTimeout(() => audioPlayer.play(), 1000);
         }
 
-        function playCurrentSong() {
-            var index = document.getElementById("index").value;
-            startMusic(songsArray, index);
-        }
+
+        const modal = document.getElementById('updatePlaylistModal');
+
+        const openModalBtn = document.getElementById('open-modal-button');
+
+        const closeModalBtn = document.getElementById('close-modal-button');
+
+        openModalBtn.addEventListener('click', () => {
+            modal.style.display = 'block';
+        });
+
+        closeModalBtn.addEventListener('click', () => {
+            modal.style.display = 'none';
+        });
+        window.addEventListener('click', (event) => {
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
 
     </script>
 

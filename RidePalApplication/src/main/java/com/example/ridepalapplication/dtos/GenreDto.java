@@ -1,6 +1,5 @@
 package com.example.ridepalapplication.dtos;
 
-import jakarta.validation.constraints.NotNull;
 
 public class GenreDto {
 
