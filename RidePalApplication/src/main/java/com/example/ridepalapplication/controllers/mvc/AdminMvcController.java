@@ -93,7 +93,11 @@ public class AdminMvcController {
     @GetMapping("/users/{id}/delete")
     public String deleteUser(Authentication authentication, Model model, @PathVariable Long id){
         User user = verifyAuthority(authentication);
+
         userService.deleteUser(user, id);
+        if(user.getId()==id){
+            return "redirect:/logout";
+        }
         model.addAttribute("user",user);
         return "redirect:/admins/users";
     }

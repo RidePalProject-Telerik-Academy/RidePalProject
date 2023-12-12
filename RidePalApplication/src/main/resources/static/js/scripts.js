@@ -93,5 +93,27 @@ $(document).ready(function () {
             });
         }
     });
+    function setupDeleteConfirmation(selector) {
+        var elements = document.querySelectorAll(selector);
+        for (var i = 0; i < elements.length; i++) {
+            elements[i].addEventListener('click', function (event) {
+                var choice = confirm(this.getAttribute('data-confirm'));
+
+                if (!choice) {
+                    event.preventDefault();
+                }
+                // If choice is true, allow the default action (navigation or form submission)
+            });
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        setupDeleteConfirmation('.delete-user');
+        setupDeleteConfirmation('.delete-element-btn');
+        setupDeleteConfirmation('.delete-element-utility-btn');
+    });
+
+    setupDeleteConfirmation('.delete-user');
+    setupDeleteConfirmation('.delete-element-btn');
 });
 

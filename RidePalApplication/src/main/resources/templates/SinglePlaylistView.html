@@ -27,10 +27,25 @@
 
 
     <title>Playlist</title>
+    <style>
+        #single-playlist-view-body {
+            font-size: 2.1rem;
+            color: #f8f9fa;
+            min-height: 100vh;
+            width: 100%;
+            background-size: 250%;
+            position: absolute;
+            background-image: linear-gradient(rgba(4, 9, 30, 0.2), rgba(4, 9, 30, 0.2)), url(/images/vinyl.jpg);
+            background-repeat: repeat;
+            display: flex;
+            flex-direction: column;
+
+        }
+    </style>
 
 </head>
 
-<body id="main-body">
+<body id="single-playlist-view-body">
 
 <!--NAVIGATION BAR-->
 <section class="header">
@@ -65,8 +80,9 @@
     </div>
 </section>
 
-<a  id="open-modal-button">Update Playlist</a>
+<a th:if="${user.username.equals(username)}" id="open-modal-button">Update Playlist</a>
 
+<a th:if="${user.username.equals(username)}" style="margin-left: 83%; margin-top: 30px;" class="utility-btn" id="open-tag-modal-button">Add Tag</a>
 <!-- Update Playlist Modal STARTS HERE> -->
 
 <div id="updatePlaylistModal" class="update-playlist-modal">
@@ -74,12 +90,26 @@
         <span class="close" id="close-modal-button">&times;</span>
         <form id="update-playlist-form" th:object="${updatePlaylistDto}"
               th:action="@{'/playlists/' + ${id} + '/update'}" method="post">
-            <label for="playlist-name">Enter name:</label>
+            <label for="playlist-name">Enter Name:</label>
             <input type="text" id="playlist-name" name="playlist-name"  th:field="*{name}" maxlength="64" value="Current Playlist Name">
             <button type="submit" id="submit-update">Submit</button>
         </form>
     </div>
 </div>
+
+
+<div id="addTagModal" class="update-playlist-modal">
+    <div class="modal-content">
+        <span class="close" id="close-tag-modal-button">&times;</span>
+        <form id="add-tag-form" th:object="${newTag}"
+              th:action="@{'/playlists/' + ${id} + '/tags'}" method="post">
+            <label for="add-tag">Enter Tag Name:</label>
+            <input type="text" id="add-tag" name="tag-name"  th:field="*{tagName}" maxlength="64" value="Tag Name">
+            <button type="submit" id="submit-tag">Submit</button>
+        </form>
+    </div>
+</div>
+
 
 <!-- Update Playlist Modal ENDS HERE> -->
 
@@ -106,7 +136,7 @@
         <form class = "delete-form" th:if="${user.username.equals(username)}"
               th:action="@{/playlists/{id}/tag(id=${singlePlaylist.getId()})}" method="post">
             <input type="hidden" name="tagName" th:value="${tag.getName()}"/>
-            <button type="submit" class="delete-element-btn">X</button>
+            <button type="submit" class="delete-element-btn" data-confirm="Are you sure?"> X</button>
         </form>
     </span>
                     </li>
@@ -121,7 +151,8 @@
             <form class = "delete-form" th:if="${user.username.equals(username)}"
                   th:action="@{'/playlists/'+${singlePlaylist.getId()}+'/songs/'+${song.getId()+'/delete'}}" method="post">
                 <input type="hidden" name="tagName" th:value="${song.getId()}"/>
-                <button type="submit" class="delete-element-btn">X</button>
+                <button type="submit" class="delete-element-btn" data-confirm="Are you sure?">X</button>
+
             </form>
         </div>
         <div class="song-item">
@@ -136,8 +167,12 @@
     </div>
 </section>
 
-<a th:if="${user.username.equals(username)}" class="utility-btn" style="margin: 5vmin" th:href="@{'/playlists/' + ${singlePlaylist.getId()} + '/delete'}">Delete
-    playlist</a></li>
+<a th:if="${user.username.equals(username)}" class="delete-user"
+   style="margin: 5vmin" th:href="@{'/playlists/' + ${singlePlaylist.getId()} + '/delete'}"
+   data-confirm="Are you sure?">Delete playlist</a>
+
+
+
 
 <section>
     <div th:if="${isAuthenticated}" class="player">
@@ -334,8 +369,6 @@
             audioPlayer.currentTime = (audioPlayer.duration * seekSlider.value) / 100;
             setTimeout(() => audioPlayer.play(), 1000);
         }
-
-
         const modal = document.getElementById('updatePlaylistModal');
 
         const openModalBtn = document.getElementById('open-modal-button');
@@ -352,6 +385,26 @@
         window.addEventListener('click', (event) => {
             if (event.target === modal) {
                 modal.style.display = 'none';
+            }
+        });
+
+
+        const modalTag = document.getElementById('addTagModal');
+
+        const openTagModalBtn = document.getElementById('open-tag-modal-button');
+
+        const closeTagModalBtn = document.getElementById('close-tag-modal-button');
+
+        openTagModalBtn.addEventListener('click', () => {
+            modalTag.style.display = 'block';
+        });
+
+        closeTagModalBtn.addEventListener('click', () => {
+            modalTag.style.display = 'none';
+        });
+        window.addEventListener('click', (event) => {
+            if (event.target === modalTag) {
+                modalTag.style.display = 'none';
             }
         });
 
