@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" >
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="../static/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
@@ -63,6 +63,25 @@
     </div>
 </section>
 <!--ENDS USER CARD-->
+
+<!--DELETE ACCOUNT-->
+<a th:href="@{/users/delete}" methods="get" class="delete-user" data-confirm="Are you sure to delete this item?">Delete Account</a>
+
+<script>
+    var deleteLinks = document.querySelectorAll('.delete-user');
+    for (var i = 0; i < deleteLinks.length; i++) {
+        deleteLinks[i].addEventListener('click', function (event) {
+            event.preventDefault();
+
+            var choice = confirm(this.getAttribute('data-confirm'));
+
+            if (choice) {
+                window.location.href = this.getAttribute('href');
+            }
+        });
+    }
+</script>
+<!--ENDS DELETE ACCOUNT-->
 
 <!-- USER PLAYLIST STARTS HERE --->
 <h3 style="text-align: center; font-size: 8vmin" th:text="${user.username} + '\'s Playlists'">User's Playlists</h3>

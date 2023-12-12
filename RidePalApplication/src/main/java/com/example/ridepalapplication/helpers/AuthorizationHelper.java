@@ -22,7 +22,7 @@ public class AuthorizationHelper {
         }
     }
 
-    public  void checkAuthorization(User loggedUser, User userToUpdate, String operation) {
+    public void checkAuthorization(User loggedUser, User userToUpdate, String operation) {
         if (loggedUser.getId() != userToUpdate.getId()) {
             throw new AuthorizationException(String.format(UNAUTHORIZED_OPERATION, operation));
         }

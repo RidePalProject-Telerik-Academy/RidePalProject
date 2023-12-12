@@ -117,4 +117,12 @@ public class UserMvcController {
             return "UserUpdateView";
         }
     }
+
+    @GetMapping("/delete")
+    public String deleteUser(Authentication authentication) {
+        User loggedUser = authenticationHelper.tryGetUser(authentication);
+        userService.deleteUser(loggedUser, loggedUser.getId());
+           return "redirect:/logout";
+    }
+
 }

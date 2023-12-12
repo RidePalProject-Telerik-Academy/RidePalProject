@@ -3,7 +3,9 @@ package com.example.ridepalapplication.services;
 import com.example.ridepalapplication.exceptions.AuthorizationException;
 import com.example.ridepalapplication.exceptions.EntityDuplicateException;
 import com.example.ridepalapplication.exceptions.EntityNotFoundException;
+import com.example.ridepalapplication.helpers.AuthorizationHelper;
 import com.example.ridepalapplication.models.User;
+import com.example.ridepalapplication.repositories.PlaylistRepository;
 import com.example.ridepalapplication.repositories.UserRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -25,6 +27,10 @@ public class UserServiceTests {
 
     @Mock
     UserRepository mockRepository;
+    @Mock
+    AuthorizationHelper authorizationHelper;
+    @Mock
+    PlaylistRepository playlistRepository;
     @InjectMocks
     UserServiceImpl service;
 
@@ -100,10 +106,10 @@ public class UserServiceTests {
     void createUser_Should_ReturnNewUser_When_UsernameAndEmail_NotExists() {
         User mockUser = createMockUser();
 
-        Mockito.when(mockRepository.findByUsername(Mockito.anyString()))
-                .thenReturn(null);
+        Mockito.when(mockRepository.findByUsername(mockUser.getUsername()))
+                .thenReturn(Optional.empty());
 
-        Mockito.when(mockRepository.findByEmail(Mockito.anyString()))
+        Mockito.when(mockRepository.findByEmail(mockUser.getEmail()))
                 .thenReturn(null);
 
         service.createUser(mockUser);
@@ -112,21 +118,21 @@ public class UserServiceTests {
                 .save(mockUser);
     }
 
-//    @Test
-//    void createUser_Should_ThrowException_When_UsernameExists() {
-//
-//        User mockUser = createMockUser();
-//        service.createUser(mockUser);
-//
-//        Mockito.when(mockRepository.findByUsername(mockUser.getUsername()))
-//                .thenReturn(mockUser);
-//
-//        EntityDuplicateException exception = Assertions.assertThrows(
-//                EntityDuplicateException.class,
-//                () -> service.createUser(mockUser));
-//
-//        Assertions.assertEquals(String.format("User with %s %s already exists.", "username", mockUser.getUsername()), exception.getMessage());
-//    }
+    @Test
+    void createUser_Should_ThrowException_When_UsernameExists() {
+
+        User mockUser = createMockUser();
+        service.createUser(mockUser);
+
+        Mockito.when(mockRepository.findByUsername(mockUser.getUsername()))
+                .thenReturn(Optional.of(mockUser));
+
+        EntityDuplicateException exception = Assertions.assertThrows(
+                EntityDuplicateException.class,
+                () -> service.createUser(mockUser));
+
+        Assertions.assertEquals(String.format("User with %s %s already exists.", "username", mockUser.getUsername()), exception.getMessage());
+    }
 
     @Test
     void createUser_Should_ThrowException_When_EmailExists() {
@@ -175,6 +181,7 @@ public class UserServiceTests {
                 .save(mockUser);
     }
 
+    //TODO: fix logic in service
     @Test
     void updateUser_Should_ThrowException_When_EmailExists() {
         User mockUser = createMockUser();
@@ -186,11 +193,13 @@ public class UserServiceTests {
 
         EntityDuplicateException exception = Assertions.assertThrows(
                 EntityDuplicateException.class,
-                () -> service.updateUser(mockUser, mockUser));
+                () -> service.updateUser(anotherUser, mockUser));
 
         Assertions.assertEquals(String.format("User with %s %s already exists.", "email", mockUser.getEmail()), exception.getMessage());
     }
 
+
+    //TODO: check also here I believe there is an issue with logic
     @Test
     void updateUser_Should_ThrowException_When_OtherUser() {
         User mockUser = createMockUser();
@@ -231,10 +240,14 @@ public class UserServiceTests {
                 .deleteById(mockUser.getId());
     }
 
+    //TODO: check for security auth role
     @Test
     void deleteUser_Should_ThrowException_When_OtherUser() {
         User mockUser = createMockUser();
         User newMockUser = new User();
+
+        Mockito.when(mockRepository.findById(mockUser.getId()))
+                .thenReturn(Optional.of(mockUser));
 
         AuthorizationException exception = Assertions.assertThrows(
                 AuthorizationException.class,
