@@ -120,7 +120,7 @@ public class PlaylistMvcController {
     }
 
     @GetMapping("/{id}")
-    public String singlePlaylistView(@PathVariable long id, Model model, Authentication authentication) {
+    public String singlePlaylistView(@PathVariable Long id, Model model, Authentication authentication) {
         String username;
         try {
             username = authentication.getName();
@@ -145,13 +145,17 @@ public class PlaylistMvcController {
     }
     
         @PostMapping("/{id}/update")
-        public String updatePlaylist(@PathVariable long id,
+        public String updatePlaylist(@PathVariable Long id,
                                      Authentication authentication,
                                      @Valid @ModelAttribute("updatePlaylistDto") UpdatePlaylistDto updatePlaylistDto,
                                      BindingResult bindingResult, Model model) {
 
             if (bindingResult.hasErrors()) {
-                return "ErrorView";
+                if (bindingResult.hasErrors()) {
+                    model.addAttribute("error",bindingResult.getFieldError("name").getDefaultMessage());
+                    return "ErrorView";
+                }
+
             }
 
             try {
@@ -168,7 +172,7 @@ public class PlaylistMvcController {
         }
 
     @GetMapping("/{id}/delete")
-    public String deletePlaylist(@PathVariable long id,
+    public String deletePlaylist(@PathVariable Long id,
                                  Authentication authentication) {
 
         User user = authenticationHelper.tryGetUser(authentication);
@@ -177,15 +181,15 @@ public class PlaylistMvcController {
         return "redirect:/users/myProfile";
     }
 
-    //TODO: fix BindingResult
     @PostMapping("/{id}/tags")
-    public String createTag(@PathVariable long id,
+    public String createTag(@PathVariable Long id,
                             @Valid @ModelAttribute("newTag") TagDto tagDto,
                             BindingResult bindingResult,
                             Authentication authentication, Model model) {
 
         if (bindingResult.hasErrors()) {
-            return "redirect:/playlists" + id;
+            model.addAttribute("error",bindingResult.getFieldError("tagName").getDefaultMessage());
+            return "ErrorView";
         }
 
         try {
@@ -196,14 +200,14 @@ public class PlaylistMvcController {
             playlistService.createTag(user, tag, playlist);
             return "redirect:/playlists/" + id;
         } catch (EntityDuplicateException e) {
-//            bindingResult.rejectValue("name", "name_error", e.getMessage());
+             bindingResult.rejectValue("name", "name_error", e.getMessage());
             model.addAttribute("error", e.getMessage());
             return "ErrorView";
         }
     }
 
     @PostMapping("/{id}/tag")
-    public String deleteTag(@PathVariable long id,
+    public String deleteTag(@PathVariable Long id,
                             @Valid @ModelAttribute("newTag") TagDto tagDto,
                             Authentication authentication) {
 
@@ -221,8 +225,8 @@ public class PlaylistMvcController {
     }
 
     @PostMapping("/{playlistId}/songs/{songId}/delete")
-    public String deleteSong(@PathVariable long playlistId,
-                             @PathVariable long songId,
+    public String deleteSong(@PathVariable Long playlistId,
+                             @PathVariable Long songId,
                              Authentication authentication) {
 
         User user = authenticationHelper.tryGetUser(authentication);

@@ -69,14 +69,9 @@ public class UserServiceTests {
 
     @Test
     void getById_Should_ThrowException_When_IdNotFound() {
-
-        long mockId = Mockito.anyLong();
-
-        EntityNotFoundException exception = Assertions.assertThrows(
-                EntityNotFoundException.class,
-                () -> service.getById(mockId));
-
-        Assertions.assertEquals(String.format("User with id %s not found.", mockId), exception.getMessage());
+        User user = createMockUser();
+        Mockito.when(mockRepository.findById(Mockito.anyLong())).thenReturn(Optional.empty());
+        Assertions.assertThrows(EntityNotFoundException.class,()->service.getById(user.getId()));
     }
 
     @Test

@@ -5,7 +5,6 @@ import com.example.ridepalapplication.helpers.AuthenticationHelper;
 import com.example.ridepalapplication.models.Playlist;
 import com.example.ridepalapplication.models.SynchronizationDetails;
 import com.example.ridepalapplication.models.User;
-import com.example.ridepalapplication.repositories.RoleRepository;
 import com.example.ridepalapplication.services.PlaylistService;
 import com.example.ridepalapplication.services.SynchronizationService;
 import com.example.ridepalapplication.services.UserService;
