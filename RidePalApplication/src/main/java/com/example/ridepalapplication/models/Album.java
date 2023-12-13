@@ -7,7 +7,7 @@ import jakarta.persistence.*;
 public class Album {
     @Id
     @Column(name = "id")
-    private long id;
+    private Long id;
     @Column(name = "name")
     private String name;
     @Column(name = "album_track_list_url")

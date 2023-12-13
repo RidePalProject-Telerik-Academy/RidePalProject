@@ -17,7 +17,8 @@ public interface PlaylistService {
 
     Optional<Playlist> getById(long id);
 
-    Playlist choosePlaylistStrategy(PlaylistDto playlistDto, Playlist playlist, int travelDuration, List<GenreDto> genreList);
+    Playlist choosePlaylistStrategy(PlaylistDto playlistDto, Playlist playlist, int travelDuration);
+
     Playlist generateDefaultRankUniqueArtistsPlaylist(Playlist playlist, int travelDuration, List<GenreDto> genreDtoList);
 
     Playlist generateTopRankSongsNonUniqueArtistPlaylist(Playlist playlist, int travelDuration, List<GenreDto> genreDtoList);

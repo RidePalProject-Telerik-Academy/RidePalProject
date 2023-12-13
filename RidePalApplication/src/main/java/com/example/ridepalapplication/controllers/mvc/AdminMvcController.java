@@ -6,7 +6,7 @@ import com.example.ridepalapplication.models.Playlist;
 import com.example.ridepalapplication.models.SynchronizationDetails;
 import com.example.ridepalapplication.models.User;
 import com.example.ridepalapplication.services.PlaylistService;
-import com.example.ridepalapplication.services.SynchronizationService;
+import com.example.ridepalapplication.services.SyncService;
 import com.example.ridepalapplication.services.UserService;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,14 +28,14 @@ public class AdminMvcController {
     private final AuthenticationHelper authenticationHelper;
     private final PlaylistService playlistService;
     private final UserService userService;
-    private final SynchronizationService synchronizationService;
+    private final SyncService syncService;
 
     @Autowired
-    public AdminMvcController(AuthenticationHelper authenticationHelper, PlaylistService playlistService, UserService userService, SynchronizationService synchronizationService) {
+    public AdminMvcController(AuthenticationHelper authenticationHelper, PlaylistService playlistService, UserService userService, SyncService syncService) {
         this.authenticationHelper = authenticationHelper;
         this.playlistService = playlistService;
         this.userService = userService;
-        this.synchronizationService = synchronizationService;
+        this.syncService = syncService;
     }
     @ModelAttribute("isAuthenticated")
     public boolean populateIsAuthenticated() {
@@ -63,7 +63,7 @@ public class AdminMvcController {
     public String synchronizeGenres(Authentication authentication,Model model) throws ParseException{
        try {
            User user = verifyAuthority(authentication);
-          synchronizationService.synchronize();
+          syncService.synchronize();
            return "redirect:/admins/sync";
        }catch (AuthorizationException e){
            model.addAttribute("error",e.getMessage());
@@ -74,7 +74,7 @@ public class AdminMvcController {
     @GetMapping("/sync")
     public String getSyncView(Authentication authentication,Model model){
         User user = verifyAuthority(authentication);
-        List<SynchronizationDetails> mostRecent = synchronizationService.mostRecent();
+        List<SynchronizationDetails> mostRecent = syncService.mostRecent();
         model.addAttribute("user",user);
         model.addAttribute("mostRecent",mostRecent);
         return "SyncView";

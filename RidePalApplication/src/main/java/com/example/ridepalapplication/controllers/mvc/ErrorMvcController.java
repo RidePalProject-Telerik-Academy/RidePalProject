@@ -1,4 +1,4 @@
-package com.example.ridepalapplication.controllers.mvc;
+/*package com.example.ridepalapplication.controllers.mvc;
 
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,10 +20,8 @@ public class ErrorMvcController implements ErrorController {
                 return "404ErrorView";
             }
         }
-        //generic ErrorView for all errors unhandled anywhere else
-        //TODO: check if we can add the specific e.message and load it as model to ErrorView
         return "ErrorView";
     }
 
 
-}
+}*/

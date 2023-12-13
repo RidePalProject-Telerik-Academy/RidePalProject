@@ -83,7 +83,7 @@ public class PlaylistController {
           Playlist playlist = playlistMapper.fromDto(playlistDto, user);
           int travelDuration = bingController.calculateTravelTime(playlistDto.getLocationDto());
 
-          return playlistService.choosePlaylistStrategy(playlistDto, playlist, travelDuration, genreList);
+          return playlistService.choosePlaylistStrategy(playlistDto, playlist, travelDuration);
 
       } catch (AuthorizationException e) {
           throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());

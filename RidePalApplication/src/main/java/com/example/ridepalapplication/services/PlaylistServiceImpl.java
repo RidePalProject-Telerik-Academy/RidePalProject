@@ -38,7 +38,10 @@ public class PlaylistServiceImpl implements PlaylistService {
         this.tagRepository = tagRepository;
         this.authorizationHelper = authorizationHelper;
     }
-
+    @Override
+    public List<Playlist> getAll() {
+        return playlistRepository.findAll();
+    }
 
     @Override
     public List<Playlist> getAll(Integer page, Integer pageSize, String name, Integer minDuration, Integer maxDuration, List<String> genres) {
@@ -81,20 +84,18 @@ public class PlaylistServiceImpl implements PlaylistService {
     }
 
     @Override
-    public Playlist choosePlaylistStrategy(PlaylistDto playlistDto, Playlist playlist, int travelDuration, List<GenreDto> genreList) {
-        if (playlistDto.topRank()) {
-            if (playlistDto.uniqueArtists()) {
-                return generateTopRankSongsUniqueArtistsPlaylist(playlist, travelDuration, genreList);
-            } else {
-                return generateTopRankSongsNonUniqueArtistPlaylist(playlist, travelDuration, genreList);
-            }
-        } else {
-            if (playlistDto.uniqueArtists()) {
-                return generateTopRankSongsUniqueArtistsPlaylist(playlist, travelDuration, genreList);
-            } else {
-                return generateDefaultRankNonUniqueArtistPlaylist(playlist, travelDuration, genreList);
-            }
-        }
+    public Playlist choosePlaylistStrategy(PlaylistDto playlistDto, Playlist playlist, int travelDuration) {
+       if(playlistDto.uniqueArtists() && !playlistDto.topRank()){
+           return generateDefaultRankUniqueArtistsPlaylist(playlist,travelDuration,playlistDto.getGenreDtoList());
+       }
+       if(playlistDto.topRank() && !playlistDto.uniqueArtists()){
+           return generateTopRankSongsNonUniqueArtistPlaylist(playlist,travelDuration,playlistDto.getGenreDtoList());
+       }
+       if(playlistDto.isTopRank() && playlistDto.isUniqueArtists()){
+           return generateTopRankSongsUniqueArtistsPlaylist(playlist,travelDuration,playlistDto.getGenreDtoList());
+       }
+       else return generateDefaultRankNonUniqueArtistPlaylist(playlist,travelDuration,playlistDto.getGenreDtoList());
+
     }
 
     @Override
@@ -324,8 +325,5 @@ public class PlaylistServiceImpl implements PlaylistService {
         return playlistRepository.getMostRecent();
     }
 
-    @Override
-    public List<Playlist> getAll() {
-        return playlistRepository.findAll();
-    }
+
 }

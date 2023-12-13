@@ -80,9 +80,8 @@
     </div>
 </section>
 
-<a th:if="${user.username.equals(username)}" id="open-modal-button">Update Playlist</a>
 
-<a th:if="${user.username.equals(username)}" style="margin-left: 83%; margin-top: 30px;" class="utility-btn" id="open-tag-modal-button">Add Tag</a>
+
 <!-- Update Playlist Modal STARTS HERE> -->
 
 <div id="updatePlaylistModal" class="update-playlist-modal">
@@ -136,8 +135,9 @@
         <form class = "delete-form" th:if="${user.username.equals(username)}"
               th:action="@{/playlists/{id}/tag(id=${singlePlaylist.getId()})}" method="post">
             <input type="hidden" name="tagName" th:value="${tag.getName()}"/>
-            <button type="submit" class="delete-element-btn" data-confirm="Are you sure?"> X</button>
+               <button type="submit" class="delete-element-btn" data-confirm="Are you sure?"> X</button>
         </form>
+
     </span>
                     </li>
 
@@ -145,7 +145,14 @@
             </li>
         </ul>
     </div>
+    <div style="display: inline-flex ; white-space: nowrap">
 
+        <a th:if="${user.username.equals(username)}" id="open-modal-button">Update Playlist</a>
+
+        <a th:if="${user.username.equals(username)}" style="margin-left: 1%; margin-top: 30px;" class="utility-btn" id="open-tag-modal-button">Add Tag</a>
+
+
+    </div>
     <div th:each="song : ${singlePlaylist.songs}">
         <div style="text-align: right; margin-right: 2vmin">
             <form class = "delete-form" th:if="${user.username.equals(username)}"
@@ -170,7 +177,6 @@
 <a th:if="${user.username.equals(username)}" class="delete-user"
    style="margin: 5vmin" th:href="@{'/playlists/' + ${singlePlaylist.getId()} + '/delete'}"
    data-confirm="Are you sure?">Delete playlist</a>
-
 
 
 

@@ -4,7 +4,6 @@ import com.example.ridepalapplication.exceptions.EntityNotFoundException;
 import com.example.ridepalapplication.models.Song;
 import com.example.ridepalapplication.services.SongService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;

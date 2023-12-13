@@ -1,12 +1,12 @@
 package com.example.ridepalapplication.services;
 
-import com.example.ridepalapplication.dtos.GenreDto;
 import com.example.ridepalapplication.dtos.LocationDto;
 import com.example.ridepalapplication.dtos.PlaylistDto;
 import com.example.ridepalapplication.exceptions.AuthorizationException;
 import com.example.ridepalapplication.exceptions.EntityDuplicateException;
 import com.example.ridepalapplication.exceptions.EntityNotFoundException;
 import com.example.ridepalapplication.helpers.AuthorizationHelper;
+import com.example.ridepalapplication.helpers.PlaylistHelper;
 import com.example.ridepalapplication.models.*;
 import com.example.ridepalapplication.repositories.GenreRepository;
 import com.example.ridepalapplication.repositories.PlaylistRepository;
@@ -20,12 +20,13 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 import static com.example.ridepalapplication.MockHelpers.*;
-import static org.mockito.ArgumentMatchers.anyLong;
 
 @ExtendWith(MockitoExtension.class)
 public class PlaylistServiceTests {
@@ -45,115 +46,51 @@ public class PlaylistServiceTests {
 
 
     @Test
-    void getById_Should_ReturnPlaylist() {
+    public  void getById_Should_ReturnPlaylist() {
         Playlist mockPlaylist = createMockPlaylist();
 
         Mockito.when(mockRepository.findById(mockPlaylist.getId()))
                 .thenReturn(Optional.of(mockPlaylist));
 
-        Playlist result = service.getById(mockPlaylist.getId()).orElse(null);
-        Assertions.assertEquals(mockPlaylist, result);
+         Optional<Playlist> result = service.getById(mockPlaylist.getId());
 
-        Mockito.verify(mockRepository, Mockito.times(1))
-                .findById(anyLong());
+        Assertions.assertEquals(result,Optional.of(mockPlaylist));
     }
 
     @Test
-    void getById_Should_ThrowException_When_IdNotFound() {
+    public void getById_Should_ThrowException_When_Id_NotFound() {
+        Playlist playlist = createMockPlaylist();
 
-        long mockId = anyLong();
+       Mockito.when(mockRepository.findById(playlist.getId())).thenReturn(Optional.empty());
 
-        EntityNotFoundException exception = Assertions.assertThrows(
-                EntityNotFoundException.class,
-                () -> service.getById(mockId));
-
-        Assertions.assertEquals(String.format("Playlist with id %s not found.", mockId), exception.getMessage());
+        Assertions.assertThrows(EntityNotFoundException.class,()->service.getById(playlist.getId()));
     }
-
-
-    // --- choosePlaylistStrategy ---
     @Test
-    void choosePlaylistStrategy_ShouldReturnGenerateTopRankSongsUniqueArtistsPlaylistMethod_WhenTopRankAndUniqueArtist() {
+    public void getBy_CreatorId_Should_Call_Repository(){
+        User user = createMockUser();
 
-        Playlist playlist = new Playlist();
-        PlaylistDto playlistDto = createTopRankUniqueArtistsPlaylistDto();
-        int travelDuration = 60;
+        service.getUserPlaylists(user.getId());
 
-        Mockito.verify(Mockito.when(service.choosePlaylistStrategy(playlistDto, playlist, travelDuration, playlistDto.getGenreDtoList())).thenReturn(playlist));
-
-        //top rank + unique artist
-        //we need to verify that the following method is called:
-        //generateTopRankSongsUniqueArtistsPlaylist
+        Mockito.verify(mockRepository,Mockito.times(1)).findPlaylistByCreatorId(user.getId());
     }
 
     @Test
-    void choosePlaylistStrategy_ShouldReturnGenerateTopRankSongsNonUniqueArtistPlaylist_WhenTopRankNoUniqueArtist() {
+    public void getMost_Recent_Should_Return_Nine_Playlists(){
 
-        PlaylistDto playlistDto = createTopRankUniqueArtistsPlaylistDto();
-        playlistDto.setUniqueArtists(false);
+        List<Playlist> mockList = new ArrayList<>(Collections.nCopies(9, new Playlist()));
 
-        //top rank + NO unique artist
-        //we need to verify that the following method is called:
-        //generateTopRankSongsNonUniqueArtistPlaylist
+        Mockito.when(mockRepository.getMostRecent()).thenReturn(mockList);
+
+        List<Playlist> actualList = service.getMostRecent();
+
+        Assertions.assertEquals(9, actualList.size());
     }
-
     @Test
-    void choosePlaylistStrategy_ShouldReturnGenerateTopRankSongsUniqueArtistsPlaylist_WhenNoTopRankUniqueArtist() {
+    public void getAll_Should_Call_Repository(){
+        service.getAll();
 
-        PlaylistDto playlistDto = createTopRankUniqueArtistsPlaylistDto();
-        playlistDto.setTopRank(false);
-
-        //no top rank + unique artist
-        //we need to verify that the following method is called:
-        //generateTopRankSongsUniqueArtistsPlaylist //TODO: ask Boby why this method
+        Mockito.verify(mockRepository,Mockito.times(1)).findAll();
     }
-
-    @Test
-    void choosePlaylistStrategy_ShouldReturnGenerateDefaultRankNonUniqueArtistPlaylist_WhenNoTopRankNoUniqueArtist() {
-
-        PlaylistDto playlistDto = createTopRankUniqueArtistsPlaylistDto();
-        playlistDto.setUniqueArtists(false);
-        playlistDto.setTopRank(false);
-
-        //no top rank + no unique artist
-        //we need to verify that the following method is called:
-        //generateDefaultRankNonUniqueArtistPlaylist
-    }
-
-
-
-
-
-//    @Test
-//    void generatePlaylist_Should_ReturnNewPlaylist() {
-//        Playlist mockPlaylist = new Playlist();
-//        int travelDuration = 100;
-//
-//        List<GenreDto> genresList = new ArrayList<>();
-//
-//        GenreDto rockGenreDto = new GenreDto("rock", 50);
-//        genresList.add(rockGenreDto);
-//
-//        GenreDto popGenreDto = new GenreDto("pop", 50);
-//        genresList.add(popGenreDto);
-//
-//        Genre mockRockGenre = createMockGenre();
-//        mockRockGenre.setName("rock");
-//        Mockito.when(genreMockRepository.findByName("rock")).thenReturn(mockRockGenre);
-//
-//        Genre mockPopGenre = createMockGenre();
-//        mockPopGenre.setName("pop");
-//        Mockito.when(genreMockRepository.findByName("pop")).thenReturn(mockPopGenre);
-//
-//        Song mockSong = createMockSong();
-//        Mockito.when(songMockRepository.getMeSingleSongByGenre(anyLong())).thenReturn(List.of(mockSong));
-//
-//        Mockito.when(mockRepository.save(mockPlaylist)).thenReturn(mockPlaylist);
-//
-//        Playlist result = service.generateDefaultRankUniqueArtistsPlaylist(new Playlist(), travelDuration, genresList);
-//
-//        Mockito.verify(mockRepository, Mockito.times(1)).save(mockPlaylist);
-//    }
 
     @Test
     void updateName_Should_ReturnUpdatedPlaylistName_When_SameUser() {
@@ -474,5 +411,93 @@ public class PlaylistServiceTests {
                 () -> service.delete(otherMockUser, mockPlaylist.getId()));
     }
 
+    @Test
+    void choose_Playlist_Strategy_Should_Return_Default_Function_When_NonArgs_Specified(){
+        Playlist playlist = createMockPlaylist();
+        PlaylistDto playlistDto = createMockPlayListDto();
 
+        Song song = createMockSong();
+        Genre genre = createMockGenre();
+        int timeDuration = 16160;
+
+        Mockito.when(genreMockRepository.findByName(Mockito.anyString())).thenReturn(genre);
+        Mockito.when(songMockRepository.getMeSingleSongByGenre(Mockito.anyLong())).thenReturn(Collections.singletonList(song));
+
+        service.choosePlaylistStrategy(playlistDto,playlist,timeDuration);
+
+        Mockito.verify(songMockRepository,Mockito.atLeast(1)).getMeSingleSongByGenre(Mockito.anyLong());
+
+    }
+    @Test
+    void choose_Playlist_Strategy_Should_Return_Non_UniqueArtists_Top_Rank_Function_When_Valid_Args(){
+        Playlist playlist = createMockPlaylist();
+        PlaylistDto playlistDto = createMockPlayListDto();
+        playlistDto.setTopRank(true);
+
+        Song song = createMockSong();
+        Genre genre = createMockGenre();
+        int timeDuration = 16160;
+
+        Mockito.when(genreMockRepository.findByName(Mockito.anyString())).thenReturn(genre);
+        Mockito.when(songMockRepository.getMeSingleTopSongByGenre(Mockito.anyLong())).thenReturn(Collections.singletonList(song));
+        service.choosePlaylistStrategy(playlistDto,playlist,timeDuration);
+
+        Mockito.verify(songMockRepository,Mockito.atLeast(1)).getMeSingleTopSongByGenre(Mockito.anyLong());
+
+    }
+    @Test
+    void choose_Playlist_Strategy_Should_Return_UniqueArtists_Top_Rank_Function_When_Valid_Args(){
+        Playlist playlist = createMockPlaylist();
+        PlaylistDto playlistDto = createMockPlayListDto();
+        playlistDto.setTopRank(true);
+        playlistDto.setUniqueArtists(true);
+
+
+
+        Song song = createMockSong();
+        Genre genre = createMockGenre();
+        List<Song> songList = new ArrayList<>();
+        songList.add(song);
+        List<Long> longList = new ArrayList<>();
+        longList.add(song.getArtist().getId());
+        int timeDuration = 500;
+
+        Mockito.when(genreMockRepository.findByName(Mockito.anyString())).thenReturn(genre);
+
+        Mockito.when(songMockRepository.getMeSingleTopSongByGenre(song.getId())).thenReturn(songList);
+
+        Mockito.when(songMockRepository.getMeSingleTopSongByGenreAndUniqueArtist(genre.getId(), longList)).thenReturn(songList);
+
+        service.choosePlaylistStrategy(playlistDto,playlist,timeDuration);
+
+        Mockito.verify(songMockRepository,Mockito.atLeast(1)).getMeSingleTopSongByGenreAndUniqueArtist(Mockito.anyLong(),Mockito.anyList());
+
+    }
+
+    @Test
+    public void choose_Strategy_Should_Return_generate_Default_Rank_Unique_Artists_Playlist_When_Valid_Args(){
+        Playlist playlist = createMockPlaylist();
+        PlaylistDto playlistDto = createMockPlayListDto();
+        playlistDto.setUniqueArtists(true);
+
+
+        Song song = createMockSong();
+        Genre genre = createMockGenre();
+        List<Song> songList = new ArrayList<>();
+        songList.add(song);
+        List<Long> longList = new ArrayList<>();
+        longList.add(song.getArtist().getId());
+        int timeDuration = 500;
+
+        Mockito.when(genreMockRepository.findByName(Mockito.anyString())).thenReturn(genre);
+
+        Mockito.when(songMockRepository.getMeSingleSongByGenre(genre.getId())).thenReturn(songList);
+
+        Mockito.when(songMockRepository.getMeSingleSongByGenreAndUniqueArtist(genre.getId(),longList)).thenReturn(songList);
+
+        service.choosePlaylistStrategy(playlistDto,playlist,timeDuration);
+
+        Mockito.verify(songMockRepository,Mockito.atLeast(1)).getMeSingleSongByGenreAndUniqueArtist(Mockito.anyLong(),Mockito.anyList());
+
+    }
 }

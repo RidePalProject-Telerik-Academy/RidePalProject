@@ -1,7 +1,7 @@
 package com.example.ridepalapplication.controllers.rest;
 
 import com.example.ridepalapplication.dtos.LocationDto;
-import com.example.ridepalapplication.helpers.BingApiConsumer;
+import com.example.ridepalapplication.consumers.BingApiConsumer;
 import org.json.simple.parser.ParseException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;

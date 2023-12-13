@@ -1,4 +1,4 @@
-package com.example.ridepalapplication.helpers;
+package com.example.ridepalapplication.consumers;
 
 
 import com.example.ridepalapplication.exceptions.EntityNotFoundException;

@@ -47,8 +47,7 @@
 
 <section class="main-content">
     <div th:each="song : ${songs}">
-        <div class="playlist-item" th:attr="data-preview-url=${song.previewUrl}"
-             ondblclick="stopSong()">
+        <div class="playlist-item" th:attr="data-preview-url=${song.previewUrl}">
             <img src="/images/logo-alt.gif" alt="Song Image">
             <h3 th:text="${song.title}"></h3>
             <h4 th:text="'Artist: ' + ${song.artist.name}"></h4>

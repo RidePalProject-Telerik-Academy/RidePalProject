@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface SynchronizationDetailsRepository extends JpaRepository<SynchronizationDetails, Long> {
+public interface SyncGenresRepository extends JpaRepository<SynchronizationDetails, Long> {
     @Query(nativeQuery = true, value = "SELECT * FROM synchronizations ORDER BY id DESC LIMIT 10")
     List<SynchronizationDetails> getMostRecent();
 }

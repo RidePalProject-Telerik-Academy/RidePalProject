@@ -82,9 +82,15 @@
                 <!--            th:href="@{'/playlists/' + ${playlist.id}}"-->
                 <img class="playlist-item img playlistImage" alt="Playlist Image">
                 <h3 th:text="${playlist.name}"></h3>
-                <h4 th:text="'Creator: ' + ${playlist.creator.getUsername()}"></h4>
-                <h4 th:text="'Duration: ' + ${playlist.duration/60} + ' min'"></h4>
-                <h4 th:text="'Rank: ' + ${playlist.rank}"></h4>
+                <h5 th:text="'Creator: ' + ${playlist.creator.getUsername()}"></h5>
+                <h5 th:text="'Duration: ' + ${playlist.duration/60} + ' min'"></h5>
+                <h5 th:text="'Rank: ' + ${playlist.rank}"></h5>
+                <h5>Genre:
+                    <span th:each="genre,iterStat : ${playlist.genres}">
+        <span th:text="${genre.name}"></span>
+        <span th:if="${not iterStat.last}">,</span>
+    </span>
+                </h5>
             </a>
         </div>
     </div>
@@ -111,9 +117,15 @@
                 <!--            th:href="@{'/playlists/' + ${playlist.id}}"-->
                 <img class="playlist-item img playlistImage" alt="Playlist Image">
                 <h3 th:text="${playlist.name}"></h3>
-                <h4 th:text="'Creator: ' + ${playlist.creator.getUsername()}"></h4>
-                <h4 th:text="'Duration: ' + ${playlist.duration/60} + ' min'"></h4>
-                <h4 th:text="'Rank: ' + ${playlist.rank}"></h4>
+                <h5 th:text="'Creator: ' + ${playlist.creator.getUsername()}"></h5>
+                <h5 th:text="'Duration: ' + ${playlist.duration/60} + ' min'"></h5>
+                <h5 th:text="'Rank: ' + ${playlist.rank}"></h5>
+                <h5>Genre:
+                    <span th:each="genre,iterStat : ${playlist.genres}">
+        <span th:text="${genre.name}"></span>
+        <span th:if="${not iterStat.last}">,</span>
+    </span>
+                </h5>
             </a>
         </div>
     </div>

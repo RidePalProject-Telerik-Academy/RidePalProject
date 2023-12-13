@@ -1,4 +1,4 @@
-package com.example.ridepalapplication.helpers;
+package com.example.ridepalapplication.consumers;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;

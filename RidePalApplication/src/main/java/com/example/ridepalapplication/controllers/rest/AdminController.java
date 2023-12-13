@@ -1,9 +1,7 @@
 package com.example.ridepalapplication.controllers.rest;
 
-import com.example.ridepalapplication.helpers.DeezerApiConsumer;
-import com.example.ridepalapplication.models.SynchronizationDetails;
-import com.example.ridepalapplication.repositories.SynchronizationDetailsRepository;
-import com.example.ridepalapplication.services.SynchronizationService;
+import com.example.ridepalapplication.consumers.DeezerApiConsumer;
+import com.example.ridepalapplication.services.SyncService;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -11,18 +9,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.LocalDateTime;
-
 @RestController
 @RequestMapping("/api/admins")
 public class AdminController {
 
     private final DeezerApiConsumer apiConsumer;
-    private final SynchronizationService synchronizationService;
+    private final SyncService syncService;
     @Autowired
-    public AdminController(DeezerApiConsumer apiConsumer,SynchronizationService synchronizationService) {
+    public AdminController(DeezerApiConsumer apiConsumer, SyncService syncService) {
         this.apiConsumer = apiConsumer;
-        this.synchronizationService = synchronizationService;
+        this.syncService = syncService;
     }
 
     @GetMapping("/artists")
@@ -32,12 +28,12 @@ public class AdminController {
 
     @GetMapping("/genres")
     public void populateGenres() throws ParseException {
-        synchronizationService.synchronize();
+        syncService.synchronize();
     }
 
     @Scheduled(fixedRateString = "${sync.key}")
     public void synchronizeGenres() throws ParseException {
-        synchronizationService.synchronize();
+        syncService.synchronize();
     }
 
 

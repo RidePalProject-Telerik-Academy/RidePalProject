@@ -110,7 +110,7 @@ public class PlaylistMvcController {
             User user = authenticationHelper.tryGetUser(authentication);
             Playlist playlist = playlistMapper.fromDto(playlistDto, user);
             int duration = bingController.calculateTravelTime(playlistDto.getLocationDto());
-            playlist = playlistService.choosePlaylistStrategy(playlistDto, playlist, duration, playlistDto.getGenreDtoList());
+            playlist = playlistService.choosePlaylistStrategy(playlistDto, playlist, duration);
             return "redirect:/playlists/" + playlist.getId();
         } catch (EntityNotFoundException | IllegalArgumentException e) {
             model.addAttribute("statusCode", HttpStatus.CONFLICT.getReasonPhrase());
@@ -200,7 +200,6 @@ public class PlaylistMvcController {
             playlistService.createTag(user, tag, playlist);
             return "redirect:/playlists/" + id;
         } catch (EntityDuplicateException e) {
-             bindingResult.rejectValue("name", "name_error", e.getMessage());
             model.addAttribute("error", e.getMessage());
             return "ErrorView";
         }

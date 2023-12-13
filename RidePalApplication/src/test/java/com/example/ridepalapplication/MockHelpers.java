@@ -4,6 +4,7 @@ import com.example.ridepalapplication.dtos.GenreDto;
 import com.example.ridepalapplication.dtos.LocationDto;
 import com.example.ridepalapplication.dtos.PlaylistDto;
 import com.example.ridepalapplication.models.*;
+import org.springframework.security.core.parameters.P;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -96,7 +97,7 @@ public class MockHelpers {
     public static Genre createMockGenre() {
         var mockGenre = new Genre();
         mockGenre.setId(1L);
-        mockGenre.setName("Mock");
+        mockGenre.setName("Pop");
         return mockGenre;
     }
 
@@ -115,20 +116,25 @@ public class MockHelpers {
         return locationDto;
     }
 
-    public static PlaylistDto createTopRankUniqueArtistsPlaylistDto() {
+    public static List<GenreDto> createMockGenreDtoList(){
+        GenreDto mockPop = new GenreDto("Pop",50);
+
+        return List.of(mockPop);
+    }
+    public static Playlist createAlgorithmMockPlaylist(){
+        Playlist playlist = new Playlist();
+        User user = createMockUser();
+        playlist.setCreator(user);
+        playlist.setName("MockitoName");
+        return playlist;
+    }
+    public static PlaylistDto createMockPlayListDto(){
         PlaylistDto playlistDto = new PlaylistDto();
-
-        List<GenreDto> genreDtoList = new ArrayList<>();
-        genreDtoList.add(1, new GenreDto("Pop", 0));
-        genreDtoList.add(1, new GenreDto("Rock", 0));
-        genreDtoList.add(1, new GenreDto("Rap/Hip Hop", 0));
-
-        playlistDto.setLocationDto(createLocationDto());
+        LocationDto locationDto = createLocationDto();
+        List<GenreDto> genreDtoList = createMockGenreDtoList();
+        playlistDto.setName("MockName");
+        playlistDto.setLocationDto(locationDto);
         playlistDto.setGenreDtoList(genreDtoList);
-        playlistDto.setUniqueArtists(true);
-        playlistDto.setTopRank(true);
-
         return playlistDto;
     }
-
 }
