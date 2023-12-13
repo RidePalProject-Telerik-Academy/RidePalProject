@@ -90,7 +90,7 @@
         <form id="update-playlist-form" th:object="${updatePlaylistDto}"
               th:action="@{'/playlists/' + ${id} + '/update'}" method="post">
             <label for="playlist-name">Enter Name:</label>
-            <input type="text" id="playlist-name" name="playlist-name"  th:field="*{name}" maxlength="64" value="Current Playlist Name">
+            <input type="text" id="playlist-name" name="playlist-name" th:field="*{name}" maxlength="64" value="Current Playlist Name">
             <button type="submit" id="submit-update">Submit</button>
         </form>
     </div>

@@ -1,7 +1,9 @@
 package com.example.ridepalapplication.models;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 
+@Schema(hidden = true)
 public class AuthRequest {
 
     @NotNull

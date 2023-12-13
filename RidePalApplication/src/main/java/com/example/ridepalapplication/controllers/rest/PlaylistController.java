@@ -16,6 +16,7 @@ import com.example.ridepalapplication.models.Tag;
 import com.example.ridepalapplication.models.User;
 import com.example.ridepalapplication.services.PlaylistService;
 import com.example.ridepalapplication.services.SongService;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/playlists")
+@io.swagger.v3.oas.annotations.tags.Tag(name = "Playlists")
 public class PlaylistController {
     private final AuthenticationHelper authenticationHelper;
     private final BingController bingController;
@@ -54,6 +56,7 @@ public class PlaylistController {
     }
 
 
+    @Operation(summary = "Retrieve all playlists")
     @GetMapping
     public List<Playlist> getAll(@RequestParam(required = false, defaultValue = "0") Integer page,
                                  @RequestParam(required = false, defaultValue = "10") Integer pageSize,
@@ -65,6 +68,7 @@ public class PlaylistController {
         return playlistService.getAll(page, pageSize, name, minDuration, maxDuration, tagName);
     }
 
+    @Operation(summary = "Retrieve single playlist by id")
     @GetMapping("/{id}")
     public Optional<Playlist> getById(@PathVariable long id) {
         try {
@@ -74,8 +78,9 @@ public class PlaylistController {
         }
     }
 
-  @PostMapping
-  public Playlist generatePlaylist(@RequestBody PlaylistDto playlistDto, Authentication authentication) throws ParseException {
+    @Operation(summary = "Generate new playlist")
+    @PostMapping
+    public Playlist generatePlaylist(@RequestBody PlaylistDto playlistDto, Authentication authentication) throws ParseException {
 
       try {
           User user = authenticationHelper.tryGetUser(authentication);
@@ -92,8 +97,7 @@ public class PlaylistController {
       }
   }
 
-
-
+    @Operation(summary = "Update existing playlist")
     @PutMapping("/{id}")
     public Playlist update(Authentication authentication, @PathVariable int id,
                                @Valid @RequestBody UpdatePlaylistDto updatePlaylistDto) {
@@ -110,6 +114,7 @@ public class PlaylistController {
         }
     }
 
+    @Operation(summary = "Add new song to existing playlist")
     @PostMapping("/{id}/song")
     public Playlist addSong(Authentication authentication,
                             @PathVariable int id,
@@ -129,6 +134,7 @@ public class PlaylistController {
         }
     }
 
+    @Operation(summary = "Delete existing song from existing playlist")
     @DeleteMapping("/{id}/song")
     public Playlist deleteSong(Authentication authentication,
                                @PathVariable int id,
@@ -146,6 +152,7 @@ public class PlaylistController {
         }
     }
 
+    @Operation(summary = "Add new tag to existing playlist")
     @PostMapping("/{id}/tag")
     public Playlist createTag(Authentication authentication, @PathVariable int id, @Valid @RequestBody TagDto tagDto) {
         try {
@@ -164,6 +171,7 @@ public class PlaylistController {
         }
     }
 
+    @Operation(summary = "Delete existing tag from existing playlist")
     @DeleteMapping("/{id}/tag")
     public Playlist deleteTag(Authentication authentication, @PathVariable int id, @Valid @RequestBody TagDto tagDto) {
         try {
@@ -182,6 +190,7 @@ public class PlaylistController {
         }
     }
 
+    @Operation(summary = "Delete existing playlist")
     @DeleteMapping("/{id}")
     public void delete(Authentication authentication, @PathVariable long id) {
         try {

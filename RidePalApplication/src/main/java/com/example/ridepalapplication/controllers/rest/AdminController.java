@@ -2,6 +2,8 @@ package com.example.ridepalapplication.controllers.rest;
 
 import com.example.ridepalapplication.consumers.DeezerApiConsumer;
 import com.example.ridepalapplication.services.SyncService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/admins")
+@Tag(name = "Administration")
 public class AdminController {
 
     private final DeezerApiConsumer apiConsumer;
@@ -21,11 +24,13 @@ public class AdminController {
         this.syncService = syncService;
     }
 
+    @Operation(summary = "Connect to Deezer API to populate artists in the database")
     @GetMapping("/artists")
     public void populateArtists() throws ParseException {
         apiConsumer.populateArtists();
     }
 
+    @Operation(summary = "Connect to Deezer API to populate genres in the database")
     @GetMapping("/genres")
     public void populateGenres() throws ParseException {
         syncService.synchronize();
@@ -36,13 +41,13 @@ public class AdminController {
         syncService.synchronize();
     }
 
-
-
+    @Operation(summary = "Connect to Deezer API to populate albums in the database")
     @GetMapping("/albums")
     public void populateAlbums() throws ParseException {
         apiConsumer.populateAlbums();
     }
 
+    @Operation(summary = "Connect to Deezer API to populate songs in the database")
     @GetMapping("/songs")
     public void populateSongs() throws ParseException {
         apiConsumer.populateSongs();

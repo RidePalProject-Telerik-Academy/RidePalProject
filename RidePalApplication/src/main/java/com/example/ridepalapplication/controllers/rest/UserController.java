@@ -11,6 +11,8 @@ import com.example.ridepalapplication.models.AuthRequest;
 import com.example.ridepalapplication.models.User;
 import com.example.ridepalapplication.services.JwtService;
 import com.example.ridepalapplication.services.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,6 +29,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/users")
+@Tag(name = "Users")
 public class UserController {
 
     private final UserService userService;
@@ -45,11 +48,13 @@ public class UserController {
         this.authenticationManager = authenticationManager;
     }
 
+    @Operation(summary = "Retrieve all users")
     @GetMapping
     public List<User> getAll() {
         return userService.getAll();
     }
 
+    @Operation(summary = "Retrieve single user by id")
     @GetMapping("/{id}")
     public Optional<User> getById(@PathVariable long id) {
         try {
@@ -59,6 +64,7 @@ public class UserController {
         }
     }
 
+    @Operation(summary = "Register new user")
     @PostMapping()
     public User create(@Valid @RequestBody UserDto userDto) {
         try {
@@ -69,6 +75,7 @@ public class UserController {
         }
     }
 
+    @Operation(summary = "Update existing user")
     @PutMapping("/{id}")
     public User update(Authentication authentication, @PathVariable int id, @Valid @RequestBody UpdateUserDto updateUserDto) {
         try {
@@ -85,6 +92,7 @@ public class UserController {
         }
     }
 
+    @Operation(summary = "Delete existing user")
     @DeleteMapping("/{id}")
     public void delete(Authentication authentication, @PathVariable long id) {
         try {
@@ -96,6 +104,7 @@ public class UserController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
+    @Operation(summary = "Generate a token")
     @PostMapping("/token")
     public ResponseEntity<String> authenticateAndGetToken(@RequestBody AuthRequest authRequest) {
         try {

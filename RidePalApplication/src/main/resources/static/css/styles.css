@@ -341,6 +341,7 @@ nav li:hover {
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
 .playlist-item h5 {
     color: #f8f9fa;
     font-size: 2.0vmin;
@@ -847,9 +848,11 @@ i.fa-volume-down, i.fa-volume-up {
 .table tbody tr:hover {
     background-color: rgba(52, 152, 219, 0.2);
 }
+
 .update-playlist-modal {
     display: none;
     position: fixed;
+    font-size: 3vmin;
     top: 40%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -858,8 +861,36 @@ i.fa-volume-down, i.fa-volume-up {
     z-index: 1000;
     box-shadow: 0 0 10px rgba(215, 48, 48, 0.5);
     border-radius: 10px;
-    width: 300px;
+    width: auto;
+    writing-mode: horizontal-tb !important;
 }
+
+.update-playlist-modal input[type="text"] {
+    writing-mode: horizontal-tb !important;
+    padding: 10px;
+    border: 2px solid #3498db;
+    border-radius: 5px;
+    font-size: 3vmin;
+    transition: border-color 0.3s ease-in-out;
+}
+
+.update-playlist-modal button {
+    background-color: rgba(46, 88, 140, 0.5);
+    display: inline-block;
+    color: whitesmoke;
+    padding: 1rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 3rem;
+
+    &:hover {
+        background-color: rgba(46, 88, 140, 0.5);
+        transition: transform 0.3s ease-in-out;
+        transform: scale(1.1);
+    }
+}
+
 
 .close {
     position: absolute;
@@ -878,16 +909,15 @@ i.fa-volume-down, i.fa-volume-up {
     font-size: 4vmin;
     margin-right: 2%;
     margin-left: 1%;
-    margin-top: 30px;
+    margin-top: 30px;;
 
-
-;
     &:hover {
         color: #f8f9fa;
         background: black;
         transition: transform 0.3s ease-in-out;
         transform: scale(1.1);
     }
+
     .delete-element-utility-btn {
         width: fit-content;
         border-style: solid;
@@ -906,3 +936,5 @@ i.fa-volume-down, i.fa-volume-up {
         }
     }
 }
+
+

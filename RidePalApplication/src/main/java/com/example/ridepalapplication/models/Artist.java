@@ -1,9 +1,11 @@
 package com.example.ridepalapplication.models;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "artists")
+@Schema(hidden = true)
 public class Artist {
     @Id
     @Column(name = "id")

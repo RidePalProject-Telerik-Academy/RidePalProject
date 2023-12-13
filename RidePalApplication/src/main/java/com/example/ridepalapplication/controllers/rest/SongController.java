@@ -3,6 +3,8 @@ package com.example.ridepalapplication.controllers.rest;
 import com.example.ridepalapplication.exceptions.EntityNotFoundException;
 import com.example.ridepalapplication.models.Song;
 import com.example.ridepalapplication.services.SongService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +15,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/songs")
+@Tag(name = "Songs")
 public class SongController {
 
     private final SongService songService;
@@ -21,6 +24,7 @@ public class SongController {
         this.songService = songService;
     }
 
+    @Operation(summary = "Retrieve all songs")
     @GetMapping
     public List<Song> getAll(@RequestParam(required = false,defaultValue = "0")Integer page,
                              @RequestParam(required = false,defaultValue = "10")Integer pageSize,
@@ -30,6 +34,7 @@ public class SongController {
       return songService.findAll(page,pageSize,songTitle,artist);
     }
 
+    @Operation(summary = "Retrieve single song by id")
     @GetMapping("{id}")
     public Optional<Song> getById(@PathVariable Long id){
         try{
