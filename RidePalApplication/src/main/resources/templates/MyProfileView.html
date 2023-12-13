@@ -64,10 +64,9 @@
 </section>
 <!--ENDS USER CARD-->
 
-<!--DELETE ACCOUNT-->
-<a th:href="@{/users/delete}" methods="get" class="delete-user" data-confirm="Are you sure?">Delete Account</a>
-
-<!--ENDS DELETE ACCOUNT-->
+<div class="modal-buttons">
+    <a th:href="@{/users/delete}" methods="get" class="delete-user" data-confirm="Are you sure?">Delete Account</a>
+</div>
 
 <!-- USER PLAYLIST STARTS HERE --->
 <h3 style="text-align: center; font-size: 8vmin" th:text="${user.username} + '\'s Playlists'">User's Playlists</h3>

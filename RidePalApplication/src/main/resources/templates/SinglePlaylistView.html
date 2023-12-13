@@ -81,7 +81,6 @@
 </section>
 
 
-
 <!-- Update Playlist Modal STARTS HERE> -->
 
 <div id="updatePlaylistModal" class="update-playlist-modal">
@@ -90,7 +89,8 @@
         <form id="update-playlist-form" th:object="${updatePlaylistDto}"
               th:action="@{'/playlists/' + ${id} + '/update'}" method="post">
             <label for="playlist-name">Enter Name:</label>
-            <input type="text" id="playlist-name" name="playlist-name" th:field="*{name}" maxlength="64" value="Current Playlist Name">
+            <input type="text" id="playlist-name" name="playlist-name" th:field="*{name}" maxlength="64"
+                   value="Current Playlist Name">
             <button type="submit" id="submit-update">Submit</button>
         </form>
     </div>
@@ -103,7 +103,7 @@
         <form id="add-tag-form" th:object="${newTag}"
               th:action="@{'/playlists/' + ${id} + '/tags'}" method="post">
             <label for="add-tag">Enter Tag Name:</label>
-            <input type="text" id="add-tag" name="tag-name"  th:field="*{tagName}" maxlength="64" value="Tag Name">
+            <input type="text" id="add-tag" name="tag-name" th:field="*{tagName}" maxlength="64" value="Tag Name">
             <button type="submit" id="submit-tag">Submit</button>
         </form>
     </div>
@@ -132,7 +132,7 @@
                         <span th:text="'&#35;' + ${tag.getName()}"></span>
                             <!--DELETE TAGS-->
                             <form th:if="${user.username.equals(username)}"></form>
-        <form class = "delete-form" th:if="${user.username.equals(username)}"
+        <form class="delete-form" th:if="${user.username.equals(username)}"
               th:action="@{/playlists/{id}/tag(id=${singlePlaylist.getId()})}" method="post">
             <input type="hidden" name="tagName" th:value="${tag.getName()}"/>
                <button type="submit" class="delete-element-btn" data-confirm="Are you sure?"> X</button>
@@ -145,18 +145,19 @@
             </li>
         </ul>
     </div>
-    <div style="display: inline-flex ; white-space: nowrap">
 
+    <div class="modal-buttons">
         <a th:if="${user.username.equals(username)}" id="open-modal-button">Update Playlist</a>
 
-        <a th:if="${user.username.equals(username)}" style="margin-left: 1%; margin-top: 30px;" class="utility-btn" id="open-tag-modal-button">Add Tag</a>
-
-
+        <a th:if="${user.username.equals(username)}" style="margin-left: 1%; margin-top: 30px;" class="utility-btn"
+           id="open-tag-modal-button">Add Tag</a>
     </div>
+
     <div th:each="song : ${singlePlaylist.songs}">
         <div style="text-align: right; margin-right: 2vmin">
-            <form class = "delete-form" th:if="${user.username.equals(username)}"
-                  th:action="@{'/playlists/'+${singlePlaylist.getId()}+'/songs/'+${song.getId()+'/delete'}}" method="post">
+            <form class="delete-form" th:if="${user.username.equals(username)}"
+                  th:action="@{'/playlists/'+${singlePlaylist.getId()}+'/songs/'+${song.getId()+'/delete'}}"
+                  method="post">
                 <input type="hidden" name="tagName" th:value="${song.getId()}"/>
                 <button type="submit" class="delete-element-btn" data-confirm="Are you sure?">X</button>
 
@@ -174,10 +175,11 @@
     </div>
 </section>
 
-<a th:if="${user.username.equals(username)}" class="delete-user"
-   style="margin: 5vmin" th:href="@{'/playlists/' + ${singlePlaylist.getId()} + '/delete'}"
-   data-confirm="Are you sure?">Delete playlist</a>
-
+<div class="modal-buttons">
+    <a th:if="${user.username.equals(username)}" class="delete-user"
+       style="margin: 5vmin" th:href="@{'/playlists/' + ${singlePlaylist.getId()} + '/delete'}"
+       data-confirm="Are you sure?">Delete playlist</a>
+</div>
 
 
 <section>
@@ -191,13 +193,13 @@
             <div class="sliders">
                 <div class="slider-container" id="duration">
                     <div class="current-time">0:00</div>
-                    <input type="range" min="0" max="100" value="0" class="seek-slider" >
+                    <input type="range" min="0" max="100" value="0" class="seek-slider">
                     <div class="total-duration">0:00</div>
                 </div>
 
                 <div class="slider-container" id="volume">
                     <i class="fa fa-volume-down"></i>
-                    <input type="range" min="0" max="100" value="99" class="volume-slider" >
+                    <input type="range" min="0" max="100" value="99" class="volume-slider">
                     <i class="fa fa-volume-up"></i>
                 </div>
             </div>
@@ -247,31 +249,32 @@
             }, 500);
         }
 
-             function startMusic(songsArray) {
-                let currentSongIndex = 0;
-                function playCurrentSong() {
-                    const currentSong = songsArray[currentSongIndex];
-                    audioPlayer.src = currentSong.previewUrl;
-                    audioPlayer.play().catch(error => {
-                        console.error('Error playing audio:', error);
-                    });
-                    isPlaying = true;
-                    currentSliderValue = 0;
-                    updateDuration(songsArray[currentSongIndex].title,
-                        songsArray[currentSongIndex].artist.name);
+        function startMusic(songsArray) {
+            let currentSongIndex = 0;
 
-                    console.log("Playing:", currentSong.title);
-                }
+            function playCurrentSong() {
+                const currentSong = songsArray[currentSongIndex];
+                audioPlayer.src = currentSong.previewUrl;
+                audioPlayer.play().catch(error => {
+                    console.error('Error playing audio:', error);
+                });
+                isPlaying = true;
+                currentSliderValue = 0;
+                updateDuration(songsArray[currentSongIndex].title,
+                    songsArray[currentSongIndex].artist.name);
 
-                function playNextSong() {
-                    currentSongIndex = (currentSongIndex + 1) % songsArray.length;
-                    playCurrentSong();
-                }
+                console.log("Playing:", currentSong.title);
+            }
 
-                function playPrevSong() {
-                    currentSongIndex = (currentSongIndex - 1 + songsArray.length) % songsArray.length;
-                    playCurrentSong();
-                }
+            function playNextSong() {
+                currentSongIndex = (currentSongIndex + 1) % songsArray.length;
+                playCurrentSong();
+            }
+
+            function playPrevSong() {
+                currentSongIndex = (currentSongIndex - 1 + songsArray.length) % songsArray.length;
+                playCurrentSong();
+            }
 
             function updateDuration(title, artist) {
                 const durationElement = document.querySelector('.total-duration');

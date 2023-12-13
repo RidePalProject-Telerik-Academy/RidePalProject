@@ -112,7 +112,6 @@ $(document).ready(function () {
         setupDeleteConfirmation('.delete-element-btn');
         setupDeleteConfirmation('.delete-element-utility-btn');
     });
-
     setupDeleteConfirmation('.delete-user');
     setupDeleteConfirmation('.delete-element-btn');
 });

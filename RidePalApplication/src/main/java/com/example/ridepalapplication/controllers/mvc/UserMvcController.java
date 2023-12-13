@@ -2,6 +2,7 @@ package com.example.ridepalapplication.controllers.mvc;
 
 import com.example.ridepalapplication.dtos.RegisterDto;
 import com.example.ridepalapplication.dtos.UpdateUserDto;
+import com.example.ridepalapplication.dtos.UpdateUserMvcDto;
 import com.example.ridepalapplication.exceptions.AuthorizationException;
 import com.example.ridepalapplication.exceptions.EntityDuplicateException;
 import com.example.ridepalapplication.helpers.AuthenticationHelper;
@@ -84,22 +85,22 @@ public class UserMvcController {
         } catch (EntityDuplicateException e) {
             bindingResult.rejectValue("username", "username_error", e.getMessage());
             return "RegisterView";
-        }catch (AuthorizationException e){
-            bindingResult.rejectValue("password","password_error",e.getMessage());
+        } catch (AuthorizationException e) {
+            bindingResult.rejectValue("password", "password_error", e.getMessage());
             return "RegisterView";
         }
     }
 
     @GetMapping("/update")
     public String getUpdateView(Model model, Authentication authentication) {
-        model.addAttribute("userToUpdate", new UpdateUserDto());
+        model.addAttribute("userToUpdate", new UpdateUserMvcDto());
         model.addAttribute("user", authenticationHelper.tryGetUser(authentication));
         return "UserUpdateView";
     }
 
 
     @PostMapping("/update")
-    public String updateUser(@Valid @ModelAttribute("userToUpdate") UpdateUserDto updateUserDto,
+    public String updateUser(@Valid @ModelAttribute("userToUpdate") UpdateUserMvcDto updateUserMvcDto,
                              BindingResult bindingResult,
                              Authentication authentication) {
 
@@ -110,12 +111,22 @@ public class UserMvcController {
         User loggedUser = authenticationHelper.tryGetUser(authentication);
 
         try {
-            User userToUpdate = userMapper.fromDto(loggedUser.getId(), updateUserDto);
+            verifyConfirmPassword(updateUserMvcDto);
+            User userToUpdate = userMapper.fromDto(loggedUser.getId(), updateUserMvcDto);
             userService.updateUser(loggedUser, userToUpdate);
             return "redirect:/users/myProfile";
         } catch (EntityDuplicateException e) {
             bindingResult.rejectValue("email", "email_error", e.getMessage());
             return "UserUpdateView";
+        } catch (AuthorizationException e) {
+            bindingResult.rejectValue("password", "password_error", e.getMessage());
+            return "UserUpdateView";
+        }
+    }
+
+    private static void verifyConfirmPassword(UpdateUserMvcDto updateUserMvcDto) {
+        if (!updateUserMvcDto.getPassword().equals(updateUserMvcDto.getConfirmPassword())) {
+            throw new AuthorizationException("Passwords does not match please try again");
         }
     }
 
@@ -123,7 +134,7 @@ public class UserMvcController {
     public String deleteUser(Authentication authentication) {
         User loggedUser = authenticationHelper.tryGetUser(authentication);
         userService.deleteUser(loggedUser, loggedUser.getId());
-           return "redirect:/logout";
+        return "redirect:/logout";
     }
 
 }

@@ -16,8 +16,9 @@
             margin: 5vmin;
             margin-top: 10%;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-            max-width:90%;
+            max-width: 90%;
         }
+
         form h2 {
             margin-bottom: 2vmin;
             margin-top: 2vmin;
@@ -30,7 +31,7 @@
             font-size: 5vmin;
         }
 
-        #generate-playlist-title{
+        #generate-playlist-title {
             margin-bottom: 1rem;
             margin-top: 1rem;
             font-weight: bold;
@@ -79,7 +80,7 @@
         }
 
         input[type=checkbox] {
-           padding: 1rem;
+            padding: 1rem;
             accent-color: #ca433e;
         }
     </style>
@@ -96,7 +97,12 @@
             </div>
         </a>
         <ul>
-            <li th:if="${isAuthenticated}" class="nav-item"><a href="#" class="nav-link" th:href="@{/logout}">Logout</a></li>
+            <li th:if="${isAuthenticated}" class="nav-item"><a href="#" class="nav-link"
+                                                               th:href="@{/songs}">Explore</a></li>
+            <li th:if="${isAuthenticated}" class="nav-item"><a href="#" class="nav-link"
+                                                               th:href="@{/users/myProfile}">MyProfile</a></li>
+            <li th:if="${isAuthenticated}" class="nav-item"><a href="#" class="nav-link" th:href="@{/logout}">Logout</a>
+            </li>
         </ul>
     </nav>
 
@@ -108,13 +114,15 @@
 
     <form id="reg-fields" th:action="@{/playlists/generate}" th:object="${newPlaylist}" method="post">
         <div id="generate-playlist-title">
-            <input type="text" id="name"  th:field="*{name}" placeholder="Enter your awesome playlist name here" required/>
+            <input type="text" id="name" th:field="*{name}" placeholder="Enter your awesome playlist name here"
+                   required/>
         </div>
 
         <h2>Current Location</h2>
         <div>
             <label for="startLocation">City:</label>
-            <input type="text" id="startLocation" th:field="*{startLocation}" placeholder="Where are you now?" required/>
+            <input type="text" id="startLocation" th:field="*{startLocation}" placeholder="Where are you now?"
+                   required/>
         </div>
         <div>
             <label for="startAddress">Address:</label>
@@ -124,7 +132,8 @@
         <h2>Destination</h2>
         <div>
             <label for="endLocation">City:</label>
-            <input type="text" id="endLocation" th:field="*{endLocation}" placeholder="Where do you want to go?" required/>
+            <input type="text" id="endLocation" th:field="*{endLocation}" placeholder="Where do you want to go?"
+                   required/>
         </div>
         <div>
             <label for="endAddress">Address:</label>
@@ -133,7 +142,8 @@
 
         <h2>Playlist Genres % Distribution</h2>
         <div class="genre-fields" th:each="genre, iterStat : *{genres}">
-            <input id="genreName" type="text" th:id="${'genreName' + iterStat.index}" th:field="*{genres[__${iterStat.index}__].name}"
+            <input id="genreName" type="text" th:id="${'genreName' + iterStat.index}"
+                   th:field="*{genres[__${iterStat.index}__].name}"
                    placeholder="Genre Name" required readonly/>
             <input type="number" th:id="${'genrePercentage' + iterStat.index}"
                    th:field="*{genres[__${iterStat.index}__].percentage}" placeholder="Percentage" required/>

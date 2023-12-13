@@ -114,6 +114,11 @@
                 <input type="password" th:field="*{password}" placeholder="Enter your Password" required>
             </div>
             <label class="error" th:errors="*{password}">Name error placeholder</label>
+            <div class="input-box">
+                <span class="user-details"></span>
+                <input type="password" th:field="*{confirmPassword}" placeholder="Confirm your Password" required>
+            </div>
+            <label class="error" th:errors="*{confirmPassword}">Password error placeholder</label>
             <div class="button-container">
                 <div class="button">
                     <button type="submit">Update</button>

@@ -112,9 +112,13 @@ public class PlaylistMvcController {
             int duration = bingController.calculateTravelTime(playlistDto.getLocationDto());
             playlist = playlistService.choosePlaylistStrategy(playlistDto, playlist, duration);
             return "redirect:/playlists/" + playlist.getId();
-        } catch (EntityNotFoundException | IllegalArgumentException e) {
+        } catch (EntityNotFoundException | UnsupportedOperationException e) {
             model.addAttribute("statusCode", HttpStatus.CONFLICT.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        } catch (ClassCastException e) {
+            model.addAttribute("statusCode", HttpStatus.CONFLICT.getReasonPhrase());
+            model.addAttribute("error", "Invalid location");
             return "ErrorView";
         }
     }
