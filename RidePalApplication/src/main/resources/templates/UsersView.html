@@ -77,7 +77,7 @@
             <td>
                 <form class="delete-form"
                       th:action="@{'/admins/users/' + ${user.getId()} + '/delete'}" method="get">
-                    <button type="submit" class="delete-element-btn">X</button>
+                    <button type="submit" class="delete-element-btn" data-confirm="Are you sure?">X</button>
                 </form>
             </td>
         </tr>

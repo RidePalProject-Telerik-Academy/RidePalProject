@@ -35,7 +35,7 @@
     <div th:each="playlist : ${playlists}">
         <form class = "delete-form"
               th:action="@{'/playlists/' + ${playlist.getId()} + '/delete'}" method="get">
-            <button type="submit" class="delete-element-btn">X</button>
+            <button type="submit" class="delete-element-btn" data-confirm="Are you sure?">X</button>
         </form>
         <div class="playlist-item">
             <img class="playlist-item img playlistImage" alt="Playlist Image">
