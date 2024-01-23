@@ -44,7 +44,7 @@ the Database in the following order: artists, genres, albums, roles, roles_seq, 
 - JUnit
 - Mockito
 ### Database schema
-![database_design.jpeg](src%2Fmain%2Fresources%2Fstatic%2Fimages%2Fdatabase_design.jpeg)
+<img src="https://github.com/RidePalProject-Telerik-Academy/RidePalProject/blob/main/RidePalApplication/src/main/resources/static/images/database_design.jpeg" alt="image">
 
 ## Main Functionalities
 

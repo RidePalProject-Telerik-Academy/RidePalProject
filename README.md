@@ -44,7 +44,6 @@ With the help of Deezer API we ensure you that all your favorite tracks are only
 - JUnit
 - Mockito
 ### Database schema
-![database_design.jpeg](RidePalApplication%2Fsrc%2Fmain%2Fresources%2Fstatic%2Fimages%2Fdatabase_design.jpeg)
 
 ## Main Functionalities
 
