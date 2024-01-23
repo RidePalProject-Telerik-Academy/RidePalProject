@@ -38,7 +38,7 @@ public class AdminController {
 
     }
 
-    @Operation(summary = "Connect to Deezer API to populate genres in the database")
+    @Operation(summary = "Connect to Deezer API to synchronize genres in the database")
     @GetMapping("/genres")
     public void populateGenres() throws ParseException {
         syncService.synchronize();

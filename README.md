@@ -49,6 +49,31 @@ With the help of Deezer API we ensure you that all your favorite tracks are only
 
 ## Main Functionalities
 
+### Register 
+
+<img src="https://github.com/RidePalProject-Telerik-Academy/RidePalProject/blob/main/RidePalApplication/src/main/resources/static/images/register.png" alt="register-img">
+
+### Login
+
+<img src="https://github.com/RidePalProject-Telerik-Academy/RidePalProject/blob/main/RidePalApplication/src/main/resources/static/images/login.png" alt="login-img">
+
+### Generate a playlist
+
+<img src="https://github.com/RidePalProject-Telerik-Academy/RidePalProject/blob/main/RidePalApplication/src/main/resources/static/images/generate.png" alt="generate-img">
+
+### Browse 
+
+<img src="https://github.com/RidePalProject-Telerik-Academy/RidePalProject/blob/main/RidePalApplication/src/main/resources/static/images/all-tacks.jpeg" alt="tracks-img">
+<br>
+<br>
+<img src="https://github.com/RidePalProject-Telerik-Academy/RidePalProject/blob/main/RidePalApplication/src/main/resources/static/images/browse.png" alt="top-ranked-img">
+
+### Synchronize genres
+- Be aware that only admins can trigger the manual genre synchronization (refer to swagger for more information).
+- Scheduled job is set on a weekly basis.
+
+<img src="https://github.com/RidePalProject-Telerik-Academy/RidePalProject/blob/main/RidePalApplication/src/main/resources/static/images/sync.png" alt="sync-img">
+
 
 ### Team Members
 - **Boris Neykov** - GitHub [https://github.com/BorisNeykov1202]
