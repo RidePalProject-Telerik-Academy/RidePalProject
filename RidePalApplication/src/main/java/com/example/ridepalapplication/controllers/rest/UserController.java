@@ -10,7 +10,7 @@ import com.example.ridepalapplication.mappers.UserMapper;
 import com.example.ridepalapplication.models.AuthRequest;
 import com.example.ridepalapplication.models.User;
 import com.example.ridepalapplication.services.JwtService;
-import com.example.ridepalapplication.services.UserService;
+import com.example.ridepalapplication.services.contracts.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;

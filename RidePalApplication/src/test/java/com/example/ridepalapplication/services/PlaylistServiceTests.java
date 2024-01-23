@@ -100,7 +100,7 @@ public class PlaylistServiceTests {
 
         service.update(mockUser, mockPlaylist, newName);
 
-        Assertions.assertTrue(mockPlaylist.getName().equals(newName));
+        Assertions.assertEquals(mockPlaylist.getName(), newName);
 
         Mockito.verify(mockRepository, Mockito.times(1))
                 .save(mockPlaylist);
@@ -114,7 +114,7 @@ public class PlaylistServiceTests {
 
         service.update(mockAdminUser, mockPlaylist, newName);
 
-        Assertions.assertTrue(mockPlaylist.getName().equals(newName));
+        Assertions.assertEquals(mockPlaylist.getName(), newName);
 
         Mockito.verify(mockRepository, Mockito.times(1))
                 .save(mockPlaylist);

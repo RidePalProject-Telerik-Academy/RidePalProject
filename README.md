@@ -1,5 +1,7 @@
 # RidePal Playlist Generator
-
+| **Simona Nedeva**                                                                                                                                                                                                                                                                                 | **Boris Neykov**                                                                                                                                                                                                                                                                                    | **Nikolay Yordanov**                                                                                                                                                                                                                                                                                      |
+|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [![portfolio](https://img.shields.io/badge/github-000?style=for-the-badge&logo=ko-fi&logoColor=white)](https://github.com/simonanedeva) [![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/simonanedeva1/) | [![portfolio](https://img.shields.io/badge/github-000?style=for-the-badge&logo=ko-fi&logoColor=white)](https://github.com/BorisNeykov1202) [![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/boris-neykov/) | [![portfolio](https://img.shields.io/badge/github-000?style=for-the-badge&logo=ko-fi&logoColor=white)](https://github.com/YordanoffNikolay) [![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/yordanoff-nikolay/) |
 ## Project Description
 Ride Pal is a web application that enables users to fire up a fast and efficient algorithm
 that generates unique playlists.
@@ -74,8 +76,7 @@ With the help of Deezer API we ensure you that all your favorite tracks are only
 
 <img src="https://github.com/RidePalProject-Telerik-Academy/RidePalProject/blob/main/RidePalApplication/src/main/resources/static/images/sync.png" alt="sync-img">
 
+## Test Coverage
 
-### Team Members
-- **Boris Neykov** - GitHub [https://github.com/BorisNeykov1202]
-- **Simona Nedeva** - GitHub [https://github.com/simonanedeva]
-- **Nikolay Dimitrov** - GitHub [https://github.com/YordanoffNikolay]
+<img src="https://github.com/RidePalProject-Telerik-Academy/RidePalProject/blob/main/RidePalApplication/src/main/resources/static/images/unit-tests.jpeg" alt="tests-img">
+

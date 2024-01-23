@@ -13,8 +13,8 @@ import com.example.ridepalapplication.models.Playlist;
 import com.example.ridepalapplication.models.Song;
 import com.example.ridepalapplication.models.Tag;
 import com.example.ridepalapplication.models.User;
-import com.example.ridepalapplication.services.PlaylistService;
-import com.example.ridepalapplication.services.SongService;
+import com.example.ridepalapplication.services.contracts.PlaylistService;
+import com.example.ridepalapplication.services.contracts.SongService;
 import jakarta.validation.Valid;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +25,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller

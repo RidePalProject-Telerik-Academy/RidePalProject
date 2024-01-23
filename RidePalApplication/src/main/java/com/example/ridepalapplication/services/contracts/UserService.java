@@ -1,4 +1,4 @@
-package com.example.ridepalapplication.services;
+package com.example.ridepalapplication.services.contracts;
 
 import com.example.ridepalapplication.dtos.UserDto;
 import com.example.ridepalapplication.models.User;

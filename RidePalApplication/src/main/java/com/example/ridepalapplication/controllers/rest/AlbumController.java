@@ -2,7 +2,7 @@ package com.example.ridepalapplication.controllers.rest;
 
 import com.example.ridepalapplication.exceptions.EntityNotFoundException;
 import com.example.ridepalapplication.models.Album;
-import com.example.ridepalapplication.services.AlbumService;
+import com.example.ridepalapplication.services.contracts.AlbumService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;

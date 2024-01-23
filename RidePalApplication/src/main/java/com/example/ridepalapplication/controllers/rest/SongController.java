@@ -2,7 +2,7 @@ package com.example.ridepalapplication.controllers.rest;
 
 import com.example.ridepalapplication.exceptions.EntityNotFoundException;
 import com.example.ridepalapplication.models.Song;
-import com.example.ridepalapplication.services.SongService;
+import com.example.ridepalapplication.services.contracts.SongService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,6 +1,5 @@
 package com.example.ridepalapplication.services;
 
-import com.example.ridepalapplication.exceptions.AuthorizationException;
 import com.example.ridepalapplication.exceptions.EntityDuplicateException;
 import com.example.ridepalapplication.exceptions.EntityNotFoundException;
 import com.example.ridepalapplication.helpers.AuthorizationHelper;
@@ -8,9 +7,8 @@ import com.example.ridepalapplication.models.Playlist;
 import com.example.ridepalapplication.models.User;
 import com.example.ridepalapplication.repositories.PlaylistRepository;
 import com.example.ridepalapplication.repositories.UserRepository;
+import com.example.ridepalapplication.services.contracts.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;

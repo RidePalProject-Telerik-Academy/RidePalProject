@@ -11,6 +11,7 @@ import com.example.ridepalapplication.repositories.GenreRepository;
 import com.example.ridepalapplication.repositories.PlaylistRepository;
 import com.example.ridepalapplication.repositories.SongRepository;
 import com.example.ridepalapplication.repositories.TagRepository;
+import com.example.ridepalapplication.services.contracts.PlaylistService;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
 import org.springframework.beans.factory.annotation.Autowired;

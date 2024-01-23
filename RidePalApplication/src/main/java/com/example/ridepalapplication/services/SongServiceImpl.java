@@ -4,18 +4,16 @@ import com.example.ridepalapplication.exceptions.EntityNotFoundException;
 import com.example.ridepalapplication.models.Artist;
 import com.example.ridepalapplication.models.Song;
 import com.example.ridepalapplication.repositories.SongRepository;
+import com.example.ridepalapplication.services.contracts.SongService;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Predicate;
 
 @Service
 public class SongServiceImpl implements SongService {

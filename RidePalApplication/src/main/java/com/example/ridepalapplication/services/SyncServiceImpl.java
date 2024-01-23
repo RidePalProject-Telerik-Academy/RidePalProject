@@ -3,6 +3,7 @@ package com.example.ridepalapplication.services;
 import com.example.ridepalapplication.consumers.DeezerApiConsumer;
 import com.example.ridepalapplication.models.SynchronizationDetails;
 import com.example.ridepalapplication.repositories.SyncGenresRepository;
+import com.example.ridepalapplication.services.contracts.SyncService;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

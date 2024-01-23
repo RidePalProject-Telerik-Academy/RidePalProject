@@ -1,6 +1,6 @@
 package com.example.ridepalapplication.config;
 
-import com.example.ridepalapplication.services.UserService;
+import com.example.ridepalapplication.services.contracts.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

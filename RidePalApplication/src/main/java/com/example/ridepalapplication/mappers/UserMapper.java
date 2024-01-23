@@ -7,14 +7,13 @@ import com.example.ridepalapplication.exceptions.AuthorizationException;
 import com.example.ridepalapplication.models.Role;
 import com.example.ridepalapplication.models.User;
 import com.example.ridepalapplication.repositories.RoleRepository;
-import com.example.ridepalapplication.services.UserService;
+import com.example.ridepalapplication.services.contracts.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
 
 @Component

@@ -1,4 +1,4 @@
-package com.example.ridepalapplication.services;
+package com.example.ridepalapplication.services.contracts;
 
 import com.example.ridepalapplication.models.SynchronizationDetails;
 import org.json.simple.parser.ParseException;

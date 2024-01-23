@@ -2,7 +2,7 @@ package com.example.ridepalapplication.helpers;
 
 import com.example.ridepalapplication.exceptions.AuthorizationException;
 import com.example.ridepalapplication.models.User;
-import com.example.ridepalapplication.services.UserService;
+import com.example.ridepalapplication.services.contracts.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;

@@ -30,10 +30,7 @@ public class UserServiceTests {
     UserRepository mockRepository;
     @Mock
     AuthorizationHelper authorizationHelper;
-    @Mock
-    PlaylistRepository playlistRepository;
-    @Mock
-    RoleRepository roleRepository;
+
     @InjectMocks
     UserServiceImpl service;
 

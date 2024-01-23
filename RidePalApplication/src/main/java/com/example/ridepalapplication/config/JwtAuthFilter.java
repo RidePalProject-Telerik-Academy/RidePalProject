@@ -1,6 +1,6 @@
 package com.example.ridepalapplication.config;
 import com.example.ridepalapplication.services.JwtService;
-import com.example.ridepalapplication.services.UserService;
+import com.example.ridepalapplication.services.contracts.UserService;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.io.DecodingException;
