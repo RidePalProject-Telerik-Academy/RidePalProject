@@ -1,12 +1,12 @@
 $(document).ready(function () {
-    var durationSlider = $("#durationSlider").ionRangeSlider({
+    const durationSlider = $("#durationSlider").ionRangeSlider({
         type: "double",
         grid: true,
         min: 0,
         max: 600,
         step: 15,
-        from:  0,
-        to:  600,
+        from: 0,
+        to: 600,
         onChange: function (data) {
             $("#minDuration").val(data.from * 60);
             $("#maxDuration").val(data.to * 60);
