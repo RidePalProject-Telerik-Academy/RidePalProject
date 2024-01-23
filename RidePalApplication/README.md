@@ -8,12 +8,27 @@ Working alongside Microsoft Bing API the software calculates the exact duration 
 <br>
 With the help of Deezer API we ensure you that all your favorite tracks are only a click away !
 
+## Swagger
+     API documentation available at:
+- http://localhost:8080/swagger-ui/index.html
+
 ## Installation Guide
 
 - **Clone the repository on your local machine**
-- **Be sure to have JDK 17 and MariaDB installed**
--  **run the script located at /RidePalProject/RidePalApplication/db/create.sql to create the schema**
-  
+- **Make sure you have JDK 17 and MariaDB installed**
+-  **run the script located at `/RidePalProject/RidePalApplication/db/create/create.sql` to create the schema**
+-  **run the scripts located at `/RidePalProject/RidePalApplication/db/insert` to populate 
+the Database in the following order: artists, genres, albums, roles, roles_seq, songs, tags, users, playlists, playlist_songs, playlist_tags, playlists_genres, users_roles**
+- **API keys are located in application.properties for your convenience**
+- **Access the application at the following url http://localhost:8080**
+### Login Details
+    The credentials below are specifically for testing purposes. 
+    It's essential to highlight that the application, leveraging Spring Security, 
+    encrypts and safeguards passwords, ensuring they are not stored in their original form.
+
+- Admin user : **username:** `simonanedeva` **password:** `123456`
+- User : **username:** `alex_ivanova` **password:** `123456`
+
 
 ## Technologies
 - Java 17
@@ -21,7 +36,7 @@ With the help of Deezer API we ensure you that all your favorite tracks are only
 - Spring Security
 - Spring MVC
 - Spring Data JPA
-- MariaDB
+- MariaDB 
 - Thymeleaf
 - HTML5
 - CSS
@@ -30,6 +45,8 @@ With the help of Deezer API we ensure you that all your favorite tracks are only
 - Mockito
 ### Database schema
 ![database_design.jpeg](src%2Fmain%2Fresources%2Fstatic%2Fimages%2Fdatabase_design.jpeg)
+
+## Main Functionalities
 
 
 ### Team Members
