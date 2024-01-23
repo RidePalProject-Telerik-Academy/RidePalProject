@@ -47,6 +47,8 @@ With the help of Deezer API we ensure you that all your favorite tracks are only
 
 ## Main Functionalities
 
+<img src="https://github.com/RidePalProject-Telerik-Academy/RidePalProject/blob/main/RidePalApplication/src/main/resources/static/images/database_design.jpeg" alt="">
+
 
 ### Team Members
 - **Boris Neykov** - GitHub [https://github.com/BorisNeykov1202]
