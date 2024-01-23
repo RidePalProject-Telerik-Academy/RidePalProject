@@ -1,0 +1,15 @@
+INSERT INTO ride_pal.users_roles (user_id, role_id) VALUES (45, 1);
+INSERT INTO ride_pal.users_roles (user_id, role_id) VALUES (46, 1);
+INSERT INTO ride_pal.users_roles (user_id, role_id) VALUES (47, 1);
+INSERT INTO ride_pal.users_roles (user_id, role_id) VALUES (45, 2);
+INSERT INTO ride_pal.users_roles (user_id, role_id) VALUES (46, 2);
+INSERT INTO ride_pal.users_roles (user_id, role_id) VALUES (47, 2);
+INSERT INTO ride_pal.users_roles (user_id, role_id) VALUES (48, 2);
+INSERT INTO ride_pal.users_roles (user_id, role_id) VALUES (49, 2);
+INSERT INTO ride_pal.users_roles (user_id, role_id) VALUES (50, 2);
+INSERT INTO ride_pal.users_roles (user_id, role_id) VALUES (51, 2);
+INSERT INTO ride_pal.users_roles (user_id, role_id) VALUES (52, 2);
+INSERT INTO ride_pal.users_roles (user_id, role_id) VALUES (53, 2);
+INSERT INTO ride_pal.users_roles (user_id, role_id) VALUES (54, 2);
+INSERT INTO ride_pal.users_roles (user_id, role_id) VALUES (55, 2);
+INSERT INTO ride_pal.users_roles (user_id, role_id) VALUES (56, 2);

@@ -58,7 +58,7 @@ public class SecurityConfiguration {
                     auth.requestMatchers(HttpMethod.GET, "/api/playlists/**").permitAll();
                     auth.requestMatchers(HttpMethod.GET, "/api/songs/**").permitAll();
                     auth.requestMatchers(HttpMethod.GET, "/api/albums/**").permitAll();
-                    auth.requestMatchers("/api/admins/**").hasAuthority("ADMIN");
+                    auth.requestMatchers(HttpMethod.GET,"api/admins/**").hasAnyAuthority("ADMIN");
                     auth.requestMatchers("/**", "/resources/**", "/static/**", "/css/**", "/js/**",
                                     "/images/**", "/vendor/**", "/fonts/**")
                             .permitAll();
